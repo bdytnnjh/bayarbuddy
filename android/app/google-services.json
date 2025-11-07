@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "766257651005",
+    "project_id": "bayarbuddy-62eb4",
+    "storage_bucket": "bayarbuddy-62eb4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766257651005:android:92fcf2014e754fe64a7954",
+        "android_client_info": {
+          "package_name": "com.bayarbuddy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbgl0DfjvuxiZk_VV4m3uFVF9VVE33RyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
