@@ -1,4 +1,5 @@
 import 'package:app/core/configs/firebase_options.dart';
+import 'package:app/presentation/screens/boarding/boarding_screen.dart';
 import 'package:app/presentation/screens/home/home_screen.dart';
 import 'package:app/presentation/screens/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           ),
       ),
     // Static route definitions
-    routes: {'/': (context) => SplashScreen(), '/home': (context) => HomeScreen()}
+    routes: {'/': (context) => SplashScreen(), '/home': (context) => HomeScreen(), '/boarding': (context) => BoardingScreen()}
     );
   }
 }
