@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
             ),
             _buildItemMenu('Settings', 'assets/imgs/icn_user.png'),
             _buildItemMenu('Logout', 'assets/imgs/icn_chart.png'),
-            _buildItemMenu('Logout', 'assets/imgs/icn_tranfer.png'),
+            _buildItemMenu('Logout', 'assets/imgs/icn_transfer.png'),
             _buildItemMenu('Logout', 'assets/imgs/icn_settings.png'),
             const Spacer(),
             Container(
