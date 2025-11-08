@@ -1,4 +1,4 @@
-import 'package:app/presentation/screens/profile_screen.dart';
+import 'package:app/presentation/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
