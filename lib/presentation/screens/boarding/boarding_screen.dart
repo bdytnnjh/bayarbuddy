@@ -56,6 +56,7 @@ class BoardingScreen extends StatelessWidget{
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.ease,
                         );
+                        Navigator.pushReplacementNamed(context, '/home');
                     },
                     child: const Text('Skip'),
                   ),
@@ -91,7 +92,7 @@ class BoardingScreen extends StatelessWidget{
                             );
                         } else {
                           //last page action
-                          Navigator.of(context).maybePop();
+                          Navigator.pushReplacementNamed(context, '/home');
                         }
                       },
                       child: Text(current < pages.length - 1 ? 'Next' : 'Get Started'),
