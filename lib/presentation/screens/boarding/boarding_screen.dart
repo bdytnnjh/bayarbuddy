@@ -92,7 +92,7 @@ class BoardingScreen extends StatelessWidget{
                             );
                         } else {
                           //last page action
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/login');
                         }
                       },
                       child: Text(current < pages.length - 1 ? 'Next' : 'Get Started'),
