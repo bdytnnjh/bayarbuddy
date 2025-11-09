@@ -14,34 +14,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFF5F7),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(32.0),
+        padding: EdgeInsets.symmetric(horizontal: 28, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Align(
                 alignment: Alignment.topLeft,
-                child: Image.asset(
-                  'assets/imgs/app_logo_only_blue.png',
-                  height: 60,
-                ),
+                child: Image.asset('assets/imgs/app_logo_only_blue.png', height: 60),
               ),
-            SizedBox(height: 60),
-            
-            Container(
-              width: 60,
-              height: 60,
-            ),
-            
-            SizedBox(height: 24),
+            SizedBox(height: 30),
             
             Text(
               'Register',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 40, 
+                fontWeight: FontWeight.bold),
             ),
             
-            SizedBox(height: 40),
+            SizedBox(height: 30),
             
             Text('Email Address', style: TextStyle(color: Colors.grey)),
             TextField(
@@ -92,14 +84,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFF006B),
+                  backgroundColor: Color(0xFFFF1F70),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28),
                   ),
                 ),
                 child: Text(
                   'Sign Up',
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -111,42 +103,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Expanded(child: Divider()),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Or', style: TextStyle(color: Colors.grey)),
+                  child: Text('or', style: TextStyle(color: Colors.grey[600])),
                 ),
                 Expanded(child: Divider()),
               ],
             ),
             
-            SizedBox(height: 32),
+            SizedBox(height: 25),
             
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.g_mobiledata, size: 32),
-                ),
-                
-                SizedBox(width: 24),
-                
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1877F2),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.facebook, color: Colors.white, size: 32),
-                ),
-              ],
-            ),
-            
-            SizedBox(height: 32),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _socialButton('assets/imgs/icn_google.png', () {
+                    
+                  }),
+                  const SizedBox(width: 25),
+                  _socialButton('assets/imgs/icn_facebook.png', () {
+                    
+                  }),
+                ],
+              ),
+              SizedBox(height: 40),
             
             Center(
               child: Row(
@@ -166,6 +143,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _socialButton(String assetPath, VoidCallback onPressed) {
+    return Container(
+      height: 50,
+      width: 50,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.grey.shade300, width: 1.5),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(25),
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Image.asset(assetPath),
         ),
       ),
     );

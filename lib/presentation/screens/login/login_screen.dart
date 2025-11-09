@@ -8,8 +8,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  bool _hidePassword = true;
+  bool _hideConfirmPassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +21,24 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🔹 App Logo (top-left)
+              // App Logo (top-left)
               Align(
                 alignment: Alignment.topLeft,
-                child: Image.asset(
-                  'assets/imgs/app_logo_only_blue.png',
-                  height: 60,
-                ),
+                child: Image.asset('assets/imgs/app_logo_only_blue.png', height: 60),
               ),
               const SizedBox(height: 30),
 
-              // 🔹 Title
+              // Title
               const Text(
                 "Log in",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 30),
 
-              // 🔹 Email Field
+              // Email Field
               TextField(
                 decoration: InputDecoration(
                   labelText: "Email Address",
@@ -49,64 +46,64 @@ class _LoginPageState extends State<LoginPage> {
                   border: const UnderlineInputBorder(),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
-              // 🔹 Password Field
+              // Password Field
               TextField(
-                obscureText: _obscurePassword,
+                obscureText: _hidePassword,
                 decoration: InputDecoration(
                   labelText: "Password",
                   border: const UnderlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword
+                      _hidePassword
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
                     ),
                     onPressed: () {
                       setState(() {
-                        _obscurePassword = !_obscurePassword;
+                        _hidePassword = !_hidePassword;
                       });
                     },
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
-              // 🔹 Confirm Password Field
+              // Confirm Password Field
               TextField(
-                obscureText: _obscureConfirmPassword,
+                obscureText: _hideConfirmPassword,
                 decoration: InputDecoration(
                   labelText: "Confirm Password",
                   border: const UnderlineInputBorder(),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscureConfirmPassword
+                      _hideConfirmPassword
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
                     ),
                     onPressed: () {
                       setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                        _hideConfirmPassword = !_hideConfirmPassword;
                       });
                     },
                   ),
                 ),
               ),
-              const SizedBox(height: 35),
+              const SizedBox(height: 40),
 
-              // 🔹 Log In Button
+              // Log In Button
               SizedBox(
                 width: double.infinity,
-                height: 55,
+                height: 56,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFFFF4B2B), Color(0xFFFF416C)],
+                      colors: [Color(0xFFFF1F70)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(28),
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -116,23 +113,23 @@ class _LoginPageState extends State<LoginPage> {
                       "Log In",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 32),
 
-              // 🔹 Divider with “or”
+              // Divider with “or”
               Row(
                 children: [
                   const Expanded(
                     child: Divider(thickness: 1, color: Colors.grey),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
                       "or",
                       style: TextStyle(color: Colors.grey[600]),
@@ -145,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 25),
 
-              // 🔹 Social Login Buttons (using your assets)
+              // Social Login Buttons (using your assets)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -170,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, '/register');
+                      // TODO: navigate to Sign Up
                     },
                     child: const Text(
                       "Sign Up",
@@ -189,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // 🔹 Custom image social button
+  // Custom image social button
   Widget _socialButton(String assetPath, VoidCallback onPressed) {
     return Container(
       height: 50,
