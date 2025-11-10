@@ -50,7 +50,9 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                   Navigator.pushReplacementNamed(context, '/loginr');
+                },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
                   backgroundColor: Color(0xFFFF1F70),

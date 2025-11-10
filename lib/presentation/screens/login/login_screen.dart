@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // Title
               const Text(
-                "Log in",
+                "Log In",
                 style: TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
@@ -98,16 +98,17 @@ class _LoginPageState extends State<LoginPage> {
                 height: 56,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFFF1F70)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: Color(0xFFFF1F70),
+                    //gradient: const LinearGradient(
+                      // colors: [Color(0xFFFF1F70)],
+                      // begin: Alignment.topLeft,
+                      // end: Alignment.bottomRight,
+                    //),
                     borderRadius: BorderRadius.circular(28),
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // TODO: handle login logic
+                       Navigator.pushReplacementNamed(context, '/home');
                     },
                     child: const Text(
                       "Log In",
