@@ -34,24 +34,31 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             _buildItemMenu(
-              'Profile',
+              'My Wallet',
               'assets/imgs/icn_wallet.png',
+              // onTap: () {
+              //   Navigator.pop(context);
+              //   Navigator.push(context, MaterialPageRoute(builder: (context) => MyWallet())));
+              // },
+            ),
+            _buildItemMenu(
+              'Profile', 
+              'assets/imgs/icn_user.png',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
               },
             ),
-            _buildItemMenu('Settings', 'assets/imgs/icn_user.png'),
-            _buildItemMenu('Logout', 'assets/imgs/icn_chart.png'),
-            _buildItemMenu('Logout', 'assets/imgs/icn_transfer.png'),
-            _buildItemMenu('Logout', 'assets/imgs/icn_settings.png'),
+            _buildItemMenu('Statistics', 'assets/imgs/icn_chart.png'),
+            _buildItemMenu('Transfer', 'assets/imgs/icn_transfer.png'),
+            _buildItemMenu('Settings', 'assets/imgs/icn_settings.png'),
             const Spacer(),
             Container(
               padding: const EdgeInsets.all(16.0),
               alignment: Alignment.center,
               child: TextButton(
                 onPressed: () {
-                   Navigator.pushReplacementNamed(context, '/loginr');
+                   Navigator.pushReplacementNamed(context, '/login');
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),

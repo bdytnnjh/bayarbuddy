@@ -1,4 +1,5 @@
 import 'package:app/core/configs/firebase_options.dart';
+import 'package:app/core/themes/base_theme.dart';
 import 'package:app/presentation/screens/boarding/boarding_screen.dart';
 import 'package:app/presentation/screens/home/home_screen.dart';
 import 'package:app/presentation/screens/login/login_screen.dart';
@@ -22,20 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bayar Buddy',
       initialRoute: '/',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        primarySwatch: Colors.pink,
-        drawerTheme: DrawerThemeData(backgroundColor: Colors.white),
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.light,
-          seedColor: Color(0xFFFF1F70),
-          primary: Color(0xFFFF1F70),
-          secondary: Color(0xFF5664BB),
-          surface: Colors.white,
-          onSurface: Colors.black87,
-          onPrimary: Colors.white,
-          ),
-      ),
+      theme: buildBaseTheme(),
     // Static route definitions
     routes: {
     '/': (context) => SplashScreen(), 
