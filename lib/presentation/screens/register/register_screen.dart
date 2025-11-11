@@ -35,25 +35,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
             
             SizedBox(height: 30),
             
-            Text('Email Address', style: TextStyle(color: Colors.grey)),
             TextField(
               decoration: InputDecoration(
-                
+                labelText: "Email Address",
+                hintText: "helloweenski@gmail.com",
+                border: const UnderlineInputBorder(),
               ),
             ),
             
             SizedBox(height: 24),
             
-            Text('Password', style: TextStyle(color: Colors.grey)),
             TextField(
               obscureText: _hidePassword,
               decoration: InputDecoration(
+                labelText: "Password",
+                border: const UnderlineInputBorder(),
                 suffixIcon: IconButton(
-                  icon: Icon(_hidePassword ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(
+                  _hidePassword 
+                    ? Icons.visibility_off_outlined 
+                    : Icons.visibility_outlined,
+                  ),
                   onPressed: () {
                     setState(() {
                       _hidePassword = !_hidePassword;
                     });
+                  
                   },
                 ),
               ),
@@ -61,12 +68,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             
             SizedBox(height: 24),
             
-            Text('Confirm Password', style: TextStyle(color: Colors.grey)),
             TextField(
               obscureText: _hideConfirmPassword,
               decoration: InputDecoration(
+                labelText: "Confirm Password",
+                border: const UnderlineInputBorder(),
                 suffixIcon: IconButton(
-                  icon: Icon(_hideConfirmPassword ? Icons.visibility_off : Icons.visibility),
+                  icon: Icon(
+                    _hideConfirmPassword 
+                    ? Icons.visibility_off_outlined 
+                    : Icons.visibility_outlined),
                   onPressed: () {
                     setState(() {
                       _hideConfirmPassword = !_hideConfirmPassword;

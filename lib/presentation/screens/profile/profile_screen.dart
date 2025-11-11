@@ -1,3 +1,4 @@
+import 'package:app/presentation/screens/trusted_contact/trusted_contact_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app/presentation/screens/limit/limit_screen.dart';
 
@@ -64,7 +65,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
              _buildNavigationRow('Limit Transactions', () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => LimitTransactionScreen()));
              }),
-             _buildNavigationRow('Trusted Contacts', () {}),
+             _buildNavigationRow('Trusted Contacts', () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TrustedContactScreen()));
+             }),
              _buildToggleRow('Display Mode', displayModeEnabled, (value) {
                 setState(() {
                 displayModeEnabled = value;

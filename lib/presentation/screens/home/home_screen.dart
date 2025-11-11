@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                   spacing: 8.0,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.login_outlined, color: Colors.white),
+                    Image.asset('assets/imgs/icn_logout.png', width: 20, height: 20, color: Colors.white),
                     Text('Log out', style: TextStyle(color: Colors.white)),
                   ],
                 )
