@@ -84,7 +84,7 @@ class CardScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Cash Backs',
+                  'Transaction History',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
