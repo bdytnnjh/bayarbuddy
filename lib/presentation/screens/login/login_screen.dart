@@ -1,3 +1,4 @@
+import 'package:app/core/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,17 +25,17 @@ class _LoginPageState extends State<LoginPage> {
               // App Logo (top-left)
               Align(
                 alignment: Alignment.topLeft,
-                child: Image.asset('assets/imgs/app_logo_only_blue.png', height: 60),
+                child: Image.asset(
+                  'assets/imgs/app_logo_only_blue.png',
+                  height: 60,
+                ),
               ),
               const SizedBox(height: 30),
 
               // Title
               const Text(
                 "Log In",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30),
 
@@ -92,34 +93,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 40),
 
-              // Log In Button
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFF1F70),
-                    //gradient: const LinearGradient(
-                      // colors: [Color(0xFFFF1F70)],
-                      // begin: Alignment.topLeft,
-                      // end: Alignment.bottomRight,
-                    //),
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/home');
-                    },
-                    child: const Text(
-                      "Log In",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+              ButtonWidget.rectangle(
+                context: context,
+                text: "Log In",
+                width: MediaQuery.of(context).size.width,
+                type: ButtonType.primary,
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/home');
+                },
               ),
               const SizedBox(height: 32),
 

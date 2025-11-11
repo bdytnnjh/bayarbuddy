@@ -35,11 +35,22 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            _buildItemMenu('My Wallet', 'assets/imgs/icn_wallet.png', onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
-            }),
-            _buildItemMenu('Profile', 'assets/imgs/icn_user.png'),
+            _buildItemMenu(
+              'My Wallet',
+              'assets/imgs/icn_wallet.png',
+              // onTap: () {
+              //   Navigator.pop(context);
+              //   Navigator.push(context, MaterialPageRoute(builder: (context) => MyWallet())));
+              // },
+            ),
+            _buildItemMenu(
+              'Profile', 
+              'assets/imgs/icn_user.png',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+              },
+            ),
             _buildItemMenu('Statistics', 'assets/imgs/icn_chart.png'),
             _buildItemMenu('Transfer', 'assets/imgs/icn_transfer.png', onTap: () {
               Navigator.pop(context);
