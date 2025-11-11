@@ -1,5 +1,6 @@
 import 'package:app/presentation/screens/card/card_screen.dart';
 import 'package:app/presentation/screens/profile/profile_screen.dart';
+import 'package:app/presentation/screens/transfer/transfer_screen1.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -34,17 +35,16 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            _buildItemMenu(
-              'My Wallet',
-              'assets/imgs/icn_wallet.png',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
-              },
-            ),
+            _buildItemMenu('My Wallet', 'assets/imgs/icn_wallet.png', onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+            }),
             _buildItemMenu('Profile', 'assets/imgs/icn_user.png'),
             _buildItemMenu('Statistics', 'assets/imgs/icn_chart.png'),
-            _buildItemMenu('Transfer', 'assets/imgs/icn_transfer.png'),
+            _buildItemMenu('Transfer', 'assets/imgs/icn_transfer.png', onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TransferScreen1()));
+            }),
             _buildItemMenu('Settings', 'assets/imgs/icn_settings.png'),
             const Spacer(),
             Container(
