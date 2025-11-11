@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'transfer_screen6.dart';
+import 'family_member.dart';
 
 class TransferScreen5 extends StatelessWidget {
   final String amount;
@@ -192,11 +193,10 @@ class TransferScreen5 extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle help
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Help support will be contacted'),
-                          backgroundColor: Color(0xFFFF1F70),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FamilyMemberHelpScreen(),
                         ),
                       );
                     },

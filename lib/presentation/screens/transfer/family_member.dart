@@ -1,4 +1,5 @@
 import 'package:app/core/themes/app_theme.dart';
+import 'package:app/presentation/screens/transfer/transfer_screen6.dart';
 import 'package:flutter/material.dart';
 
 class FamilyMemberHelpScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class _FamilyMemberHelpScreenState extends State<FamilyMemberHelpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.colors.bgPink.withValues(alpha: 0.4),
+      backgroundColor: Color(0xFFFFE5F0),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -68,7 +69,18 @@ class _FamilyMemberHelpScreenState extends State<FamilyMemberHelpScreen> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        // Handle reject
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TransferScreen6(
+                              amount: '700.00',
+                              recipientName: 'TOM HAALAND',
+                              recipientPhone: '1233 3566 2352',
+                              senderName: 'TOM HAALAND',
+                              isSuccessful: false,
+                            ),
+                          ),
+                        );
                       },
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
@@ -96,7 +108,18 @@ class _FamilyMemberHelpScreenState extends State<FamilyMemberHelpScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle approve
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TransferScreen6(
+                              amount: '700.00',
+                              recipientName: 'TOM HAALAND',
+                              recipientPhone: '1233 3566 2352',
+                              senderName: 'TOM HAALAND',
+                              isSuccessful: true,
+                            ),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.colors.primary,
@@ -134,7 +157,7 @@ class _FamilyMemberHelpScreenState extends State<FamilyMemberHelpScreen> {
         Text(
           label,
           style: TextStyle(
-            color: AppTheme.colors.grey,
+            color: Color(0xFF878787),
             fontSize: 14,
             fontWeight: FontWeight.w500,
             fontFamily: AppTheme.typography.primary,
