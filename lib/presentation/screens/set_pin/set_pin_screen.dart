@@ -20,17 +20,17 @@ class _SetPinScreenState extends State<SetPinScreen> {
     }
   }
 
-  void _deleteDigit() {
-    if (pin.isNotEmpty) {
-      setState(() {
-        pin = pin.substring(0, pin.length - 1);
-      });
-    }
-  }
+  // void _deleteDigit() {
+  //   if (pin.isNotEmpty) {
+  //     setState(() {
+  //       pin = pin.substring(0, pin.length - 1);
+  //     });
+  //   }
+  // }
 
   void _setPin() {
     if (pin.length == maxPinLength) {
-      print('PIN set: $pin');
+      debugPrint('PIN set: $pin');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LoginPage()),

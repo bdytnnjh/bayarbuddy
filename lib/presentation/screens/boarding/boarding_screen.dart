@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../set pin/set_pin_screen.dart';
+import '../set_pin/set_pin_screen.dart';
 
 class BoardingScreen extends StatelessWidget {
   BoardingScreen({super.key});
