@@ -1,4 +1,4 @@
-import 'package:app/presentation/screens/transfer/transfer_screen4.dart';
+import 'package:app/presentation/screens/main/transfer/transfer_screen4.dart';
 import 'package:flutter/material.dart';
 
 class TransferScreen3 extends StatefulWidget {
@@ -29,10 +29,7 @@ class _TransferScreen3State extends State<TransferScreen3> {
         backgroundColor: Colors.white,
         leading: Container(
           margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Color(0xFFFF1F70),
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: Color(0xFFFF1F70), borderRadius: BorderRadius.circular(12)),
           child: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
@@ -40,12 +37,7 @@ class _TransferScreen3State extends State<TransferScreen3> {
         ),
         title: Text(
           'Transfer To',
-          style: TextStyle(
-            fontFamily: 'Amaranth',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontFamily: 'Amaranth', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: false,
       ),
@@ -57,10 +49,7 @@ class _TransferScreen3State extends State<TransferScreen3> {
             // Recipient Info
             Row(
               children: [
-                CircleAvatar(
-                  radius: 32,
-                  backgroundImage: AssetImage('assets/imgs/user_avatar.png'),
-                ),
+                CircleAvatar(radius: 32, backgroundImage: AssetImage('assets/imgs/user_avatar.png')),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -68,28 +57,16 @@ class _TransferScreen3State extends State<TransferScreen3> {
                     children: [
                       Text(
                         '1233 3566 2352',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'TOM HAALAND',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'MAYBANK',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -113,24 +90,12 @@ class _TransferScreen3State extends State<TransferScreen3> {
               controller: _referenceController,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
                 hintText: 'Enter reference',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.grey[400],
-                ),
+                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
               ),
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.black),
             ),
             const SizedBox(height: 32),
 
@@ -150,24 +115,12 @@ class _TransferScreen3State extends State<TransferScreen3> {
               maxLines: 3,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
                 hintText: 'Enter payment details',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.grey[400],
-                ),
+                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
               ),
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.black),
             ),
             const SizedBox(height: 48),
 
@@ -178,10 +131,7 @@ class _TransferScreen3State extends State<TransferScreen3> {
                 onPressed: () {
                   if (_referenceController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Please enter recipient reference'),
-                        backgroundColor: Color(0xFFFF1F70),
-                      ),
+                      SnackBar(content: Text('Please enter recipient reference'), backgroundColor: Color(0xFFFF1F70)),
                     );
                   } else {
                     // Navigate to Transfer Screen 4 with reference and payment details
@@ -200,9 +150,7 @@ class _TransferScreen3State extends State<TransferScreen3> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 child: Text(
                   'Continue',

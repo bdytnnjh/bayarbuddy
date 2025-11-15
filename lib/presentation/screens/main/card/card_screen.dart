@@ -1,4 +1,3 @@
-import 'package:app/presentation/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class CardScreen extends StatelessWidget {
@@ -7,31 +6,6 @@ class CardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Color(0xFFFF1F70),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        title: Text(
-          'Card Details',
-          style: TextStyle(
-            fontFamily: 'Amaranth',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: false,
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -58,13 +32,8 @@ class CardScreen extends StatelessWidget {
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 48,
-                    vertical: 14,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 child: Text(
                   'Add Card',
@@ -96,11 +65,7 @@ class CardScreen extends StatelessWidget {
                   onTap: () {},
                   child: Text(
                     'See All',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: Color(0xFFFF1F70),
-                    ),
+                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
                   ),
                 ),
               ],
@@ -136,47 +101,10 @@ class CardScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 1,
-        selectedItemColor: Color(0xFFFF1F70),
-        unselectedItemColor: Colors.grey[300],
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Color(0xFFFF1F70),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(Icons.credit_card, color: Colors.white),
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: '',
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildCardDetailsWidget(
-      String cardType, String cardInfo, String balance) {
+  Widget _buildCardDetailsWidget(String cardType, String cardInfo, String balance) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -194,17 +122,11 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   cardType,
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   cardInfo,
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: Colors.grey[600]),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -225,8 +147,7 @@ class CardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCurrencyCard(String currency, String amount,
-      {required bool isActive}) {
+  Widget _buildCurrencyCard(String currency, String amount, {required bool isActive}) {
     return Container(
       width: 100,
       padding: const EdgeInsets.all(12),
@@ -249,8 +170,7 @@ class CardScreen extends StatelessWidget {
                   color: isActive ? Colors.white : Colors.black,
                 ),
               ),
-              Icon(Icons.arrow_outward,
-                  size: 16, color: isActive ? Colors.white : Colors.black),
+              Icon(Icons.arrow_outward, size: 16, color: isActive ? Colors.white : Colors.black),
             ],
           ),
           const SizedBox(height: 8),
@@ -277,23 +197,14 @@ class CardScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           Container(
             width: 48,
             height: 48,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon,
-                color: backgroundColor == Color(0xFFFF1F70)
-                    ? Colors.white
-                    : Colors.black),
+            decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(12)),
+            child: Icon(icon, color: backgroundColor == Color(0xFFFF1F70) ? Colors.white : Colors.black),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -302,19 +213,11 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   time,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -343,16 +246,10 @@ class CardScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: AssetImage(avatarPath),
-          ),
+          CircleAvatar(radius: 24, backgroundImage: AssetImage(avatarPath)),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -360,19 +257,11 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   time,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),

@@ -1,5 +1,5 @@
 import 'package:app/core/themes/app_theme.dart';
-import 'package:app/presentation/screens/transfer/transfer_screen6.dart';
+import 'package:app/presentation/screens/main/transfer/transfer_screen6.dart';
 import 'package:flutter/material.dart';
 
 class FamilyMemberHelpScreen extends StatefulWidget {
@@ -83,14 +83,9 @@ class _FamilyMemberHelpScreenState extends State<FamilyMemberHelpScreen> {
                         );
                       },
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: AppTheme.colors.textPrimary,
-                          width: 2,
-                        ),
+                        side: BorderSide(color: AppTheme.colors.textPrimary, width: 2),
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                         backgroundColor: Colors.white,
                       ),
                       child: Text(
@@ -124,9 +119,7 @@ class _FamilyMemberHelpScreenState extends State<FamilyMemberHelpScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.colors.primary,
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                       ),
                       child: Text(
                         'Approve',

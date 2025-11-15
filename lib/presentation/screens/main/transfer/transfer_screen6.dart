@@ -57,32 +57,19 @@ class TransferScreen6 extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   // To Section
-                  _buildDetailRow(
-                    label: 'To',
-                    value1: recipientName,
-                    value2: recipientPhone,
-                  ),
+                  _buildDetailRow(label: 'To', value1: recipientName, value2: recipientPhone),
                   const SizedBox(height: 24),
 
                   // From Section
-                  _buildDetailRow(
-                    label: 'From',
-                    value1: senderName,
-                  ),
+                  _buildDetailRow(label: 'From', value1: senderName),
                   const SizedBox(height: 24),
 
                   // Transaction type Section
-                  _buildDetailRow(
-                    label: 'Transaction type',
-                    value1: 'Transfer',
-                  ),
+                  _buildDetailRow(label: 'Transaction type', value1: 'Transfer'),
                   const SizedBox(height: 24),
 
                   // Date & time Section
-                  _buildDetailRow(
-                    label: 'Date & time',
-                    value1: '23 May 2025, 12:03AM',
-                  ),
+                  _buildDetailRow(label: 'Date & time', value1: '23 May 2025, 12:03AM'),
                 ],
               ),
             ),
@@ -95,19 +82,12 @@ class TransferScreen6 extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Navigate to Home Screen
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ),
-                  );
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   elevation: 0,
                 ),
                 child: Text(
@@ -127,22 +107,14 @@ class TransferScreen6 extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow({
-    required String label,
-    required String value1,
-    String? value2,
-  }) {
+  Widget _buildDetailRow({required String label, required String value1, String? value2}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            color: Color(0xFFB8697E),
-          ),
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Color(0xFFB8697E)),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -167,7 +139,7 @@ class TransferScreen6 extends StatelessWidget {
                   color: Color(0xFF5B7EFF),
                 ),
               ),
-            ]
+            ],
           ],
         ),
       ],

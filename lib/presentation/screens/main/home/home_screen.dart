@@ -1,15 +1,14 @@
-import 'package:app/presentation/screens/card/card_screen.dart';
-import 'package:app/presentation/screens/profile/profile_screen.dart';
-import 'package:app/presentation/screens/transfer/transfer_screen1.dart';
+import 'package:app/presentation/screens/main/card/card_screen.dart';
+import 'package:app/presentation/screens/main/profile/profile_screen.dart';
+import 'package:app/presentation/screens/main/transfer/transfer_screen1.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(title: Text('Home Screen')),
       drawer: Drawer(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -44,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               // },
             ),
             _buildItemMenu(
-              'Profile', 
+              'Profile',
               'assets/imgs/icn_user.png',
               onTap: () {
                 Navigator.pop(context);
@@ -52,10 +51,14 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             _buildItemMenu('Statistics', 'assets/imgs/icn_chart.png'),
-            _buildItemMenu('Transfer', 'assets/imgs/icn_transfer.png', onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TransferScreen1()));
-            }),
+            _buildItemMenu(
+              'Transfer',
+              'assets/imgs/icn_transfer.png',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TransferScreen1()));
+              },
+            ),
             _buildItemMenu('Settings', 'assets/imgs/icn_settings.png'),
             const Spacer(),
             Container(
@@ -77,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                     Image.asset('assets/imgs/icn_logout.png', width: 20, height: 20, color: Colors.white),
                     Text('Log out', style: TextStyle(color: Colors.white)),
                   ],
-                )
+                ),
               ),
             ),
           ],
@@ -150,11 +153,7 @@ class HomeScreen extends StatelessWidget {
                   onTap: () {},
                   child: Text(
                     'See All',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: Color(0xFFFF1F70),
-                    ),
+                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
                   ),
                 ),
               ],
@@ -203,11 +202,7 @@ class HomeScreen extends StatelessWidget {
                   onTap: () {},
                   child: Text(
                     'See All',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: Color(0xFFFF1F70),
-                    ),
+                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
                   ),
                 ),
               ],
@@ -239,42 +234,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: 0,
-        selectedItemColor: Color(0xFFFF1F70),
-        unselectedItemColor: Colors.grey[300],
-        onTap: (index) {
-          if (index == 1) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen()));
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Color(0xFFFF1F70),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(Icons.home, color: Colors.white),
-            ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.credit_card_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_outlined),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: '',
-          ),
-        ],
       ),
     );
   }
@@ -338,18 +297,12 @@ class HomeScreen extends StatelessWidget {
     return Container(
       width: 160,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
-            radius: 32,
-            backgroundImage: AssetImage(avatarPath),
-          ),
+          CircleAvatar(radius: 32, backgroundImage: AssetImage(avatarPath)),
           const SizedBox(height: 12),
           Text(
             amount,
@@ -382,9 +335,7 @@ class HomeScreen extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: isIncoming
-                    ? [Color(0xFFB3E5FC), Color(0xFF80DEEA)]
-                    : [Color(0xFFE8EAFD), Color(0xFFD1D5FF)],
+                colors: isIncoming ? [Color(0xFFB3E5FC), Color(0xFF80DEEA)] : [Color(0xFFE8EAFD), Color(0xFFD1D5FF)],
               ),
               borderRadius: BorderRadius.circular(4),
             ),
@@ -405,5 +356,5 @@ class HomeScreen extends StatelessWidget {
       leading: Image.asset(iconPath, width: 24, height: 24),
       title: Text(title, style: TextStyle(fontFamily: 'Poppins', fontSize: 16)),
     );
-  }      
+  }
 }

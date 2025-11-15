@@ -1,4 +1,4 @@
-import 'package:app/presentation/screens/transfer/transfer_screen3.dart';
+import 'package:app/presentation/screens/main/transfer/transfer_screen3.dart';
 import 'package:flutter/material.dart';
 
 class TransferScreen2 extends StatefulWidget {
@@ -68,10 +68,7 @@ class _TransferScreen2State extends State<TransferScreen2> {
         backgroundColor: Colors.white,
         leading: Container(
           margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Color(0xFFFF1F70),
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: Color(0xFFFF1F70), borderRadius: BorderRadius.circular(12)),
           child: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
@@ -79,12 +76,7 @@ class _TransferScreen2State extends State<TransferScreen2> {
         ),
         title: Text(
           'Transfer To',
-          style: TextStyle(
-            fontFamily: 'Amaranth',
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontFamily: 'Amaranth', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: false,
       ),
@@ -99,10 +91,7 @@ class _TransferScreen2State extends State<TransferScreen2> {
                   // Recipient Info
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 32,
-                        backgroundImage: AssetImage('assets/imgs/user_avatar.png'),
-                      ),
+                      CircleAvatar(radius: 32, backgroundImage: AssetImage('assets/imgs/user_avatar.png')),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
@@ -110,28 +99,16 @@ class _TransferScreen2State extends State<TransferScreen2> {
                           children: [
                             Text(
                               '1233 3566 2352',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
+                              style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               'TOM HAALAND',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               'MAYBANK',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
+                              style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                             ),
                           ],
                         ),
@@ -176,10 +153,7 @@ class _TransferScreen2State extends State<TransferScreen2> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    height: 2,
-                    color: Color(0xFFFF1F70),
-                  ),
+                  Container(height: 2, color: Color(0xFFFF1F70)),
                 ],
               ),
             ),
@@ -194,44 +168,28 @@ class _TransferScreen2State extends State<TransferScreen2> {
                 // Row 1: 1, 2, 3
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildKeypadButton('1'),
-                    _buildKeypadButton('2'),
-                    _buildKeypadButton('3'),
-                  ],
+                  children: [_buildKeypadButton('1'), _buildKeypadButton('2'), _buildKeypadButton('3')],
                 ),
                 const SizedBox(height: 16),
 
                 // Row 2: 4, 5, 6
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildKeypadButton('4'),
-                    _buildKeypadButton('5'),
-                    _buildKeypadButton('6'),
-                  ],
+                  children: [_buildKeypadButton('4'), _buildKeypadButton('5'), _buildKeypadButton('6')],
                 ),
                 const SizedBox(height: 16),
 
                 // Row 3: 7, 8, 9
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildKeypadButton('7'),
-                    _buildKeypadButton('8'),
-                    _buildKeypadButton('9'),
-                  ],
+                  children: [_buildKeypadButton('7'), _buildKeypadButton('8'), _buildKeypadButton('9')],
                 ),
                 const SizedBox(height: 16),
 
                 // Row 4: X, 0, ✓
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildDeleteButton(),
-                    _buildKeypadButton('0'),
-                    _buildCheckButton(),
-                  ],
+                  children: [_buildDeleteButton(), _buildKeypadButton('0'), _buildCheckButton()],
                 ),
               ],
             ),
@@ -247,19 +205,11 @@ class _TransferScreen2State extends State<TransferScreen2> {
       child: Container(
         width: 60,
         height: 60,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: Colors.transparent, shape: BoxShape.circle),
         child: Center(
           child: Text(
             digit,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
       ),
@@ -272,19 +222,11 @@ class _TransferScreen2State extends State<TransferScreen2> {
       child: Container(
         width: 60,
         height: 60,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle),
         child: Center(
           child: Text(
             'X',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
       ),
@@ -295,27 +237,13 @@ class _TransferScreen2State extends State<TransferScreen2> {
     return GestureDetector(
       onTap: () {
         // Navigate to Transfer Screen 3 with amount
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TransferScreen3(amount: amount),
-          ),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => TransferScreen3(amount: amount)));
       },
       child: Container(
         width: 60,
         height: 60,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: Icon(
-            Icons.check,
-            color: Colors.white,
-            size: 28,
-          ),
-        ),
+        decoration: BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+        child: Center(child: Icon(Icons.check, color: Colors.white, size: 28)),
       ),
     );
   }

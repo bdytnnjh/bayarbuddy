@@ -5,7 +5,7 @@ import 'package:app/presentation/screens/limit/limit_screen.dart';
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
-   @override
+  @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
@@ -14,7 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool displayModeEnabled = false;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Profile Settings')),
       body: SingleChildScrollView(
@@ -48,41 +48,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               Text(
                 'Security',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),  
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
               ),
               _buildNavigationRow('Change Pin', () {}),
               _buildNavigationRow('Change Password', () {}),
               _buildToggleRow('Finger Print', fingerPrintEnabled, (value) {
                 setState(() {
-                fingerPrintEnabled = value;
-              });
-            }),
-            SizedBox(height: 16.0),
-            Text(
-              'Preferences',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
-            ),
-             _buildNavigationRow('Limit Transactions', () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => LimitTransactionScreen()));
-             }),
-             _buildNavigationRow('Trusted Contacts', () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TrustedContactScreen()));
-             }),
-             _buildToggleRow('Display Mode', displayModeEnabled, (value) {
+                  fingerPrintEnabled = value;
+                });
+              }),
+              SizedBox(height: 16.0),
+              Text(
+                'Preferences',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+              ),
+              _buildNavigationRow('Limit Transactions', () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => LimitTransactionScreen()));
+              }),
+              _buildNavigationRow('Trusted Contacts', () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TrustedContactScreen()));
+              }),
+              _buildToggleRow('Display Mode', displayModeEnabled, (value) {
                 setState(() {
-                displayModeEnabled = value;
-              });
-            }),
-          ],
+                  displayModeEnabled = value;
+                });
+              }),
+            ],
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
     );
   }
-  Widget _buildInfoRow(String label, String value){
+
+  Widget _buildInfoRow(String label, String value) {
     return Container(
-      padding: const EdgeInsets.all(16.0), 
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(color: Color(0xfff4f4f4), borderRadius: BorderRadius.circular(10.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,36 +91,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label,
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
           ),
-          Text(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70))),
+          Text(
+            value,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+          ),
         ],
       ),
     );
   }
+
   Widget _buildNavigationRow(String label, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF8F8F8),
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+        decoration: BoxDecoration(color: const Color(0xFFF8F8F8), borderRadius: BorderRadius.circular(12.0)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFFFF1F70),
-              ),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFFFF1F70)),
             ),
-            const Icon(
-              Icons.chevron_right,
-              color: Color(0xFFFF1F70),
-              size: 24,
-            ),
+            const Icon(Icons.chevron_right, color: Color(0xFFFF1F70), size: 24),
           ],
         ),
       ),
@@ -130,20 +123,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildToggleRow(String label, bool value, Function(bool) onChanged) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8F8F8),
-        borderRadius: BorderRadius.circular(12.0),
-      ),
+      decoration: BoxDecoration(color: const Color(0xFFF8F8F8), borderRadius: BorderRadius.circular(12.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFFFF1F70),
-            ),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFFFF1F70)),
           ),
           Switch(
             value: value,
@@ -157,51 +143,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
-  Widget _buildBottomNav() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem('assets/imgs/icn_home.png', false),
-          _buildNavItem('assets/imgs/icn_wallet.png', false),
-          _buildNavItem('assets/imgs/icn_chart.png', false),
-          _buildNavItem('assets/imgs/icn_user.png', true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(dynamic icon, bool isActive) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    decoration: BoxDecoration(
-      color: isActive ? const Color(0xFFFF1F70) : Colors.transparent,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: icon is String
-        ? Image.asset(
-            icon,
-            width: 28,
-            height: 28,
-            color: isActive ? Colors.white : const Color(0xFFB0B0B0),
-          )
-        : Icon(
-            icon,
-            color: isActive ? Colors.white : const Color(0xFFB0B0B0),
-            size: 28,
-          ),
-  );
-}
 }
