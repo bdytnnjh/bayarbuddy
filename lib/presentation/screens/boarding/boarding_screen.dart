@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../set pin/set_pin_screen.dart';
 
-class BoardingScreen extends StatelessWidget{
+class BoardingScreen extends StatelessWidget {
   BoardingScreen({super.key});
 
   final PageController controller = PageController();
@@ -8,25 +9,69 @@ class BoardingScreen extends StatelessWidget{
 
   final pages = [
     Container(
-      color: Colors.blueAccent,
-      child: const Center(
-        child: Text(
-          'Welcome',
-          style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
-
-        ),
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/imgs/boarding_1.png',
+            fit: BoxFit.cover,
+            width: 300,
+          ),
+          Text(
+            'Easy, Fast & Trusted',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Fast money transfer and guaranteed safe transactions with others.',
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     ),
     Container(
-      color: Colors.deepPurpleAccent,
-      child: const Center(
-        child: Text('Discover Features', style: TextStyle(color: Colors.white, fontSize: 24)),
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/imgs/boarding_2.png',
+            fit: BoxFit.cover,
+            width: 300,
+          ),
+          Text(
+            'Saving Your Money',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Track the progress of your savings and start a habit of saving with us.',
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     ),
     Container(
-      color: Colors.teal,
-      child: const Center(
-        child: Text('Get Started', style: TextStyle(color: Colors.white, fontSize: 24)),
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            'assets/imgs/boarding_3.png',
+            fit: BoxFit.cover,
+            width: 300,
+          ),
+          Text(
+            'Free Transactions',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Provides the quality of the financial system with free money transactions without any fees.',
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     ),
   ];
@@ -46,7 +91,10 @@ class BoardingScreen extends StatelessWidget{
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 16.0,
+              ),
               child: Row(
                 children: [
                   TextButton(
@@ -55,8 +103,8 @@ class BoardingScreen extends StatelessWidget{
                         pages.length - 1,
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.ease,
-                        );
-                        Navigator.pushReplacementNamed(context, '/home');
+                      );
+                      Navigator.pushReplacementNamed(context, '/home');
                     },
                     child: const Text('Skip'),
                   ),
@@ -69,10 +117,12 @@ class BoardingScreen extends StatelessWidget{
                         (i) => AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
                           margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          width: current == i ? 20:8,
+                          width: current == i ? 20 : 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: current == i ? Colors.black87 : Colors.black26,
+                            color: current == i
+                                ? Colors.black87
+                                : Colors.black26,
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
@@ -84,20 +134,27 @@ class BoardingScreen extends StatelessWidget{
                     valueListenable: pageIndex,
                     builder: (context, current, _) => ElevatedButton(
                       onPressed: () {
-                        if (current < pages.length -1) {
+                        if (current < pages.length - 1) {
                           controller.animateToPage(
                             current + 1,
                             duration: const Duration(milliseconds: 400),
                             curve: Curves.ease,
-                            );
+                          );
                         } else {
-                          //last page action
-                          Navigator.pushReplacementNamed(context, '/login');
+                          // Navigate to SetPinScreen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SetPinScreen(),
+                            ),
+                          );
                         }
                       },
-                      child: Text(current < pages.length - 1 ? 'Next' : 'Get Started'),
+                      child: Text(
+                        current < pages.length - 1 ? 'Next' : 'Get Started',
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
