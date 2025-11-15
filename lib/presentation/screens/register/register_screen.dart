@@ -1,3 +1,4 @@
+import 'package:app/presentation/screens/register/screen1.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -93,7 +94,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Screen1(),
+                      ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),
                   shape: RoundedRectangleBorder(
