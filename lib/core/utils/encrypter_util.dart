@@ -1,7 +1,7 @@
 import 'package:encrypt/encrypt.dart';
 
 class EncrypterUtil {
-  String keyString = '9bLQ8qA79bfCMCDXNPYRbYVNicmi59k';
+  String keyString = '9bLQ8qA79bfCMCDXNPYRbYVNicmi59k1';
   String ivString = 'bByZM84tUl6h1djM';
 
   String encryptData(String plainText) {
