@@ -3,7 +3,7 @@ import 'package:app/core/themes/base_theme.dart';
 import 'package:app/presentation/screens/boarding/boarding_screen.dart';
 import 'package:app/presentation/screens/login/login_screen.dart';
 import 'package:app/presentation/screens/main/wrapper_screen.dart';
-import 'package:app/presentation/screens/register/providers/register_provider.dart';
+//import 'package:app/presentation/screens/register/providers/register_provider.dart';
 import 'package:app/presentation/screens/register/register_screen.dart';
 import 'package:app/presentation/screens/splash/splash_screen.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         // Add your providers here
         ChangeNotifierProvider(create: (_) => AppProvider()),
-        ChangeNotifierProvider(create: (_) => RegisterProvider()),
+        //ChangeNotifierProvider(create: (_) => RegisterProvider()),
       ],
       child: MaterialApp(
         title: 'Bayar Buddy',
