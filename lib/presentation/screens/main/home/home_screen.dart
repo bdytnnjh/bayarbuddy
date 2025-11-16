@@ -26,10 +26,7 @@ class HomeScreen extends StatelessWidget {
                       "John Smith",
                       style: TextStyle(fontFamily: 'Amaranth', fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    Text(
-                      "john.appleseed@apple.com",
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
-                    ),
+                    Text("john.appleseed@apple.com", style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                   ],
                 ),
               ),
@@ -95,10 +92,7 @@ class HomeScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Current Balance',
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
-                ),
+                Text('Current Balance', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                 const SizedBox(height: 8),
                 Text(
                   'RM 34,565.78',
@@ -142,19 +136,11 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'Incoming Transactions',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[700],
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
                 ),
                 GestureDetector(
                   onTap: () {},
-                  child: Text(
-                    'See All',
-                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
-                  ),
+                  child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
                 ),
               ],
             ),
@@ -191,19 +177,11 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'Outgoing Transactions',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[700],
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
                 ),
                 GestureDetector(
                   onTap: () {},
-                  child: Text(
-                    'See All',
-                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
-                  ),
+                  child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
                 ),
               ],
             ),
@@ -257,13 +235,10 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      cardType,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
+                    Text(cardType, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                     Text(
                       cardInfo,
-                      style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -272,12 +247,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 balance,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFF1F70),
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
               ),
             ],
           ),
@@ -307,21 +277,17 @@ class HomeScreen extends StatelessWidget {
           Text(
             amount,
             style: TextStyle(
-              fontFamily: 'Poppins',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: isIncoming ? Color(0xFF00D4FF) : Color(0xFFFF3D00),
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
-          ),
+          Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
           Flexible(
             child: Text(
               name,
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 12, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -341,10 +307,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            date,
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 10, color: Colors.grey[600]),
-          ),
+          Text(date, style: TextStyle(fontSize: 10, color: Colors.grey[600])),
         ],
       ),
     );
@@ -354,7 +317,7 @@ class HomeScreen extends StatelessWidget {
     return ListTile(
       onTap: onTap,
       leading: Image.asset(iconPath, width: 24, height: 24),
-      title: Text(title, style: TextStyle(fontFamily: 'Poppins', fontSize: 16)),
+      title: Text(title, style: TextStyle(fontSize: 16)),
     );
   }
 }
