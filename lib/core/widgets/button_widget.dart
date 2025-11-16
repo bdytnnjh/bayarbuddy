@@ -55,7 +55,9 @@ class ButtonWidget {
       borderRadius: BorderRadius.circular(50),
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
-        overlayColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
           if (states.contains(WidgetState.pressed)) {
             return overlayColor;
           }
@@ -76,7 +78,11 @@ class ButtonWidget {
                     if (leftIcon != null) {
                       return Container(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(leftIcon, size: 25, color: iconColor ?? Colors.white),
+                        child: Icon(
+                          leftIcon,
+                          size: 25,
+                          color: iconColor ?? Colors.white,
+                        ),
                       );
                     } else {
                       return const SizedBox();
@@ -85,14 +91,21 @@ class ButtonWidget {
                 ),
                 Text(
                   text,
-                  style: TextStyle(color: textColor ?? Colors.white, fontSize: fontSize ?? 18),
+                  style: TextStyle(
+                    color: textColor ?? Colors.white,
+                    fontSize: fontSize ?? 18,
+                  ),
                 ),
                 Builder(
                   builder: (context) {
                     if (rightIcon != null) {
                       return Container(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(rightIcon, size: 25, color: iconColor ?? Colors.white),
+                        child: Icon(
+                          rightIcon,
+                          size: 25,
+                          color: iconColor ?? Colors.white,
+                        ),
                       );
                     } else {
                       return const SizedBox();
@@ -145,7 +158,9 @@ class ButtonWidget {
       borderRadius: BorderRadius.circular(size / 2),
       child: InkWell(
         borderRadius: BorderRadius.circular(size / 2),
-        overlayColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+        overlayColor: WidgetStateProperty.resolveWith<Color?>((
+          Set<WidgetState> states,
+        ) {
           if (states.contains(WidgetState.pressed)) {
             return overlayColor;
           }

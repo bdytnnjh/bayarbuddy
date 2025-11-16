@@ -32,11 +32,17 @@ class _SetPinScreenState extends State<SetPinScreen> {
   void _setPin() {
     if (pin.length == maxPinLength) {
       debugPrint('PIN set: $pin');
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-    } else {
-      ScaffoldMessenger.of(
+      Navigator.pushReplacement(
         context,
-      ).showSnackBar(SnackBar(content: Text('Please enter a 5-digit PIN'), backgroundColor: Color(0xFFFF1F70)));
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter a 5-digit PIN'),
+          backgroundColor: Color(0xFFFF1F70),
+        ),
+      );
     }
   }
 
@@ -67,18 +73,30 @@ class _SetPinScreenState extends State<SetPinScreen> {
               // Subtitle
               Text(
                 'Please set your own',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 16, color: Colors.grey[400]),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  color: Colors.grey[400],
+                ),
               ),
               Text(
                 'Pin Code',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 16, color: Colors.grey[400]),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  color: Colors.grey[400],
+                ),
               ),
               const SizedBox(height: 32),
 
               // PIN length indicator
               Text(
                 'Set Pin Code (5-digit)',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
               ),
               const SizedBox(height: 16),
 
@@ -93,7 +111,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: index < pin.length ? Color(0xFFFF1F70) : Colors.grey[300],
+                      color: index < pin.length
+                          ? Color(0xFFFF1F70)
+                          : Colors.grey[300],
                     ),
                   ),
                 ),
@@ -104,28 +124,44 @@ class _SetPinScreenState extends State<SetPinScreen> {
               // Row 1: 1, 2, 3
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [_buildKeypadButton('1'), _buildKeypadButton('2'), _buildKeypadButton('3')],
+                children: [
+                  _buildKeypadButton('1'),
+                  _buildKeypadButton('2'),
+                  _buildKeypadButton('3'),
+                ],
               ),
               const SizedBox(height: 24),
 
               // Row 2: 4, 5, 6
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [_buildKeypadButton('4'), _buildKeypadButton('5'), _buildKeypadButton('6')],
+                children: [
+                  _buildKeypadButton('4'),
+                  _buildKeypadButton('5'),
+                  _buildKeypadButton('6'),
+                ],
               ),
               const SizedBox(height: 24),
 
               // Row 3: 7, 8, 9
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [_buildKeypadButton('7'), _buildKeypadButton('8'), _buildKeypadButton('9')],
+                children: [
+                  _buildKeypadButton('7'),
+                  _buildKeypadButton('8'),
+                  _buildKeypadButton('9'),
+                ],
               ),
               const SizedBox(height: 24),
 
               // Row 4: Face ID, 0, Fingerprint
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [_buildCloseButton(), _buildKeypadButton('0'), _buildFingerprintButton()],
+                children: [
+                  _buildCloseButton(),
+                  _buildKeypadButton('0'),
+                  _buildFingerprintButton(),
+                ],
               ),
               const SizedBox(height: 48),
 
@@ -154,7 +190,11 @@ class _SetPinScreenState extends State<SetPinScreen> {
       type: ButtonType.secondary,
       child: Text(
         digit,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
       ),
     );
   }
@@ -177,15 +217,20 @@ class _SetPinScreenState extends State<SetPinScreen> {
     return GestureDetector(
       onTap: () {
         // Fingerprint action
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Fingerprint not implemented'), backgroundColor: Color(0xFFFF1F70)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Fingerprint not implemented'),
+            backgroundColor: Color(0xFFFF1F70),
+          ),
+        );
       },
       child: Container(
         width: 60,
         height: 60,
         decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-        child: Center(child: Icon(Icons.fingerprint, color: Colors.white, size: 28)),
+        child: Center(
+          child: Icon(Icons.fingerprint, color: Colors.white, size: 28),
+        ),
       ),
     );
   }

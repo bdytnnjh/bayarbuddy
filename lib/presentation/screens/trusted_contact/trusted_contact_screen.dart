@@ -20,7 +20,9 @@ class _TrustedContactScreenState extends State<TrustedContactScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarGlobal(title: _isViewMode ? 'Trusted Contact' : 'Edit Trusted Contact'),
+      appBar: AppBarGlobal(
+        title: _isViewMode ? 'Trusted Contact' : 'Edit Trusted Contact',
+      ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
@@ -44,7 +46,9 @@ class _TrustedContactScreenState extends State<TrustedContactScreen> {
                   ],
                 ),
               // Trusted Contact List Section
-              _buildSectionTitle(_isViewMode ? 'Trusted Contact List' : 'Trusted Contact List'),
+              _buildSectionTitle(
+                _isViewMode ? 'Trusted Contact List' : 'Trusted Contact List',
+              ),
               const SizedBox(height: 16),
               ..._buildContactsList(),
               const SizedBox(height: 60),
@@ -204,10 +208,7 @@ class _TrustedContactScreenState extends State<TrustedContactScreen> {
                 setState(() => _isViewMode = true);
               },
               style: OutlinedButton.styleFrom(
-                side: BorderSide(
-                  color: AppTheme.colors.primary,
-                  width: 2,
-                ),
+                side: BorderSide(color: AppTheme.colors.primary, width: 2),
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),

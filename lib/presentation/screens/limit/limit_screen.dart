@@ -28,7 +28,9 @@ class _LimitTransactionScreenState extends State<LimitTransactionScreen> {
             children: [
               // Title and Description
               Text(
-                _isEditing ? 'Transfer Limit Successfully Updated' : 'Limit Transaction',
+                _isEditing
+                    ? 'Transfer Limit Successfully Updated'
+                    : 'Limit Transaction',
                 style: TextStyle(
                   color: AppTheme.colors.primary,
                   fontSize: 18,
@@ -258,24 +260,24 @@ class _LimitTransactionScreenState extends State<LimitTransactionScreen> {
   }
 
   Widget _buildNavItem(dynamic icon, bool isActive) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-    decoration: BoxDecoration(
-      color: isActive ? const Color(0xFFFF1F70) : Colors.transparent,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: icon is String
-        ? Image.asset(
-            icon,
-            width: 28,
-            height: 28,
-            color: isActive ? Colors.white : const Color(0xFFB0B0B0),
-          )
-        : Icon(
-            icon,
-            color: isActive ? Colors.white : const Color(0xFFB0B0B0),
-            size: 28,
-          ),
-  );
-}
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      decoration: BoxDecoration(
+        color: isActive ? const Color(0xFFFF1F70) : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: icon is String
+          ? Image.asset(
+              icon,
+              width: 28,
+              height: 28,
+              color: isActive ? Colors.white : const Color(0xFFB0B0B0),
+            )
+          : Icon(
+              icon,
+              color: isActive ? Colors.white : const Color(0xFFB0B0B0),
+              size: 28,
+            ),
+    );
+  }
 }
