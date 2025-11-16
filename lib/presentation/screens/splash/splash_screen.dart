@@ -1,4 +1,6 @@
+import 'package:app/presentation/shared/providers/app_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,13 +12,30 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), (){
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/boarding');
-      }
-    });
-
     super.initState();
+    // Delay eksekusi sampai setelah frame pertama selesai
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeSplash();
+    });
+  }
+
+  Future<void> _initializeSplash() async {
+    // Dapatkan instance AppProvider tanpa mendengarkan perubahan
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
+
+    // Panggil inisialisasi aplikasi
+    await appProvider.initializeApp();
+
+    // Simulasikan waktu loading selama 3 detik
+    await Future.delayed(const Duration(seconds: 3));
+
+    // Dapatkan rute awal berdasarkan status
+    if (mounted) {
+      final route = await appProvider.getInitialRoute();
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, route);
+      }
+    }
   }
 
   @override
@@ -49,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF5063BF),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -64,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

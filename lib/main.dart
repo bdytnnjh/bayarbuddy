@@ -3,10 +3,13 @@ import 'package:app/core/themes/base_theme.dart';
 import 'package:app/presentation/screens/boarding/boarding_screen.dart';
 import 'package:app/presentation/screens/login/login_screen.dart';
 import 'package:app/presentation/screens/main/wrapper_screen.dart';
+import 'package:app/presentation/screens/register/providers/register_provider.dart';
 import 'package:app/presentation/screens/register/register_screen.dart';
 import 'package:app/presentation/screens/splash/splash_screen.dart';
+import 'package:app/presentation/shared/providers/app_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,18 +23,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Bayar Buddy',
-      initialRoute: '/',
-      theme: buildBaseTheme(),
-      // Static route definitions
-      routes: {
-        '/': (context) => SplashScreen(),
-        '/home': (context) => WrapperScreen(),
-        '/boarding': (context) => BoardingScreen(),
-        '/login': (context) => LoginPage(),
-        '/register': (context) => RegisterScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        // Add your providers here
+        ChangeNotifierProvider(create: (_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => RegisterProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Bayar Buddy',
+        initialRoute: '/',
+        theme: buildBaseTheme(),
+        // Static route definitions
+        routes: {
+          '/': (context) => SplashScreen(),
+          '/home': (context) => WrapperScreen(),
+          '/boarding': (context) => BoardingScreen(),
+          '/login': (context) => LoginPage(),
+          '/register': (context) => RegisterScreen(),
+        },
+      ),
     );
   }
 }

@@ -37,7 +37,7 @@ class ColorsTheme {
       colors: [primary.withValues(alpha: 0.45), bgLight],
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
-      stops: const[0, 0.6],
+      stops: const [0, 0.6],
     );
   }
 }
