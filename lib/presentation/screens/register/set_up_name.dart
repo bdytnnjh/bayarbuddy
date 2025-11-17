@@ -1,28 +1,62 @@
 import 'package:app/core/themes/app_theme.dart';
+import 'package:app/core/widgets/button_widget.dart';
 import 'package:app/core/widgets/customs/app_bar_global.dart';
-import 'package:app/presentation/screens/register/screen2.dart';
+import 'package:app/presentation/screens/register/providers/register_providers.dart';
+import 'package:app/presentation/screens/register/set_up_phone.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Screen1 extends StatefulWidget {
-  const Screen1({super.key});
+class SetUpNameScreen extends StatefulWidget {
+  const SetUpNameScreen({super.key});
 
   @override
-  State<Screen1> createState() => _Screen1State();
+  State<SetUpNameScreen> createState() => _SetUpNameScreenState();
 }
 
-class _Screen1State extends State<Screen1> {
-  final TextEditingController _firstNameController = TextEditingController(
-    text: 'Micheal',
-  );
-  final TextEditingController _lastNameController = TextEditingController(
-    text: 'Starc',
-  );
+class _SetUpNameScreenState extends State<SetUpNameScreen> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
 
   @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
     super.dispose();
+  }
+
+  void _handleSetName() {
+    // Validate input
+    if (_firstNameController.text.trim().isEmpty) {
+      _showError('Please enter your first name');
+      return;
+    }
+
+    if (_lastNameController.text.trim().isEmpty) {
+      _showError('Please enter your last name');
+      return;
+    }
+
+    // Save name to provider
+    final registerProvider = Provider.of<RegisterProvider>(
+      context,
+      listen: false,
+    );
+    registerProvider.saveName(
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+    );
+
+    // Navigate to phone setup screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SetUpPhoneScreen()),
+    );
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
   }
 
   @override
@@ -146,34 +180,12 @@ class _Screen1State extends State<Screen1> {
 
               // Set Button
               Center(
-                child: SizedBox(
-                  width: 140,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Screen2(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.colors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: Text(
-                      'Set',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: AppTheme.typography.primary,
-                      ),
-                    ),
-                  ),
+                child: ButtonWidget.rectangle(
+                  context: context,
+                  text: 'Set',
+                  width: 115,
+                  type: ButtonType.primary,
+                  onPressed: _handleSetName,
                 ),
               ),
               const SizedBox(height: 40),
