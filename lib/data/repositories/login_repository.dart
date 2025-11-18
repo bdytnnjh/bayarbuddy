@@ -29,7 +29,19 @@ class LoginRepository {
         throw Exception('Invalid password. Please try again.');
       }
 
-      final jwtToken = _jwtUtil.generateJwtFromJson(user.toMap());
+      final tokenPayload = {
+        'uid': user.uid,
+        'email': user.email,
+        'username': user.username,
+        'fullName': user.fullName,
+        'phoneNumber': user.phoneNumber,
+        'photoUrl': user.photoUrl,
+        'createdAt': user.createdAt.toIso8601String(),
+        'updatedAt': user.updatedAt.toIso8601String(),
+        'iat': DateTime.now().millisecondsSinceEpoch,
+      };
+
+      final jwtToken = _jwtUtil.generateJwtFromJson(tokenPayload);
 
       await _sessionUtil.writeSession(_sessionUtil.authKey, jwtToken);
       await _sessionUtil.writeSession(_sessionUtil.userKey, user.uid);
