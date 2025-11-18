@@ -10,50 +10,26 @@ class LoginRepository {
   final JwTUtil _jwtUtil = JwTUtil();
   final SessionUtil _sessionUtil = SessionUtil();
 
-  Future<bool> loginWithEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> loginWithEmailPassword({required String email, required String password}) async {
     try {
-      final usersSnapshot = await FirebaseQuery.getCollection(
+      final usersSnapshot = await FirebaseQuery.getDocuments(
         collection: _usersCollection,
+        queryBuilder: (collection) => collection.where('email', isEqualTo: email).limit(1),
       );
-      print(usersSnapshot.docs);
 
       if (usersSnapshot.docs.isEmpty) {
-        throw Exception('No users found. Please register first.');
-      }
-
-      UserModel? user;
-      for (var doc in usersSnapshot.docs) {
-        final userData = UserModel.fromMap(doc.data());
-        if (userData.email == email) {
-          user = userData;
-          break;
-        }
-      }
-
-      if (user == null) {
         throw Exception('User not found. Please check your email.');
       }
 
+      final user = UserModel.fromMap(usersSnapshot.docs.first.data());
+
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       } catch (e) {
         throw Exception('Invalid password. Please try again.');
       }
 
-      final tokenPayload = {
-        'id': user.uid,
-        'email': user.email,
-        'username': user.username,
-        'iat': DateTime.now().millisecondsSinceEpoch,
-      };
-
-      final jwtToken = _jwtUtil.generateJwtFromJson(tokenPayload);
+      final jwtToken = _jwtUtil.generateJwtFromJson(user.toMap());
 
       await _sessionUtil.writeSession(_sessionUtil.authKey, jwtToken);
       await _sessionUtil.writeSession(_sessionUtil.userKey, user.uid);

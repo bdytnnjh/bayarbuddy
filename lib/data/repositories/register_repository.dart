@@ -14,13 +14,12 @@ class RegisterRepository {
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   // Register user with email and password (Firebase Auth only)
-  Future<User> registerWithEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<User> registerWithEmailPassword({required String email, required String password}) async {
     try {
-      final UserCredential userCredential = await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      final UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (userCredential.user == null) {
         throw Exception('User registration failed');
@@ -58,11 +57,7 @@ class RegisterRepository {
         updatedAt: DateTime.now(),
       );
 
-      await FirebaseQuery.setDocument(
-        collection: _usersCollection,
-        docId: uid,
-        data: userModel.toMap(),
-      );
+      await FirebaseQuery.setDocument(collection: _usersCollection, docId: uid, data: userModel.toMap());
 
       debugPrint('User profile created successfully: $uid');
     } catch (e) {
@@ -85,10 +80,7 @@ class RegisterRepository {
   // Get user profile from Firestore
   Future<UserModel?> getUserProfile(String uid) async {
     try {
-      final doc = await FirebaseQuery.getDocument(
-        collection: _usersCollection,
-        docId: uid,
-      );
+      final doc = await FirebaseQuery.getDocument(collection: _usersCollection, docId: uid);
 
       if (!doc.exists) {
         return null;
@@ -117,11 +109,7 @@ class RegisterRepository {
       if (phoneNumber != null) updateData['phoneNumber'] = phoneNumber;
       if (photoUrl != null) updateData['photoUrl'] = photoUrl;
 
-      await FirebaseQuery.updateDocument(
-        collection: _usersCollection,
-        docId: uid,
-        data: updateData,
-      );
+      await FirebaseQuery.updateDocument(collection: _usersCollection, docId: uid, data: updateData);
 
       debugPrint('User profile updated successfully: $uid');
     } catch (e) {
@@ -139,10 +127,7 @@ class RegisterRepository {
       }
 
       // Delete user profile from Firestore
-      await FirebaseQuery.deleteDocument(
-        collection: _usersCollection,
-        docId: user.uid,
-      );
+      await FirebaseQuery.deleteDocument(collection: _usersCollection, docId: user.uid);
 
       // Delete user from Firebase Auth
       await user.delete();

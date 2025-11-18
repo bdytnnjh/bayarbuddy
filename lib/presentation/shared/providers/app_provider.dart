@@ -31,9 +31,7 @@ class AppProvider with ChangeNotifier {
     try {
       debugPrint('Initializing AppProvider...');
 
-      _boardingStatus = await _sessionUtil.readSession(
-        _sessionUtil.boardingKey,
-      );
+      _boardingStatus = await _sessionUtil.readSession(_sessionUtil.boardingKey);
       _loginStatus = await _sessionUtil.readSession(_sessionUtil.authKey);
       _isInitialized = true;
 
@@ -51,7 +49,7 @@ class AppProvider with ChangeNotifier {
   //method to get the initial route based on app status
   Future<String> getInitialRoute() async {
     if (_boardingStatus != null && _boardingStatus == 'true') {
-      if (_loginStatus != null && _loginStatus == 'true') {
+      if (_loginStatus != null) {
         return '/home'; //user has completed onboarding and is logged in
       } else {
         return '/login'; //user has completed onboarding but is not logged in

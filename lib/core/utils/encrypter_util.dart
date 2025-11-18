@@ -16,7 +16,7 @@ class EncrypterUtil {
     final key = Key.fromUtf8(keyString);
     final iv = IV.fromUtf8(ivString);
     final encrypter = Encrypter(AES(key));
-    final decrypted = encrypter.decrypt64(encryptedText, iv: iv);
+    final decrypted = encrypter.decrypt16(encryptedText, iv: iv);
     return decrypted;
   }
 }
