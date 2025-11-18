@@ -1,9 +1,11 @@
 import 'package:app/data/repositories/register_repository.dart';
+import 'package:app/data/repositories/wallet_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterProvider with ChangeNotifier {
   final RegisterRepository _authRepository = RegisterRepository();
+  final WalletRepository _walletRepository = WalletRepository();
 
   // Registration state
   bool _isLoading = false;
@@ -30,10 +32,7 @@ class RegisterProvider with ChangeNotifier {
   String get username => _email?.split('@').first ?? '';
 
   // Step 1: Register with email and password (Firebase Auth)
-  Future<bool> registerWithEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> registerWithEmailPassword({required String email, required String password}) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -45,10 +44,8 @@ class RegisterProvider with ChangeNotifier {
       }
 
       // Register user in Firebase Auth
-      final User user = await _authRepository.registerWithEmailPassword(
-        email: email,
-        password: password,
-      );
+      final User user = await _authRepository.registerWithEmailPassword(email: email, password: password);
+      await _walletRepository.createWallet(userId: user.uid);
 
       // Store user data temporarily
       _userId = user.uid;
@@ -84,9 +81,7 @@ class RegisterProvider with ChangeNotifier {
     try {
       // Validate all required data
       if (_userId == null || _email == null) {
-        throw Exception(
-          'User not registered. Please start from the beginning.',
-        );
+        throw Exception('User not registered. Please start from the beginning.');
       }
 
       if (_firstName == null || _lastName == null) {

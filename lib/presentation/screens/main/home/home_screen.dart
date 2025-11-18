@@ -1,140 +1,187 @@
 import 'package:app/presentation/screens/main/card/card_screen.dart';
+import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Current Balance Section
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Current Balance', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
-                const SizedBox(height: 8),
-                Text(
-                  'RM 34,565.78',
-                  style: TextStyle(
-                    fontFamily: 'Amaranth',
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFFF1F70),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
+    return ChangeNotifierProvider(
+      create: (_) => WalletProvider(),
+      child: Scaffold(
+        body: Consumer<WalletProvider>(
+          builder: (context, walletProvider, child) {
+            return RefreshIndicator(
+              onRefresh: () => walletProvider.refreshWallets(),
+              color: Color(0xFFFF1F70),
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Current Balance Section
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Current Balance', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                        const SizedBox(height: 8),
+                        Text(
+                          'RM 34,565.78',
+                          style: TextStyle(
+                            fontFamily: 'Amaranth',
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFF1F70),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
 
-            // Card Section
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen()));
-                    },
-                    child: _buildCardWidget('VISA', 'Master Card • 6253', 'RM 11,243.60'),
-                  ),
-                  const SizedBox(width: 12),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen()));
-                    },
-                    child: _buildCardWidget('VISA', 'Master Card • 6253', 'RM 11,243.60'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
+                    // Card Section
+                    Consumer<WalletProvider>(
+                      builder: (context, walletProvider, child) {
+                        if (walletProvider.isLoading) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
+                            ),
+                          );
+                        }
 
-            // Incoming Transactions Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Incoming Transactions',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildTransactionCard(
-                    '+RM 54.23',
-                    'From',
-                    'Johnny Bairdstow',
-                    '23 December 2020',
-                    'assets/imgs/user_avatar.png',
-                    isIncoming: true,
-                  ),
-                  const SizedBox(width: 12),
-                  _buildTransactionCard(
-                    '+RM 62.54',
-                    'From',
-                    'Johnson Charles',
-                    '23 December 2020',
-                    'assets/imgs/user_avatar.png',
-                    isIncoming: true,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
+                        if (walletProvider.error != null) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  Text('Error loading wallets', style: TextStyle(color: Colors.red)),
+                                  SizedBox(height: 8),
+                                  ElevatedButton(
+                                    onPressed: () => walletProvider.refreshWallets(),
+                                    child: Text('Retry'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
 
-            // Outgoing Transactions Section
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Outgoing Transactions',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                        if (walletProvider.wallets.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(32.0),
+                              child: Text('No wallets found', style: TextStyle(color: Colors.grey[600])),
+                            ),
+                          );
+                        }
+
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: walletProvider.wallets.map((wallet) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen()));
+                                },
+                                child: _buildCardWidget('VISA', wallet.walletNummer, wallet.balance.toStringAsFixed(2)),
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Incoming Transactions Section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Incoming Transactions',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildTransactionCard(
+                            '+RM 54.23',
+                            'From',
+                            'Johnny Bairdstow',
+                            '23 December 2020',
+                            'assets/imgs/user_avatar.png',
+                            isIncoming: true,
+                          ),
+                          const SizedBox(width: 12),
+                          _buildTransactionCard(
+                            '+RM 62.54',
+                            'From',
+                            'Johnson Charles',
+                            '23 December 2020',
+                            'assets/imgs/user_avatar.png',
+                            isIncoming: true,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Outgoing Transactions Section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Outgoing Transactions',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildTransactionCard(
+                            '-RM 39.84',
+                            'From',
+                            'John Morrison',
+                            '12 December 2021',
+                            'assets/imgs/user_avatar.png',
+                            isIncoming: false,
+                          ),
+                          const SizedBox(width: 12),
+                          _buildTransactionCard(
+                            '-RM 45.21',
+                            'From',
+                            'Mellony Storke',
+                            '12 December 2021',
+                            'assets/imgs/user_avatar.png',
+                            isIncoming: false,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  _buildTransactionCard(
-                    '-RM 39.84',
-                    'From',
-                    'John Morrison',
-                    '12 December 2021',
-                    'assets/imgs/user_avatar.png',
-                    isIncoming: false,
-                  ),
-                  const SizedBox(width: 12),
-                  _buildTransactionCard(
-                    '-RM 45.21',
-                    'From',
-                    'Mellony Storke',
-                    '12 December 2021',
-                    'assets/imgs/user_avatar.png',
-                    isIncoming: false,
-                  ),
-                ],
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -143,6 +190,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCardWidget(String cardType, String cardInfo, String balance) {
     return Container(
       width: 300,
+      margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!, width: 2),
