@@ -1,9 +1,11 @@
 import 'package:app/data/repositories/register_repository.dart';
+import 'package:app/data/repositories/wallet_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterProvider with ChangeNotifier {
   final RegisterRepository _authRepository = RegisterRepository();
+  final WalletRepository _walletRepository = WalletRepository();
 
   // Registration state
   bool _isLoading = false;
@@ -49,6 +51,7 @@ class RegisterProvider with ChangeNotifier {
         email: email,
         password: password,
       );
+      await _walletRepository.createWallet(userId: user.uid);
 
       // Store user data temporarily
       _userId = user.uid;
