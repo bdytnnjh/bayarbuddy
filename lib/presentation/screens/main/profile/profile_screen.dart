@@ -49,7 +49,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 'Security',
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
               ),
-              _buildNavigationRow('Change Pin', () {}),
+              _buildNavigationRow('Change Pin', () {
+                Navigator.pushNamed(context, '/set-pin');
+              }),
               _buildNavigationRow('Change Password', () {}),
               _buildToggleRow('Finger Print', fingerPrintEnabled, (value) {
                 setState(() {
@@ -133,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             activeTrackColor: const Color(0xFFFF1F70),
             inactiveThumbColor: Colors.white,
             inactiveTrackColor: const Color(0xFFE0E0E0),

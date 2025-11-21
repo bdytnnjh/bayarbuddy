@@ -48,4 +48,31 @@ class UserRepository {
       return false;
     }
   }
+
+  Future<String?> getHashedPin({required String uid}) async {
+    try {
+      final userDoc = await FirebaseQuery.getDocument(collection: _usersCollection, docId: uid);
+
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        if (data != null && data.containsKey('hashedPin')) {
+          return data['hashedPin'] as String?;
+        }
+      }
+      return null; // Return null if not found
+    } catch (e) {
+      debugPrint('Get Hashed Pin Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<bool> createOrUpdateHasedPin({required String uid, required String hashedPin}) async {
+    try {
+      await FirebaseQuery.updateDocument(collection: _usersCollection, docId: uid, data: {'hashedPin': hashedPin});
+      return true;
+    } catch (e) {
+      debugPrint('Create or Update Hashed Pin Error: $e');
+      return false;
+    }
+  }
 }
