@@ -49,6 +49,7 @@ class RegisterRepository {
       final userModel = UserModel(
         uid: uid,
         email: email,
+        limitTransaction: 1000,
         username: username,
         fullName: fullName,
         phoneNumber: phoneNumber,

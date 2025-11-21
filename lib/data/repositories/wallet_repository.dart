@@ -6,11 +6,7 @@ class WalletRepository {
   final String _collection = 'wallets';
 
   // Create
-  Future<void> createWallet({
-    required String userId,
-    double balance = 0.0,
-    String currency = 'MYR',
-  }) async {
+  Future<void> createWallet({required String userId, double balance = 0.0, String currency = 'MYR'}) async {
     // Generate random 12-digit wallet number
     final random = DateTime.now().millisecondsSinceEpoch.toString();
     final walletNummer = random.substring(random.length - 12);
@@ -18,6 +14,7 @@ class WalletRepository {
     await FirebaseQuery.createDocument(
       collection: _collection,
       data: {
+        'isPrimary': true,
         'userId': userId,
         'balance': balance,
         'currency': currency,
@@ -29,10 +26,7 @@ class WalletRepository {
 
   // Read - Get wallet by ID
   Future<WalletModel?> getWallet(String walletId) async {
-    final doc = await FirebaseQuery.getDocument(
-      collection: _collection,
-      docId: walletId,
-    );
+    final doc = await FirebaseQuery.getDocument(collection: _collection, docId: walletId);
 
     if (!doc.exists || doc.data() == null) {
       return null;
@@ -45,8 +39,7 @@ class WalletRepository {
   Future<List<WalletModel>> getWalletByUserId(String userId) async {
     final snapshot = await FirebaseQuery.getDocuments(
       collection: _collection,
-      queryBuilder: (collection) =>
-          collection.where('userId', isEqualTo: userId),
+      queryBuilder: (collection) => collection.where('userId', isEqualTo: userId),
     );
 
     if (snapshot.docs.isEmpty) {
@@ -57,53 +50,32 @@ class WalletRepository {
   }
 
   // Update - Update balance
-  Future<void> updateBalance({
-    required String walletId,
-    required double newBalance,
-  }) async {
+  Future<void> updateBalance({required String walletId, required double newBalance}) async {
     await FirebaseQuery.updateDocument(
       collection: _collection,
       docId: walletId,
-      data: {
-        'balance': newBalance,
-        'lastUpdated': FieldValue.serverTimestamp(),
-      },
+      data: {'balance': newBalance, 'lastUpdated': FieldValue.serverTimestamp()},
     );
   }
 
   // Update - Full update
-  Future<void> updateWallet({
-    required String walletId,
-    String? userId,
-    double? balance,
-    String? currency,
-  }) async {
+  Future<void> updateWallet({required String walletId, String? userId, double? balance, String? currency}) async {
     Map<String, dynamic> data = {'lastUpdated': FieldValue.serverTimestamp()};
 
     if (userId != null) data['userId'] = userId;
     if (balance != null) data['balance'] = balance;
     if (currency != null) data['currency'] = currency;
 
-    await FirebaseQuery.updateDocument(
-      collection: _collection,
-      docId: walletId,
-      data: data,
-    );
+    await FirebaseQuery.updateDocument(collection: _collection, docId: walletId, data: data);
   }
 
   // Delete
   Future<void> deleteWallet(String walletId) async {
-    await FirebaseQuery.deleteDocument(
-      collection: _collection,
-      docId: walletId,
-    );
+    await FirebaseQuery.deleteDocument(collection: _collection, docId: walletId);
   }
 
   // Stream - Real-time updates
   Stream<DocumentSnapshot<Map<String, dynamic>>> walletStream(String walletId) {
-    return FirebaseQuery.streamDocument(
-      collection: _collection,
-      docId: walletId,
-    );
+    return FirebaseQuery.streamDocument(collection: _collection, docId: walletId);
   }
 }
