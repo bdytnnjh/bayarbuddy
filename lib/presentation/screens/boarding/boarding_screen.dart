@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../set_pin/set_pin_screen.dart';
 
 class BoardingScreen extends StatelessWidget {
   BoardingScreen({super.key});
@@ -74,7 +73,7 @@ class BoardingScreen extends StatelessWidget {
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.ease,
                       );
-                      Navigator.pushReplacementNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/login');
                     },
                     child: const Text('Skip'),
                   ),
@@ -110,7 +109,7 @@ class BoardingScreen extends StatelessWidget {
                           );
                         } else {
                           // Navigate to SetPinScreen
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SetPinScreen()));
+                          Navigator.pushReplacementNamed(context, '/login');
                         }
                       },
                       child: Text(current < pages.length - 1 ? 'Next' : 'Get Started'),

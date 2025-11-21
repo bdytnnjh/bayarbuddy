@@ -5,6 +5,7 @@ import 'package:app/presentation/screens/login/login_screen.dart';
 import 'package:app/presentation/screens/main/wrapper_screen.dart';
 import 'package:app/presentation/screens/register/providers/register_providers.dart';
 import 'package:app/presentation/screens/register/register_screen.dart';
+import 'package:app/presentation/screens/set_pin/set_pin_screen.dart';
 import 'package:app/presentation/screens/splash/splash_screen.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           '/boarding': (context) => BoardingScreen(),
           '/login': (context) => LoginPage(),
           '/register': (context) => RegisterScreen(),
+          '/set-pin': (context) => SetPinScreen(),
         },
       ),
     );
