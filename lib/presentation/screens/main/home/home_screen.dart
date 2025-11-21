@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
                       Text('Current Balance', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                       const SizedBox(height: 8),
                       Text(
-                        'RM 34,565.78',
+                        walletProvider.calculateCurrentBalance(),
                         style: TextStyle(
                           fontFamily: 'Amaranth',
                           fontSize: 36,

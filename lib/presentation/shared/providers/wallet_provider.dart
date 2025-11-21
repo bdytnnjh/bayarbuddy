@@ -70,4 +70,12 @@ class WalletProvider with ChangeNotifier {
       _notifyListeners();
     }
   }
+
+  String calculateCurrentBalance() {
+    double totalBalance = 0.0;
+    for (var wallet in _wallets) {
+      totalBalance += wallet.balance;
+    }
+    return 'RM ${totalBalance.toStringAsFixed(2)}';
+  }
 }
