@@ -57,7 +57,9 @@ class WalletProvider with ChangeNotifier {
       String? userId = await AppUtil.getCurrentUserId();
 
       if (userId != null) {
-        List<WalletModel> wallets = await _walletRepository.getWalletByUserId(userId);
+        List<WalletModel> wallets = await _walletRepository.getWalletByUserId(
+          userId,
+        );
         _wallets = wallets;
       } else {
         _error = 'User not found';
@@ -69,5 +71,13 @@ class WalletProvider with ChangeNotifier {
       _isLoading = false;
       _notifyListeners();
     }
+  }
+
+  String calculateCurrentBalance() {
+    double totalBalance = 0.0;
+    for (var wallet in _wallets) {
+      totalBalance += wallet.balance;
+    }
+    return 'RM ${totalBalance.toStringAsFixed(2)}';
   }
 }
