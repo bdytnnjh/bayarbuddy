@@ -7,184 +7,146 @@ class CardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => WalletProvider(),
-      child: Scaffold(
-        body: Consumer<WalletProvider>(
-          builder: (context, walletProvider, child) {
-            return RefreshIndicator(
-              onRefresh: () => walletProvider.refreshWallets(),
-              color: Color(0xFFFF1F70),
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Card Widget
-                    // Card Section
-                    if (walletProvider.isLoading)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: CircularProgressIndicator(
-                            color: Color(0xFFFF1F70),
-                          ),
-                        ),
-                      )
-                    else if (walletProvider.error != null)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                'Error loading wallets',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              SizedBox(height: 8),
-                              ElevatedButton(
-                                onPressed: () =>
-                                    walletProvider.refreshWallets(),
-                                child: Text('Retry'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    else if (walletProvider.wallets.isEmpty)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: Text(
-                            'No wallets found',
-                            style: TextStyle(color: Colors.grey[600]),
-                          ),
-                        ),
-                      )
-                    else
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: walletProvider.wallets.map((wallet) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CardScreen(),
-                                  ),
-                                );
-                              },
-                              child: _buildCardWidget(
-                                'VISA',
-                                wallet.walletNummer,
-                                wallet.balance.toStringAsFixed(2),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    const SizedBox(height: 24),
-
-                    // Currency Selector Section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildCurrencyCard('USD', '72.28', isActive: true),
-                        _buildCurrencyCard('Euro', '34.46', isActive: false),
-                        _buildCurrencyCard('Yen', '95.31', isActive: false),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-
-                    // Add Card Button
+    return Scaffold(
+      body: Consumer<WalletProvider>(
+        builder: (context, walletProvider, child) {
+          return RefreshIndicator(
+            onRefresh: () => walletProvider.refreshWallets(),
+            color: Color(0xFFFF1F70),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Card Widget
+                  // Card Section
+                  if (walletProvider.isLoading)
                     Center(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFF1F70),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 48,
-                            vertical: 14,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
+                      ),
+                    )
+                  else if (walletProvider.error != null)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Text('Error loading wallets', style: TextStyle(color: Colors.red)),
+                            SizedBox(height: 8),
+                            ElevatedButton(onPressed: () => walletProvider.refreshWallets(), child: Text('Retry')),
+                          ],
                         ),
-                        child: Text(
-                          'Add Card',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                      ),
+                    )
+                  else if (walletProvider.wallets.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Text('No wallets found', style: TextStyle(color: Colors.grey[600])),
+                      ),
+                    )
+                  else
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: walletProvider.wallets.map((wallet) {
+                          return _buildCardWidget('VISA', wallet.walletNummer, wallet.balance.toStringAsFixed(2));
+                        }).toList(),
+                      ),
+                    ),
+                  const SizedBox(height: 24),
+
+                  // Currency Selector Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildCurrencyCard('USD', '72.28', isActive: true),
+                      _buildCurrencyCard('Euro', '34.46', isActive: false),
+                      _buildCurrencyCard('Yen', '95.31', isActive: false),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+
+                  // Add Card Button
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFFF1F70),
+                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+                      child: Text(
+                        'Add Card',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                  ),
+                  const SizedBox(height: 32),
 
-                    // Cash Backs Section
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Transaction History',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[700],
-                          ),
+                  // Cash Backs Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Transaction History',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[700],
                         ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Text(
-                            'See All',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 12,
-                              color: Color(0xFFFF1F70),
-                            ),
-                          ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Text(
+                          'See All',
+                          style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
 
-                    // Cash Back Items
-                    _buildCashBackItem(
-                      icon: Icons.shopping_bag_outlined,
-                      title: 'Entertainment',
-                      time: '4:34 PM',
-                      amount: 'RM 5.40',
-                      backgroundColor: Color(0xFFB3E5FC),
-                    ),
-                    const SizedBox(height: 12),
-                    _buildCashBackItem(
-                      icon: Icons.shopping_bag_outlined,
-                      title: 'Food Delivery',
-                      time: '6:57 PM',
-                      amount: 'RM 4.70',
-                      backgroundColor: Color(0xFFFF1F70),
-                    ),
-                    const SizedBox(height: 12),
-                    _buildCashBackItemWithAvatar(
-                      avatarPath: 'assets/imgs/user_avatar.png',
-                      title: 'Sarah',
-                      time: '12:23 AM',
-                      amount: 'RM 5.00',
-                    ),
-                    const SizedBox(height: 32),
+                  // Cash Back Items
+                  _buildCashBackItem(
+                    icon: Icons.shopping_bag_outlined,
+                    title: 'Entertainment',
+                    time: '4:34 PM',
+                    amount: 'RM 5.40',
+                    backgroundColor: Color(0xFFB3E5FC),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildCashBackItem(
+                    icon: Icons.shopping_bag_outlined,
+                    title: 'Food Delivery',
+                    time: '6:57 PM',
+                    amount: 'RM 4.70',
+                    backgroundColor: Color(0xFFFF1F70),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildCashBackItemWithAvatar(
+                    avatarPath: 'assets/imgs/user_avatar.png',
+                    title: 'Sarah',
+                    time: '12:23 AM',
+                    amount: 'RM 5.00',
+                  ),
+                  const SizedBox(height: 32),
 
-                    // Bottom Navigation Placeholder (optional for future use)
-                  ],
-                ),
+                  // Bottom Navigation Placeholder (optional for future use)
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -209,13 +171,7 @@ class CardScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      cardType,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text(cardType, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                     Text(
                       cardInfo,
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -227,11 +183,7 @@ class CardScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'RM $balance',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFF1F70),
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
               ),
             ],
           ),
@@ -240,11 +192,7 @@ class CardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCurrencyCard(
-    String currency,
-    String amount, {
-    required bool isActive,
-  }) {
+  Widget _buildCurrencyCard(String currency, String amount, {required bool isActive}) {
     return Container(
       width: 100,
       padding: const EdgeInsets.all(12),
@@ -267,11 +215,7 @@ class CardScreen extends StatelessWidget {
                   color: isActive ? Colors.white : Colors.black,
                 ),
               ),
-              Icon(
-                Icons.arrow_outward,
-                size: 16,
-                color: isActive ? Colors.white : Colors.black,
-              ),
+              Icon(Icons.arrow_outward, size: 16, color: isActive ? Colors.white : Colors.black),
             ],
           ),
           const SizedBox(height: 8),
@@ -298,25 +242,14 @@ class CardScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           Container(
             width: 48,
             height: 48,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              icon,
-              color: backgroundColor == Color(0xFFFF1F70)
-                  ? Colors.white
-                  : Colors.black,
-            ),
+            decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(12)),
+            child: Icon(icon, color: backgroundColor == Color(0xFFFF1F70) ? Colors.white : Colors.black),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -325,19 +258,11 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   time,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -366,10 +291,7 @@ class CardScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           CircleAvatar(radius: 24, backgroundImage: AssetImage(avatarPath)),
@@ -380,19 +302,11 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   time,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),

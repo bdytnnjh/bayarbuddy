@@ -5,10 +5,23 @@ import 'package:flutter/material.dart';
 
 class WalletProvider with ChangeNotifier {
   final WalletRepository _walletRepository = WalletRepository();
+  bool _disposed = false;
 
   // Initializer
   WalletProvider() {
     _initializeWallets();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  void _notifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
   }
 
   List<WalletModel> _wallets = [];
@@ -21,7 +34,7 @@ class WalletProvider with ChangeNotifier {
 
   void setWallets(List<WalletModel> wallets) {
     _wallets = wallets;
-    notifyListeners();
+    _notifyListeners();
   }
 
   /// Initialize wallets for the current user
@@ -38,15 +51,13 @@ class WalletProvider with ChangeNotifier {
   Future<void> loadWallets() async {
     _isLoading = true;
     _error = null;
-    notifyListeners();
+    _notifyListeners();
 
     try {
       String? userId = await AppUtil.getCurrentUserId();
 
       if (userId != null) {
-        List<WalletModel> wallets = await _walletRepository.getWalletByUserId(
-          userId,
-        );
+        List<WalletModel> wallets = await _walletRepository.getWalletByUserId(userId);
         _wallets = wallets;
       } else {
         _error = 'User not found';
@@ -56,7 +67,7 @@ class WalletProvider with ChangeNotifier {
       debugPrint('Error loading wallets: $e');
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _notifyListeners();
     }
   }
 }

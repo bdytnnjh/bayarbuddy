@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -9,10 +12,22 @@ plugins {
     
 }
 
+// Membaca file dev.properties
+val devProperties = Properties()
+val devPropertiesFile = rootProject.file("dev.properties")
+if (devPropertiesFile.exists()) {
+    devProperties.load(FileInputStream(devPropertiesFile))
+}
+
+val minSdkValue: Int = devProperties.getProperty("minSdk")?.toInt() ?: 21 // Default ke 21 jika tidak ada
+val targetSdkValue: Int = devProperties.getProperty("targetSdk")?.toInt() ?: 33 // Default ke 33 jika tidak ada
+val compileSdkValue: Int = devProperties.getProperty("compileSdk")?.toInt() ?: flutter.compileSdkVersion // Gunakan flutter.compileSdkVersion sebagai default
+val ndkVersionValue: String = devProperties.getProperty("ndkVersion") ?: flutter.ndkVersion // Gunakan flutter.ndkVersion sebagai default
+
 android {
     namespace = "com.bayarbuddy.app"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = compileSdkValue // Menggunakan nilai dari dev.properties
+    ndkVersion = ndkVersionValue // Menggunakan nilai dari dev.properties   
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -24,14 +39,12 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.bayarbuddy.app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = minSdkValue // Menggunakan nilai dari dev.properties
+        targetSdk = targetSdkValue // Menggunakan nilai dari dev.properties
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -48,15 +61,7 @@ flutter {
 }
 
 dependencies {
-  // Import the Firebase BoM
   implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
-
-
-  // TODO: Add the dependencies for Firebase products you want to use
-  // When using the BoM, don't specify versions in Firebase dependencies
+  implementation("androidx.multidex:multidex:2.0.1")
   implementation("com.google.firebase:firebase-analytics")
-
-
-  // Add the dependencies for any other desired Firebase products
-  // https://firebase.google.com/docs/android/setup#available-libraries
 }
