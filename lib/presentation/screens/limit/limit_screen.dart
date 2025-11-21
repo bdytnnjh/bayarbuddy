@@ -214,41 +214,7 @@ class LimitTransactionScreen extends StatelessWidget {
             ),
           ),
         ),
-        bottomNavigationBar: _buildBottomNavBar(),
       ),
-    );
-  }
-
-  Widget _buildBottomNavBar() {
-    return Container(
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), spreadRadius: 1, blurRadius: 8)],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem('assets/imgs/icn_home.png', false),
-          _buildNavItem('assets/imgs/icn_wallet.png', false),
-          _buildNavItem('assets/imgs/icn_chart.png', false),
-          _buildNavItem('assets/imgs/icn_user.png', true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(dynamic icon, bool isActive) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFFFF1F70) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: icon is String
-          ? Image.asset(icon, width: 28, height: 28, color: isActive ? Colors.white : const Color(0xFFB0B0B0))
-          : Icon(icon, color: isActive ? Colors.white : const Color(0xFFB0B0B0), size: 28),
     );
   }
 }
