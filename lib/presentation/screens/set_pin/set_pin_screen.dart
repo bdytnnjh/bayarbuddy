@@ -190,10 +190,17 @@ class _SetPinContent extends StatelessWidget {
                     : () async {
                         if (pinProvider.isVerifyMode) {
                           // Verify PIN mode
-                          final success = await pinProvider.verifyPin();
+                          final success = await pinProvider.verifyPin(uid: uid);
                           if (success && context.mounted) {
                             Navigator.pushReplacementNamed(context, '/home');
                           } else if (!success && context.mounted) {
+                            // Check if account is blocked
+                            if (pinProvider.failedAttempts >= pinProvider.maxFailedAttempts) {
+                              // Logout user if blocked
+                              await SessionUtil().deleteSession(SessionUtil().userKey);
+                              Navigator.pushReplacementNamed(context, '/login');
+                            }
+
                             // Show error snackbar when PIN is incorrect
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -207,7 +214,7 @@ class _SetPinContent extends StatelessWidget {
                                   ],
                                 ),
                                 backgroundColor: Colors.red.shade700,
-                                duration: const Duration(seconds: 3),
+                                duration: const Duration(seconds: 4),
                                 behavior: SnackBarBehavior.floating,
                               ),
                             );

@@ -23,6 +23,18 @@ class LoginRepository {
 
       final user = UserModel.fromMap(usersSnapshot.docs.first.data());
 
+      // Check if user account is blocked
+      if (user.status == 'blocked') {
+        throw Exception(
+          'Your account has been blocked due to security reasons. Please contact admin support to unlock your account.',
+        );
+      }
+
+      // Check if user account is inactive
+      if (user.status == 'inactive') {
+        throw Exception('Your account is inactive. Please contact admin support.');
+      }
+
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       } catch (e) {

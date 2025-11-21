@@ -12,6 +12,7 @@ class SetPinProvider with ChangeNotifier {
   bool _isVerifyMode = false;
   String? _storedHashedPin;
   int _failedAttempts = 0;
+  bool _isBlocked = false;
 
   final int maxPinLength = 5;
   final int maxFailedAttempts = 3;
@@ -22,6 +23,7 @@ class SetPinProvider with ChangeNotifier {
   bool get isVerifyMode => _isVerifyMode;
   bool get isPinComplete => _pin.length == maxPinLength;
   int get failedAttempts => _failedAttempts;
+  bool get isBlocked => _isBlocked;
 
   void setVerifyMode(bool value, {String? hashedPin}) {
     _isVerifyMode = value;
@@ -89,7 +91,7 @@ class SetPinProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> verifyPin() async {
+  Future<bool> verifyPin({required String uid}) async {
     if (_pin.length != maxPinLength) {
       _errorMessage = 'Please enter a 5-digit PIN';
       notifyListeners();
@@ -107,12 +109,22 @@ class SetPinProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      // Check if user is already blocked
+      final userStatus = await _userRepository.getUserStatus(uid: uid);
+      if (userStatus == 'blocked') {
+        _isBlocked = true;
+        _errorMessage = 'Account is blocked. Please contact support.';
+        notifyListeners();
+        return false;
+      }
+
       // Encrypt entered PIN
       final enteredHashedPin = _encrypterUtil.encryptData(_pin);
 
       // Compare with stored hashed PIN
       if (enteredHashedPin == _storedHashedPin) {
         _failedAttempts = 0; // Reset on success
+        _isBlocked = false;
         clearPin();
         return true;
       } else {
@@ -120,7 +132,10 @@ class SetPinProvider with ChangeNotifier {
         final remainingAttempts = maxFailedAttempts - _failedAttempts;
 
         if (_failedAttempts >= maxFailedAttempts) {
-          _errorMessage = 'Too many failed attempts. Please contact support.';
+          // Block user after 3 failed attempts
+          await _userRepository.updateUserStatus(uid: uid, status: 'blocked');
+          _isBlocked = true;
+          _errorMessage = 'Account blocked due to too many failed attempts. Please contact support.';
         } else {
           _errorMessage = 'Incorrect PIN. $remainingAttempts attempt${remainingAttempts > 1 ? 's' : ''} remaining.';
         }
