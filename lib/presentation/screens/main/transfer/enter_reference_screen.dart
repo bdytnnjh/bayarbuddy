@@ -1,16 +1,17 @@
-import 'package:app/presentation/screens/main/transfer/transfer_screen4.dart';
+import 'package:app/core/widgets/customs/app_bar_global.dart';
+import 'package:app/presentation/screens/main/transfer/detail_receiver_screen.dart';
+import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TransferScreen3 extends StatefulWidget {
-  final String amount;
-
-  const TransferScreen3({super.key, this.amount = '0.00'});
+class EnterReferenceScreen extends StatefulWidget {
+  const EnterReferenceScreen({super.key});
 
   @override
-  State<TransferScreen3> createState() => _TransferScreen3State();
+  State<EnterReferenceScreen> createState() => _EnterReferenceScreenState();
 }
 
-class _TransferScreen3State extends State<TransferScreen3> {
+class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
   final TextEditingController _referenceController = TextEditingController();
   final TextEditingController _paymentDetailsController = TextEditingController();
 
@@ -24,23 +25,7 @@ class _TransferScreen3State extends State<TransferScreen3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: Color(0xFFFF1F70), borderRadius: BorderRadius.circular(12)),
-          child: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ),
-        title: Text(
-          'Transfer To',
-          style: TextStyle(fontFamily: 'Amaranth', fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        centerTitle: false,
-      ),
+      appBar: AppBarGlobal(title: 'Enter Reference'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -131,17 +116,26 @@ class _TransferScreen3State extends State<TransferScreen3> {
                 onPressed: () {
                   if (_referenceController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please enter recipient reference'), backgroundColor: Color(0xFFFF1F70)),
+                      const SnackBar(
+                        content: Text('Please enter recipient reference'),
+                        backgroundColor: Color(0xFFFF1F70),
+                      ),
                     );
                   } else {
-                    // Navigate to Transfer Screen 4 with reference and payment details
+                    // Save reference and payment details to provider
+                    final transferProvider = Provider.of<TransferProvider>(context, listen: false);
+                    transferProvider.setReference(_referenceController.text);
+                    transferProvider.setPaymentDetails(_paymentDetailsController.text);
+
+                    // Navigate to Detail Receiver Screen
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => TransferScreen4(
-                          reference: _referenceController.text,
-                          paymentDetails: _paymentDetailsController.text,
-                          amount: widget.amount,
+                        builder: (context) => DetailReceiverScreen(
+                          receiver: transferProvider.receiver!,
+                          amount: transferProvider.amount,
+                          reference: transferProvider.reference,
+                          paymentDetails: transferProvider.paymentDetails,
                         ),
                       ),
                     );

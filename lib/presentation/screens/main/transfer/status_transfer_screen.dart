@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import '../home/home_screen.dart';
 
-class TransferScreen6 extends StatelessWidget {
+class StatusTransferScreen extends StatelessWidget {
   final String amount;
   final String recipientName;
   final String recipientPhone;
   final String senderName;
   final bool isSuccessful;
 
-  const TransferScreen6({
+  const StatusTransferScreen({
     super.key,
     required this.amount,
     this.recipientName = 'TOM HAALAND',
@@ -82,7 +81,7 @@ class TransferScreen6 extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Navigate to Home Screen
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                  Navigator.pushReplacementNamed(context, '/home');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),

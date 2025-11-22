@@ -1,9 +1,36 @@
+import 'package:app/presentation/shared/providers/app_provider.dart';
+import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
 import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+      final historyProvider = Provider.of<TransferHistoryProvider>(context, listen: false);
+
+      if (appProvider.loginStatus != null) {
+        // Load outgoing transfers
+        historyProvider.loadOutgoingTransfers(appProvider.loginStatus!);
+
+        // Load incoming transfers using primary wallet number
+        if (walletProvider.primaryWallet != null) {
+          historyProvider.loadIncomingTransfers(walletProvider.primaryWallet!.walletNummer);
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +50,7 @@ class HomeScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Current Balance',
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                      ),
+                      Text('Current Balance', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                       const SizedBox(height: 8),
                       Text(
                         walletProvider.calculateCurrentBalance(),
@@ -46,9 +70,7 @@ class HomeScreen extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: CircularProgressIndicator(
-                          color: Color(0xFFFF1F70),
-                        ),
+                        child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
                       ),
                     )
                   else if (walletProvider.error != null)
@@ -57,15 +79,9 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            Text(
-                              'Error loading wallets',
-                              style: TextStyle(color: Colors.red),
-                            ),
+                            Text('Error loading wallets', style: TextStyle(color: Colors.red)),
                             SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed: () => walletProvider.refreshWallets(),
-                              child: Text('Retry'),
-                            ),
+                            ElevatedButton(onPressed: () => walletProvider.refreshWallets(), child: Text('Retry')),
                           ],
                         ),
                       ),
@@ -74,10 +90,7 @@ class HomeScreen extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: Text(
-                          'No wallets found',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
+                        child: Text('No wallets found', style: TextStyle(color: Colors.grey[600])),
                       ),
                     )
                   else
@@ -85,11 +98,7 @@ class HomeScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: walletProvider.wallets.map((wallet) {
-                          return _buildCardWidget(
-                            'VISA',
-                            wallet.walletNummer,
-                            wallet.balance.toStringAsFixed(2),
-                          );
+                          return _buildCardWidget('VISA', wallet.walletNummer, wallet.balance.toStringAsFixed(2));
                         }).toList(),
                       ),
                     ),
@@ -101,48 +110,48 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Incoming Transactions',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                        ),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: Text(
-                          'See All',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFFF1F70),
-                          ),
-                        ),
+                        child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _buildTransactionCard(
-                          '+RM 54.23',
-                          'From',
-                          'Johnny Bairdstow',
-                          '23 December 2020',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: true,
+                  Consumer<TransferHistoryProvider>(
+                    builder: (context, historyProvider, child) {
+                      if (historyProvider.incomingHistories.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Text(
+                              'No incoming transactions',
+                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: historyProvider.incomingHistories.take(5).map((history) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: _buildTransactionCard(
+                                '+RM ${history.amount.toStringAsFixed(2)}',
+                                'From',
+                                history.recipientName,
+                                _formatDate(history.createdAt),
+                                'assets/imgs/user_avatar.png',
+                                isIncoming: true,
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        const SizedBox(width: 12),
-                        _buildTransactionCard(
-                          '+RM 62.54',
-                          'From',
-                          'Johnson Charles',
-                          '23 December 2020',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: true,
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
 
@@ -152,48 +161,48 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Outgoing Transactions',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[700],
-                        ),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: Text(
-                          'See All',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFFF1F70),
-                          ),
-                        ),
+                        child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _buildTransactionCard(
-                          '-RM 39.84',
-                          'From',
-                          'John Morrison',
-                          '12 December 2021',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: false,
+                  Consumer<TransferHistoryProvider>(
+                    builder: (context, historyProvider, child) {
+                      if (historyProvider.outgoingHistories.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Text(
+                              'No outgoing transactions',
+                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: historyProvider.outgoingHistories.take(5).map((history) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: _buildTransactionCard(
+                                '-RM ${history.amount.toStringAsFixed(2)}',
+                                'To',
+                                history.recipientName,
+                                _formatDate(history.createdAt),
+                                'assets/imgs/user_avatar.png',
+                                isIncoming: false,
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        const SizedBox(width: 12),
-                        _buildTransactionCard(
-                          '-RM 45.21',
-                          'From',
-                          'Mellony Storke',
-                          '12 December 2021',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: false,
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -202,6 +211,24 @@ class HomeScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    final months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   Widget _buildCardWidget(String cardType, String cardInfo, String balance) {
@@ -224,13 +251,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      cardType,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text(cardType, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                     Text(
                       cardInfo,
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -242,11 +263,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'RM $balance',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFF1F70),
-                ),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
               ),
             ],
           ),
@@ -266,10 +283,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       width: 160,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
+      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -303,9 +317,7 @@ class HomeScreen extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: isIncoming
-                    ? [Color(0xFFB3E5FC), Color(0xFF80DEEA)]
-                    : [Color(0xFFE8EAFD), Color(0xFFD1D5FF)],
+                colors: isIncoming ? [Color(0xFFB3E5FC), Color(0xFF80DEEA)] : [Color(0xFFE8EAFD), Color(0xFFD1D5FF)],
               ),
               borderRadius: BorderRadius.circular(4),
             ),

@@ -1,14 +1,18 @@
-import 'package:app/presentation/screens/main/transfer/transfer_screen2.dart';
+import 'package:app/core/widgets/button_widget.dart';
+import 'package:app/presentation/screens/main/transfer/enter_amount_screen.dart';
+import 'package:app/presentation/screens/main/transfer/select_receiver_screen.dart';
+import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class TransferScreen1 extends StatefulWidget {
-  const TransferScreen1({super.key});
+class TransferScreen extends StatefulWidget {
+  const TransferScreen({super.key});
 
   @override
-  State<TransferScreen1> createState() => _TransferScreen1State();
+  State<TransferScreen> createState() => _TransferScreen1State();
 }
 
-class _TransferScreen1State extends State<TransferScreen1> {
+class _TransferScreen1State extends State<TransferScreen> {
   String selectedTab = 'SELF';
 
   @override
@@ -42,7 +46,15 @@ class _TransferScreen1State extends State<TransferScreen1> {
             // Content based on selected tab
             if (selectedTab == 'SELF') ...[
               // Wallet Section
-              _buildAccountCard(title: 'Wallet', accountNumber: '1132 2233 1234', balance: 'RM 0.40'),
+              Consumer<WalletProvider>(
+                builder: (context, walletProvider, child) {
+                  return _buildAccountCard(
+                    title: 'Wallet',
+                    accountNumber: walletProvider.wallets.first.walletNummer,
+                    balance: walletProvider.wallets.first.balance.toStringAsFixed(2),
+                  );
+                },
+              ),
               const SizedBox(height: 24),
 
               // Saving Account Section
@@ -173,15 +185,16 @@ class _TransferScreen1State extends State<TransferScreen1> {
   }
 
   Widget _buildTransferOptionButton(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
-      child: Center(
-        child: Text(
-          label,
-          style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold, color: Colors.grey[700]),
-        ),
-      ),
+    return ButtonWidget.rectangle(
+      context: context,
+      text: label,
+      type: ButtonType.secondary,
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SelectReceiverScreen(transferType: label.toLowerCase())),
+        );
+      },
     );
   }
 
@@ -198,7 +211,7 @@ class _TransferScreen1State extends State<TransferScreen1> {
       // Favourite contact - make it clickable
       return GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => TransferScreen2()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => EnterAmountScreen()));
         },
         child: Container(
           width: 60,
