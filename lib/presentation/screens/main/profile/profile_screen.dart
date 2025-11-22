@@ -28,14 +28,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Center(
                 child: Text(
                   'Your Profile Information',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF878787)),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF878787),
+                  ),
                 ),
               ),
-              Center(child: CircleAvatar(radius: 50, backgroundImage: AssetImage('assets/imgs/user_avatar.png'))),
+              Center(
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage('assets/imgs/user_avatar.png'),
+                ),
+              ),
               SizedBox(height: 16.0),
               Text(
                 'Personal Information',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFF1F70),
+                ),
               ),
               _buildInfoRow('Full Name', 'John Smith'),
               _buildInfoRow('Account Number', '02873902'),
@@ -47,9 +60,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               Text(
                 'Security',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFF1F70),
+                ),
               ),
-              _buildNavigationRow('Change Pin', () {}),
+              _buildNavigationRow('Change Pin', () {
+                Navigator.pushNamed(context, '/set-pin');
+              }),
               _buildNavigationRow('Change Password', () {}),
               _buildToggleRow('Finger Print', fingerPrintEnabled, (value) {
                 setState(() {
@@ -59,13 +78,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: 16.0),
               Text(
                 'Preferences',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFF1F70),
+                ),
               ),
               _buildNavigationRow('Limit Transactions', () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LimitTransactionScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LimitTransactionScreen(),
+                  ),
+                );
               }),
               _buildNavigationRow('Trusted Contacts', () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TrustedContactScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TrustedContactScreen(),
+                  ),
+                );
               }),
               _buildToggleRow('Display Mode', displayModeEnabled, (value) {
                 setState(() {
@@ -82,17 +115,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildInfoRow(String label, String value) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(color: Color(0xfff4f4f4), borderRadius: BorderRadius.circular(10.0)),
+      decoration: BoxDecoration(
+        color: Color(0xfff4f4f4),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFFF1F70),
+            ),
           ),
           Text(
             value,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFFF1F70),
+            ),
           ),
         ],
       ),
@@ -104,13 +148,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-        decoration: BoxDecoration(color: const Color(0xFFF8F8F8), borderRadius: BorderRadius.circular(12.0)),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8F8F8),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFFFF1F70)),
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFFFF1F70),
+              ),
             ),
             const Icon(Icons.chevron_right, color: Color(0xFFFF1F70), size: 24),
           ],
@@ -122,18 +173,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildToggleRow(String label, bool value, Function(bool) onChanged) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: BoxDecoration(color: const Color(0xFFF8F8F8), borderRadius: BorderRadius.circular(12.0)),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F8F8),
+        borderRadius: BorderRadius.circular(12.0),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFFFF1F70)),
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFFF1F70),
+            ),
           ),
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             activeTrackColor: const Color(0xFFFF1F70),
             inactiveThumbColor: Colors.white,
             inactiveTrackColor: const Color(0xFFE0E0E0),

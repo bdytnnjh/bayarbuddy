@@ -55,6 +55,7 @@ class RegisterRepository {
         fullName: fullName,
         phoneNumber: phoneNumber,
         photoUrl: photoUrl,
+        status: 'active',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

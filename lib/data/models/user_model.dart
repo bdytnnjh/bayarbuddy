@@ -8,6 +8,8 @@ class UserModel {
   final String phoneNumber;
   final String? photoUrl;
   final double limitTransaction;
+  final String? hashedPin;
+  final String status; // 'active', 'blocked', 'inactive'
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -19,6 +21,8 @@ class UserModel {
     required this.phoneNumber,
     this.photoUrl,
     required this.limitTransaction,
+    this.hashedPin,
+    this.status = 'active',
     required this.createdAt,
     required this.updatedAt,
   });
@@ -33,6 +37,8 @@ class UserModel {
       'phoneNumber': phoneNumber,
       'photoUrl': photoUrl,
       'limitTransaction': limitTransaction,
+      'hashedPin': hashedPin,
+      'status': status,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
     };
@@ -48,6 +54,8 @@ class UserModel {
       phoneNumber: map['phoneNumber'] ?? '',
       photoUrl: map['photoUrl'],
       limitTransaction: (map['limitTransaction'] ?? 0).toDouble(),
+      hashedPin: map['hashedPin'],
+      status: map['status'] ?? 'active',
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -71,6 +79,8 @@ class UserModel {
     String? phoneNumber,
     String? photoUrl,
     double? limitTransaction,
+    String? hashedPin,
+    String? status,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -82,6 +92,8 @@ class UserModel {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
       limitTransaction: limitTransaction ?? this.limitTransaction,
+      hashedPin: hashedPin ?? this.hashedPin,
+      status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

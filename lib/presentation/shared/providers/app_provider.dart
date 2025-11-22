@@ -1,8 +1,10 @@
 import 'package:app/core/utils/session_util.dart';
+import 'package:app/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
 class AppProvider with ChangeNotifier {
   final SessionUtil _sessionUtil = SessionUtil();
+  final UserRepository _userRepository = UserRepository();
 
   //private variable decalaration to save status
   bool _isInitialized = false;
@@ -31,8 +33,10 @@ class AppProvider with ChangeNotifier {
     try {
       debugPrint('Initializing AppProvider...');
 
-      _boardingStatus = await _sessionUtil.readSession(_sessionUtil.boardingKey);
-      _loginStatus = await _sessionUtil.readSession(_sessionUtil.authKey);
+      _boardingStatus = await _sessionUtil.readSession(
+        _sessionUtil.boardingKey,
+      );
+      _loginStatus = await _sessionUtil.readSession(_sessionUtil.userKey);
       _isInitialized = true;
 
       debugPrint('Boarding Status: $_boardingStatus');
@@ -50,7 +54,11 @@ class AppProvider with ChangeNotifier {
   Future<String> getInitialRoute() async {
     if (_boardingStatus != null && _boardingStatus == 'true') {
       if (_loginStatus != null) {
-        return '/home'; //user has completed onboarding and is logged in
+        String uid = _loginStatus!;
+        String? hashedPin = await _userRepository.getHashedPin(uid: uid);
+
+        // If user has PIN, go to verify PIN screen, otherwise set PIN first
+        return hashedPin != null ? '/verify-pin' : '/set-pin';
       } else {
         return '/login'; //user has completed onboarding but is not logged in
       }
@@ -58,5 +66,13 @@ class AppProvider with ChangeNotifier {
       await _sessionUtil.writeSession(_sessionUtil.boardingKey, 'true');
       return '/boarding'; //user has not completed onboarding
     }
+  }
+
+  // Get hashed PIN for verify mode
+  Future<String?> getHashedPin() async {
+    if (_loginStatus != null) {
+      return await _userRepository.getHashedPin(uid: _loginStatus!);
+    }
+    return null;
   }
 }
