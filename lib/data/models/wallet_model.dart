@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WalletModel {
-  final String walletId;
+  final bool isPrimary;
   final String userId;
   final String walletNummer;
   final double balance;
@@ -9,7 +9,7 @@ class WalletModel {
   final DateTime lastUpdated;
 
   WalletModel({
-    required this.walletId,
+    required this.isPrimary,
     required this.userId,
     required this.walletNummer,
     required this.balance,
@@ -20,7 +20,7 @@ class WalletModel {
   // Convert WalletModel to Map for Firestore
   Map<String, dynamic> toMap() {
     return {
-      'walletId': walletId,
+      'isPrimary': isPrimary,
       'userId': userId,
       'walletNummer': walletNummer,
       'balance': balance,
@@ -32,7 +32,7 @@ class WalletModel {
   // Create WalletModel from Firestore document
   factory WalletModel.fromMap(Map<String, dynamic> map) {
     return WalletModel(
-      walletId: map['walletId'] ?? '',
+      isPrimary: map['isPrimary'] ?? false,
       userId: map['userId'] ?? '',
       walletNummer: map['walletNummer'] ?? '',
       balance: (map['balance'] ?? 0.0).toDouble(),
@@ -48,12 +48,12 @@ class WalletModel {
     if (data == null) {
       throw Exception('Document data is null');
     }
-    return WalletModel.fromMap({...data, 'walletId': doc.id});
+    return WalletModel.fromMap({...data});
   }
 
   // Copy with method for updating fields
   WalletModel copyWith({
-    String? walletId,
+    bool? isPrimary,
     String? userId,
     String? walletNummer,
     double? balance,
@@ -61,7 +61,7 @@ class WalletModel {
     DateTime? lastUpdated,
   }) {
     return WalletModel(
-      walletId: walletId ?? this.walletId,
+      isPrimary: isPrimary ?? this.isPrimary,
       userId: userId ?? this.userId,
       walletNummer: walletNummer ?? this.walletNummer,
       balance: balance ?? this.balance,
@@ -72,6 +72,6 @@ class WalletModel {
 
   @override
   String toString() {
-    return 'WalletModel(walletId: $walletId, userId: $userId, walletNummer: $walletNummer, balance: $balance, currency: $currency)';
+    return 'WalletModel(isPrimary: $isPrimary, userId: $userId, walletNummer: $walletNummer, balance: $balance, currency: $currency)';
   }
 }

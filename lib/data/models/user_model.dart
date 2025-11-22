@@ -7,6 +7,7 @@ class UserModel {
   final String fullName;
   final String phoneNumber;
   final String? photoUrl;
+  final double limitTransaction;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -17,6 +18,7 @@ class UserModel {
     required this.fullName,
     required this.phoneNumber,
     this.photoUrl,
+    required this.limitTransaction,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -30,6 +32,7 @@ class UserModel {
       'fullName': fullName,
       'phoneNumber': phoneNumber,
       'photoUrl': photoUrl,
+      'limitTransaction': limitTransaction,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
     };
@@ -44,6 +47,7 @@ class UserModel {
       fullName: map['fullName'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       photoUrl: map['photoUrl'],
+      limitTransaction: (map['limitTransaction'] ?? 0).toDouble(),
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -66,6 +70,7 @@ class UserModel {
     String? fullName,
     String? phoneNumber,
     String? photoUrl,
+    double? limitTransaction,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -76,6 +81,7 @@ class UserModel {
       fullName: fullName ?? this.fullName,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photoUrl: photoUrl ?? this.photoUrl,
+      limitTransaction: limitTransaction ?? this.limitTransaction,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -83,6 +89,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, username: $username, fullName: $fullName, phoneNumber: $phoneNumber)';
+    return 'UserModel(uid: $uid, email: $email, username: $username, fullName: $fullName, phoneNumber: $phoneNumber, limitTransaction: $limitTransaction)';
   }
 }

@@ -25,7 +25,9 @@ class CardScreen extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFFF1F70),
+                        ),
                       ),
                     )
                   else if (walletProvider.error != null)
@@ -34,9 +36,15 @@ class CardScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            Text('Error loading wallets', style: TextStyle(color: Colors.red)),
+                            Text(
+                              'Error loading wallets',
+                              style: TextStyle(color: Colors.red),
+                            ),
                             SizedBox(height: 8),
-                            ElevatedButton(onPressed: () => walletProvider.refreshWallets(), child: Text('Retry')),
+                            ElevatedButton(
+                              onPressed: () => walletProvider.refreshWallets(),
+                              child: Text('Retry'),
+                            ),
                           ],
                         ),
                       ),
@@ -45,7 +53,10 @@ class CardScreen extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: Text('No wallets found', style: TextStyle(color: Colors.grey[600])),
+                        child: Text(
+                          'No wallets found',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ),
                     )
                   else
@@ -53,7 +64,11 @@ class CardScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: walletProvider.wallets.map((wallet) {
-                          return _buildCardWidget('VISA', wallet.walletNummer, wallet.balance.toStringAsFixed(2));
+                          return _buildCardWidget(
+                            'VISA',
+                            wallet.walletNummer,
+                            wallet.balance.toStringAsFixed(2),
+                          );
                         }).toList(),
                       ),
                     ),
@@ -76,8 +91,13 @@ class CardScreen extends StatelessWidget {
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFFF1F70),
-                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 48,
+                          vertical: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                       child: Text(
                         'Add Card',
@@ -109,7 +129,11 @@ class CardScreen extends StatelessWidget {
                         onTap: () {},
                         child: Text(
                           'See All',
-                          style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            color: Color(0xFFFF1F70),
+                          ),
                         ),
                       ),
                     ],
@@ -171,7 +195,13 @@ class CardScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(cardType, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(
+                      cardType,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
                       cardInfo,
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -183,7 +213,11 @@ class CardScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'RM $balance',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFF1F70),
+                ),
               ),
             ],
           ),
@@ -192,7 +226,11 @@ class CardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCurrencyCard(String currency, String amount, {required bool isActive}) {
+  Widget _buildCurrencyCard(
+    String currency,
+    String amount, {
+    required bool isActive,
+  }) {
     return Container(
       width: 100,
       padding: const EdgeInsets.all(12),
@@ -215,7 +253,11 @@ class CardScreen extends StatelessWidget {
                   color: isActive ? Colors.white : Colors.black,
                 ),
               ),
-              Icon(Icons.arrow_outward, size: 16, color: isActive ? Colors.white : Colors.black),
+              Icon(
+                Icons.arrow_outward,
+                size: 16,
+                color: isActive ? Colors.white : Colors.black,
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -242,14 +284,25 @@ class CardScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         children: [
           Container(
             width: 48,
             height: 48,
-            decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(12)),
-            child: Icon(icon, color: backgroundColor == Color(0xFFFF1F70) ? Colors.white : Colors.black),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              color: backgroundColor == Color(0xFFFF1F70)
+                  ? Colors.white
+                  : Colors.black,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -258,11 +311,19 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   time,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ],
             ),
@@ -291,7 +352,10 @@ class CardScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         children: [
           CircleAvatar(radius: 24, backgroundImage: AssetImage(avatarPath)),
@@ -302,11 +366,19 @@ class CardScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   time,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ],
             ),

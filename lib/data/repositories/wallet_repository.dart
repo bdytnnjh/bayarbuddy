@@ -18,6 +18,7 @@ class WalletRepository {
     await FirebaseQuery.createDocument(
       collection: _collection,
       data: {
+        'isPrimary': true,
         'userId': userId,
         'balance': balance,
         'currency': currency,
