@@ -1,53 +1,36 @@
+import 'package:app/core/utils/session_util.dart';
 import 'package:app/core/widgets/button_widget.dart';
+import 'package:app/presentation/screens/set_pin/providers/set_pin_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../login/login_screen.dart';
+import 'package:provider/provider.dart';
 
-class SetPinScreen extends StatefulWidget {
-  const SetPinScreen({super.key});
+class SetPinScreen extends StatelessWidget {
+  final bool isVerifyMode;
+  final String? hashedPin;
 
-  @override
-  State<SetPinScreen> createState() => _SetPinScreenState();
-}
-
-class _SetPinScreenState extends State<SetPinScreen> {
-  String pin = '';
-  final int maxPinLength = 5;
-
-  void _addDigit(String digit) {
-    if (pin.length < maxPinLength) {
-      setState(() {
-        pin += digit;
-      });
-    }
-  }
-
-  void _deleteDigit() {
-    if (pin.isNotEmpty) {
-      setState(() {
-        pin = pin.substring(0, pin.length - 1);
-      });
-    }
-  }
-
-  void _setPin() {
-    if (pin.length == maxPinLength) {
-      debugPrint('PIN set: $pin');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please enter a 5-digit PIN'),
-          backgroundColor: Color(0xFFFF1F70),
-        ),
-      );
-    }
-  }
+  const SetPinScreen({super.key, this.isVerifyMode = false, this.hashedPin});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    return ChangeNotifierProvider(
+      create: (_) =>
+          SetPinProvider()..setVerifyMode(isVerifyMode, hashedPin: hashedPin),
+      child: _SetPinContent(uid: user?.uid ?? ''),
+    );
+  }
+}
+
+class _SetPinContent extends StatelessWidget {
+  final String uid;
+
+  const _SetPinContent({required this.uid});
+
+  @override
+  Widget build(BuildContext context) {
+    final pinProvider = context.watch<SetPinProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -58,9 +41,37 @@ class _SetPinScreenState extends State<SetPinScreen> {
             children: [
               const SizedBox(height: 24),
 
+              // Error Message
+              if (pinProvider.errorMessage != null)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red.shade700),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          pinProvider.errorMessage!,
+                          style: TextStyle(color: Colors.red.shade700),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 20),
+                        onPressed: () => pinProvider.clearError(),
+                        color: Colors.red.shade700,
+                      ),
+                    ],
+                  ),
+                ),
+
               // Header with back button and title
               Text(
-                'Set Pin Code',
+                pinProvider.isVerifyMode ? 'Enter Pin Code' : 'Set Pin Code',
                 style: TextStyle(
                   fontFamily: 'Amaranth',
                   fontSize: 24,
@@ -70,9 +81,45 @@ class _SetPinScreenState extends State<SetPinScreen> {
               ),
               const SizedBox(height: 32),
 
+              // Failed attempts indicator (only in verify mode)
+              if (pinProvider.isVerifyMode && pinProvider.failedAttempts > 0)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.shade300),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: Colors.orange.shade700,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Failed attempts: ${pinProvider.failedAttempts}/${pinProvider.maxFailedAttempts}',
+                        style: TextStyle(
+                          color: Colors.orange.shade700,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
               // Subtitle
               Text(
-                'Please set your own',
+                pinProvider.isVerifyMode
+                    ? 'Please enter your'
+                    : 'Please set your own',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -104,14 +151,14 @@ class _SetPinScreenState extends State<SetPinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
-                  maxPinLength,
+                  pinProvider.maxPinLength,
                   (index) => Container(
                     width: 16,
                     height: 16,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: index < pin.length
+                      color: index < pinProvider.pin.length
                           ? Color(0xFFFF1F70)
                           : Colors.grey[300],
                     ),
@@ -125,9 +172,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildKeypadButton('1'),
-                  _buildKeypadButton('2'),
-                  _buildKeypadButton('3'),
+                  _buildKeypadButton('1', context),
+                  _buildKeypadButton('2', context),
+                  _buildKeypadButton('3', context),
                 ],
               ),
               const SizedBox(height: 24),
@@ -136,9 +183,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildKeypadButton('4'),
-                  _buildKeypadButton('5'),
-                  _buildKeypadButton('6'),
+                  _buildKeypadButton('4', context),
+                  _buildKeypadButton('5', context),
+                  _buildKeypadButton('6', context),
                 ],
               ),
               const SizedBox(height: 24),
@@ -147,9 +194,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildKeypadButton('7'),
-                  _buildKeypadButton('8'),
-                  _buildKeypadButton('9'),
+                  _buildKeypadButton('7', context),
+                  _buildKeypadButton('8', context),
+                  _buildKeypadButton('9', context),
                 ],
               ),
               const SizedBox(height: 24),
@@ -158,9 +205,9 @@ class _SetPinScreenState extends State<SetPinScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildCloseButton(),
-                  _buildKeypadButton('0'),
-                  _buildFingerprintButton(),
+                  _buildCloseButton(context),
+                  _buildKeypadButton('0', context),
+                  _buildFingerprintButton(context),
                 ],
               ),
               const SizedBox(height: 48),
@@ -168,9 +215,74 @@ class _SetPinScreenState extends State<SetPinScreen> {
               ButtonWidget.rectangle(
                 width: 117,
                 context: context,
-                text: 'Set',
+                text: pinProvider.isVerifyMode ? 'Verify' : 'Set',
                 type: ButtonType.primary,
-                onPressed: _setPin,
+                onPressed:
+                    pinProvider.isLoading ||
+                        (pinProvider.isVerifyMode &&
+                            pinProvider.failedAttempts >=
+                                pinProvider.maxFailedAttempts)
+                    ? null
+                    : () async {
+                        if (pinProvider.isVerifyMode) {
+                          // Verify PIN mode
+                          final success = await pinProvider.verifyPin(uid: uid);
+                          if (success && context.mounted) {
+                            Navigator.pushReplacementNamed(context, '/home');
+                          } else if (!success && context.mounted) {
+                            // Check if account is blocked
+                            if (pinProvider.failedAttempts >=
+                                pinProvider.maxFailedAttempts) {
+                              // Logout user if blocked
+                              await SessionUtil().deleteSession(
+                                SessionUtil().userKey,
+                              );
+                              Navigator.pushReplacementNamed(context, '/login');
+                            }
+
+                            // Show error snackbar when PIN is incorrect
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.error_outline,
+                                      color: Colors.white,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        pinProvider.errorMessage ??
+                                            'Incorrect PIN. Please try again.',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                backgroundColor: Colors.red.shade700,
+                                duration: const Duration(seconds: 4),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        } else {
+                          // Set PIN mode
+                          final success = await pinProvider.setPin(uid: uid);
+                          if (success && context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('PIN successfully set!'),
+                                backgroundColor: Color(0xFFFF1F70),
+                              ),
+                            );
+                            // Save session and navigate to home
+                            await SessionUtil().writeSession(
+                              SessionUtil().userKey,
+                              uid,
+                            );
+                            Navigator.pushReplacementNamed(context, '/home');
+                          }
+                        }
+                      },
               ),
               const SizedBox(height: 32),
             ],
@@ -180,13 +292,12 @@ class _SetPinScreenState extends State<SetPinScreen> {
     );
   }
 
-  Widget _buildKeypadButton(String digit) {
-    // final List<String> highlightedDigits = ['2', '5', '0', '6', '7'];
-    // bool isSelected = highlightedDigits.contains(digit);
+  Widget _buildKeypadButton(String digit, BuildContext context) {
+    final pinProvider = context.read<SetPinProvider>();
 
     return ButtonWidget.circle(
       context: context,
-      onPressed: () => _addDigit(digit),
+      onPressed: () => pinProvider.addDigit(digit),
       type: ButtonType.secondary,
       child: Text(
         digit,
@@ -199,10 +310,12 @@ class _SetPinScreenState extends State<SetPinScreen> {
     );
   }
 
-  Widget _buildCloseButton() {
+  Widget _buildCloseButton(BuildContext context) {
+    final pinProvider = context.read<SetPinProvider>();
+
     return GestureDetector(
       onTap: () {
-        _deleteDigit();
+        pinProvider.deleteDigit();
       },
       child: Container(
         width: 60,
@@ -213,7 +326,7 @@ class _SetPinScreenState extends State<SetPinScreen> {
     );
   }
 
-  Widget _buildFingerprintButton() {
+  Widget _buildFingerprintButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
         // Fingerprint action

@@ -4,7 +4,7 @@ import 'package:app/data/repositories/login_repository.dart';
 import 'package:app/presentation/screens/main/card/card_screen.dart';
 import 'package:app/presentation/screens/main/home/home_screen.dart';
 import 'package:app/presentation/screens/main/profile/profile_screen.dart';
-import 'package:app/presentation/screens/main/transfer/transfer_screen1.dart';
+import 'package:app/presentation/screens/main/transfer/transfer_screen.dart';
 import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +86,7 @@ class WrapperScreen extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TransferScreen1()),
+                    MaterialPageRoute(builder: (context) => TransferScreen()),
                   );
                 },
               ),
@@ -149,7 +149,7 @@ class WrapperScreen extends StatelessWidget {
           children: [
             HomeScreen(),
             CardScreen(),
-            TransferScreen1(),
+            TransferScreen(),
             ProfileScreen(),
           ],
         ),

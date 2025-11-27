@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../set_pin/set_pin_screen.dart';
 
 class BoardingScreen extends StatelessWidget {
   BoardingScreen({super.key});
@@ -14,9 +13,19 @@ class BoardingScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/imgs/boarding_1.png', fit: BoxFit.cover, width: 300),
-          Text('Easy, Fast & Trusted', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          Text('Fast money transfer and guaranteed safe transactions with others.', textAlign: TextAlign.center),
+          Image.asset(
+            'assets/imgs/boarding_1.png',
+            fit: BoxFit.cover,
+            width: 300,
+          ),
+          Text(
+            'Easy, Fast & Trusted',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Fast money transfer and guaranteed safe transactions with others.',
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     ),
@@ -26,9 +35,19 @@ class BoardingScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/imgs/boarding_2.png', fit: BoxFit.cover, width: 300),
-          Text('Saving Your Money', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          Text('Track the progress of your savings and start a habit of saving with us.', textAlign: TextAlign.center),
+          Image.asset(
+            'assets/imgs/boarding_2.png',
+            fit: BoxFit.cover,
+            width: 300,
+          ),
+          Text(
+            'Saving Your Money',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Track the progress of your savings and start a habit of saving with us.',
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     ),
@@ -38,8 +57,15 @@ class BoardingScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/imgs/boarding_3.png', fit: BoxFit.cover, width: 300),
-          Text('Free Transactions', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Image.asset(
+            'assets/imgs/boarding_3.png',
+            fit: BoxFit.cover,
+            width: 300,
+          ),
+          Text(
+            'Free Transactions',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           Text(
             'Provides the quality of the financial system with free money transactions without any fees.',
             textAlign: TextAlign.center,
@@ -64,7 +90,10 @@ class BoardingScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 16.0,
+              ),
               child: Row(
                 children: [
                   TextButton(
@@ -74,7 +103,7 @@ class BoardingScreen extends StatelessWidget {
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.ease,
                       );
-                      Navigator.pushReplacementNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/login');
                     },
                     child: const Text('Skip'),
                   ),
@@ -90,7 +119,9 @@ class BoardingScreen extends StatelessWidget {
                           width: current == i ? 20 : 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: current == i ? Colors.black87 : Colors.black26,
+                            color: current == i
+                                ? Colors.black87
+                                : Colors.black26,
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
@@ -110,10 +141,12 @@ class BoardingScreen extends StatelessWidget {
                           );
                         } else {
                           // Navigate to SetPinScreen
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SetPinScreen()));
+                          Navigator.pushReplacementNamed(context, '/login');
                         }
                       },
-                      child: Text(current < pages.length - 1 ? 'Next' : 'Get Started'),
+                      child: Text(
+                        current < pages.length - 1 ? 'Next' : 'Get Started',
+                      ),
                     ),
                   ),
                 ],

@@ -32,6 +32,16 @@ class WalletProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  /// Get primary wallet (first wallet with isPrimary flag or first wallet)
+  WalletModel? get primaryWallet {
+    if (_wallets.isEmpty) return null;
+    try {
+      return _wallets.firstWhere((wallet) => wallet.isPrimary);
+    } catch (e) {
+      return _wallets.first;
+    }
+  }
+
   void setWallets(List<WalletModel> wallets) {
     _wallets = wallets;
     _notifyListeners();

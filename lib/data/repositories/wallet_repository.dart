@@ -13,7 +13,7 @@ class WalletRepository {
   }) async {
     // Generate random 12-digit wallet number
     final random = DateTime.now().millisecondsSinceEpoch.toString();
-    final walletNummer = random.substring(random.length - 12);
+    final walletNumber = random.substring(random.length - 12);
 
     await FirebaseQuery.createDocument(
       collection: _collection,
@@ -22,7 +22,7 @@ class WalletRepository {
         'userId': userId,
         'balance': balance,
         'currency': currency,
-        'walletNummer': walletNummer,
+        'walletNumber': walletNumber,
         'lastUpdated': FieldValue.serverTimestamp(),
       },
     );
@@ -55,6 +55,20 @@ class WalletRepository {
     }
 
     return snapshot.docs.map((doc) => WalletModel.fromSnapshot(doc)).toList();
+  }
+
+  Future<WalletModel?> searchWalletByNumber(String walletNumber) async {
+    final snapshot = await FirebaseQuery.getDocuments(
+      collection: _collection,
+      queryBuilder: (collection) =>
+          collection.where('walletNumber', isEqualTo: walletNumber).limit(1),
+    );
+
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
+
+    return WalletModel.fromSnapshot(snapshot.docs.first);
   }
 
   // Update - Update balance
