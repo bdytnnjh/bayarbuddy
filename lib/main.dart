@@ -2,11 +2,15 @@ import 'package:app/core/configs/firebase_options.dart';
 import 'package:app/core/themes/base_theme.dart';
 import 'package:app/presentation/screens/boarding/boarding_screen.dart';
 import 'package:app/presentation/screens/login/login_screen.dart';
+import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
 import 'package:app/presentation/screens/main/wrapper_screen.dart';
 import 'package:app/presentation/screens/register/providers/register_providers.dart';
 import 'package:app/presentation/screens/register/register_screen.dart';
+import 'package:app/presentation/screens/set_pin/set_pin_screen.dart';
+import 'package:app/presentation/screens/set_pin/verify_pin_screen.dart';
 import 'package:app/presentation/screens/splash/splash_screen.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
+import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +32,8 @@ class MyApp extends StatelessWidget {
         // Add your providers here
         ChangeNotifierProvider(create: (_) => AppProvider()),
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
+        ChangeNotifierProvider(create: (_) => TransferProvider()),
+        ChangeNotifierProvider(create: (_) => TransferHistoryProvider()),
       ],
       child: MaterialApp(
         title: 'Bayar Buddy',
@@ -40,6 +46,8 @@ class MyApp extends StatelessWidget {
           '/boarding': (context) => BoardingScreen(),
           '/login': (context) => LoginPage(),
           '/register': (context) => RegisterScreen(),
+          '/set-pin': (context) => SetPinScreen(),
+          '/verify-pin': (context) => VerifyPinScreen(),
         },
       ),
     );

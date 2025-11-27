@@ -55,4 +55,95 @@ class UserRepository {
       return false;
     }
   }
+
+  Future<String?> getHashedPin({required String uid}) async {
+    try {
+      final userDoc = await FirebaseQuery.getDocument(
+        collection: _usersCollection,
+        docId: uid,
+      );
+
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        if (data != null && data.containsKey('hashedPin')) {
+          return data['hashedPin'] as String?;
+        }
+      }
+      return null; // Return null if not found
+    } catch (e) {
+      debugPrint('Get Hashed Pin Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<bool> createOrUpdateHasedPin({
+    required String uid,
+    required String hashedPin,
+  }) async {
+    try {
+      await FirebaseQuery.updateDocument(
+        collection: _usersCollection,
+        docId: uid,
+        data: {'hashedPin': hashedPin},
+      );
+      return true;
+    } catch (e) {
+      debugPrint('Create or Update Hashed Pin Error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateUserStatus({
+    required String uid,
+    required String status,
+  }) async {
+    try {
+      await FirebaseQuery.updateDocument(
+        collection: _usersCollection,
+        docId: uid,
+        data: {'status': status, 'updatedAt': DateTime.now()},
+      );
+      return true;
+    } catch (e) {
+      debugPrint('Update User Status Error: $e');
+      return false;
+    }
+  }
+
+  Future<String?> getUserStatus({required String uid}) async {
+    try {
+      final userDoc = await FirebaseQuery.getDocument(
+        collection: _usersCollection,
+        docId: uid,
+      );
+
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        if (data != null && data.containsKey('status')) {
+          return data['status'] as String?;
+        }
+      }
+      return 'active'; // Default if not found
+    } catch (e) {
+      debugPrint('Get User Status Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getUserByUid({required String uid}) async {
+    try {
+      final userDoc = await FirebaseQuery.getDocument(
+        collection: _usersCollection,
+        docId: uid,
+      );
+
+      if (userDoc.exists) {
+        return userDoc.data();
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Get User By Uid Error: $e');
+      rethrow;
+    }
+  }
 }

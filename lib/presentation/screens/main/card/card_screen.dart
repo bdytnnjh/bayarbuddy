@@ -1,9 +1,33 @@
+import 'package:app/data/models/transfer_history_model.dart';
+import 'package:app/presentation/shared/providers/app_provider.dart';
+import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
 import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CardScreen extends StatelessWidget {
+class CardScreen extends StatefulWidget {
   const CardScreen({super.key});
+
+  @override
+  State<CardScreen> createState() => _CardScreenState();
+}
+
+class _CardScreenState extends State<CardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+      final historyProvider = Provider.of<TransferHistoryProvider>(
+        context,
+        listen: false,
+      );
+
+      if (appProvider.loginStatus != null) {
+        historyProvider.loadTransferHistories(appProvider.loginStatus!);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +136,7 @@ class CardScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
 
-                  // Cash Backs Section
+                  // Transaction History Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -140,28 +164,89 @@ class CardScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Cash Back Items
-                  _buildCashBackItem(
-                    icon: Icons.shopping_bag_outlined,
-                    title: 'Entertainment',
-                    time: '4:34 PM',
-                    amount: 'RM 5.40',
-                    backgroundColor: Color(0xFFB3E5FC),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildCashBackItem(
-                    icon: Icons.shopping_bag_outlined,
-                    title: 'Food Delivery',
-                    time: '6:57 PM',
-                    amount: 'RM 4.70',
-                    backgroundColor: Color(0xFFFF1F70),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildCashBackItemWithAvatar(
-                    avatarPath: 'assets/imgs/user_avatar.png',
-                    title: 'Sarah',
-                    time: '12:23 AM',
-                    amount: 'RM 5.00',
+                  // Transaction History List
+                  Consumer<TransferHistoryProvider>(
+                    builder: (context, historyProvider, child) {
+                      if (historyProvider.isLoading) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: CircularProgressIndicator(
+                              color: Color(0xFFFF1F70),
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (historyProvider.error != null) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Error loading history',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                SizedBox(height: 8),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    final appProvider =
+                                        Provider.of<AppProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    if (appProvider.loginStatus != null) {
+                                      historyProvider.refreshTransferHistories(
+                                        appProvider.loginStatus!,
+                                      );
+                                    }
+                                  },
+                                  child: Text('Retry'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (historyProvider.histories.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.receipt_long_outlined,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  'No transactions yet',
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      // Show only the latest 3 transactions
+                      final latestHistories = historyProvider.histories
+                          .take(3)
+                          .toList();
+
+                      return Column(
+                        children: latestHistories.map((history) {
+                          return _buildTransferHistoryItem(history);
+                        }).toList(),
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
 
@@ -275,13 +360,32 @@ class CardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCashBackItem({
-    required IconData icon,
-    required String title,
-    required String time,
-    required String amount,
-    required Color backgroundColor,
-  }) {
+  Widget _buildTransferHistoryItem(TransferHistoryModel history) {
+    // Format time from createdAt timestamp
+    final dateTime = history.createdAt;
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    final formattedTime = '$hour:$minute';
+
+    // Determine color based on status
+    Color statusColor;
+    IconData statusIcon;
+    switch (history.status) {
+      case TransferStatus.success:
+        statusColor = Colors.green;
+        statusIcon = Icons.check_circle_outline;
+        break;
+      case TransferStatus.failed:
+      case TransferStatus.rejected:
+        statusColor = Colors.red;
+        statusIcon = Icons.error_outline;
+        break;
+      case TransferStatus.pendingApproval:
+      default:
+        statusColor = Colors.orange;
+        statusIcon = Icons.pending_outlined;
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -294,15 +398,10 @@ class CardScreen extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: backgroundColor,
+              color: statusColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              color: backgroundColor == Color(0xFFFF1F70)
-                  ? Colors.white
-                  : Colors.black,
-            ),
+            child: Icon(statusIcon, color: statusColor),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -310,7 +409,7 @@ class CardScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  history.recipientName,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
@@ -318,7 +417,7 @@ class CardScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  time,
+                  formattedTime,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 12,
@@ -328,70 +427,18 @@ class CardScreen extends StatelessWidget {
               ],
             ),
           ),
+          if (history.isDistressSignal)
+            Icon(Icons.warning_amber_rounded, size: 20, color: Colors.red),
+          if (history.isDistressSignal) const SizedBox(width: 8),
           Icon(Icons.arrow_outward, size: 20, color: Colors.grey[600]),
           const SizedBox(width: 12),
           Text(
-            amount,
+            'RM ${history.amount.toStringAsFixed(2)}',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Color(0xFFFF1F70),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCashBackItemWithAvatar({
-    required String avatarPath,
-    required String title,
-    required String time,
-    required String amount,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(radius: 24, backgroundImage: AssetImage(avatarPath)),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  time,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(Icons.arrow_outward, size: 20, color: Colors.grey[600]),
-          const SizedBox(width: 12),
-          Text(
-            amount,
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFFF1F70),
+              color: statusColor,
             ),
           ),
         ],

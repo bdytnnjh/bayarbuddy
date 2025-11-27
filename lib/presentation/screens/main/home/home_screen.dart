@@ -1,9 +1,44 @@
+import 'package:app/presentation/shared/providers/app_provider.dart';
+import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
 import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final appProvider = Provider.of<AppProvider>(context, listen: false);
+      final walletProvider = Provider.of<WalletProvider>(
+        context,
+        listen: false,
+      );
+      final historyProvider = Provider.of<TransferHistoryProvider>(
+        context,
+        listen: false,
+      );
+
+      if (appProvider.loginStatus != null) {
+        // Load outgoing transfers
+        historyProvider.loadOutgoingTransfers(appProvider.loginStatus!);
+
+        // Load incoming transfers using primary wallet number
+        if (walletProvider.primaryWallet != null) {
+          historyProvider.loadIncomingTransfers(
+            walletProvider.primaryWallet!.walletNummer,
+          );
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,29 +155,45 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _buildTransactionCard(
-                          '+RM 54.23',
-                          'From',
-                          'Johnny Bairdstow',
-                          '23 December 2020',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: true,
+                  Consumer<TransferHistoryProvider>(
+                    builder: (context, historyProvider, child) {
+                      if (historyProvider.incomingHistories.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Text(
+                              'No incoming transactions',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: historyProvider.incomingHistories
+                              .take(5)
+                              .map((history) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _buildTransactionCard(
+                                    '+RM ${history.amount.toStringAsFixed(2)}',
+                                    'From',
+                                    history.recipientName,
+                                    _formatDate(history.createdAt),
+                                    'assets/imgs/user_avatar.png',
+                                    isIncoming: true,
+                                  ),
+                                );
+                              })
+                              .toList(),
                         ),
-                        const SizedBox(width: 12),
-                        _buildTransactionCard(
-                          '+RM 62.54',
-                          'From',
-                          'Johnson Charles',
-                          '23 December 2020',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: true,
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
 
@@ -171,29 +222,45 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _buildTransactionCard(
-                          '-RM 39.84',
-                          'From',
-                          'John Morrison',
-                          '12 December 2021',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: false,
+                  Consumer<TransferHistoryProvider>(
+                    builder: (context, historyProvider, child) {
+                      if (historyProvider.outgoingHistories.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32.0),
+                            child: Text(
+                              'No outgoing transactions',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: historyProvider.outgoingHistories
+                              .take(5)
+                              .map((history) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _buildTransactionCard(
+                                    '-RM ${history.amount.toStringAsFixed(2)}',
+                                    'To',
+                                    history.recipientName,
+                                    _formatDate(history.createdAt),
+                                    'assets/imgs/user_avatar.png',
+                                    isIncoming: false,
+                                  ),
+                                );
+                              })
+                              .toList(),
                         ),
-                        const SizedBox(width: 12),
-                        _buildTransactionCard(
-                          '-RM 45.21',
-                          'From',
-                          'Mellony Storke',
-                          '12 December 2021',
-                          'assets/imgs/user_avatar.png',
-                          isIncoming: false,
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -202,6 +269,24 @@ class HomeScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    final months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
   Widget _buildCardWidget(String cardType, String cardInfo, String balance) {
