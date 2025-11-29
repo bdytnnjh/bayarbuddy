@@ -1,3 +1,4 @@
+import 'package:app/core/services/notification_service.dart';
 import 'package:app/core/utils/app_util.dart';
 import 'package:app/data/models/transfer_history_model.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
@@ -274,7 +275,14 @@ class _CardScreenState extends State<CardScreen> {
                   // Add Card Button
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await NotificationService.instance.sendNotificationByToken(
+                          token:
+                              "eiOwK6rESgSuNTvdMMxAlK:APA91bH3IqLZwd3f8egZafPEaVF2XrohRKQkOUk1wpPsImCrU-wGu2PfaDPZdTeRMaQd41x2ztxPE5MViLdZThnAU4pQAFZpu04-GWiRNzPsQPm8GWeTRPQ",
+                          title: 'TEST NOTIFICATION',
+                          body: 'This is a test notification sent from Card Screen',
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFFF1F70),
                         padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 14),
