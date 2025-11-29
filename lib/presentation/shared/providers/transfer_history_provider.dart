@@ -47,6 +47,8 @@ class TransferHistoryProvider with ChangeNotifier {
   /// Refresh transfer histories
   Future<void> refreshTransferHistories(String userId, String walletNumber) async {
     await loadTransferHistories(userId, walletNumber);
+    await loadIncomingTransfers(walletNumber);
+    await loadOutgoingTransfers(userId);
   }
 
   /// Stream transfer histories (real-time updates) - combines incoming and outgoing

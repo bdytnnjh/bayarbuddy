@@ -178,7 +178,7 @@ class _CardScreenState extends State<CardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  history.recipientName,
+                  isIncoming ? history.senderName : history.recipientName,
                   style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -203,10 +203,16 @@ class _CardScreenState extends State<CardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Consumer<WalletProvider>(
-        builder: (context, walletProvider, child) {
+      body: Consumer2<WalletProvider, TransferHistoryProvider>(
+        builder: (context, walletProvider, historyProvider, child) {
           return RefreshIndicator(
-            onRefresh: () => walletProvider.refreshWallets(),
+            onRefresh: () async {
+              String? userId = await AppUtil.getCurrentUserId();
+              if (userId == null || walletProvider.primaryWallet == null) return;
+
+              historyProvider.refreshTransferHistories(userId, walletProvider.primaryWallet!.walletNumber);
+              walletProvider.refreshWallets();
+            },
             color: Color(0xFFFF1F70),
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),

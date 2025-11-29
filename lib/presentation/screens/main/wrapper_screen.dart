@@ -65,7 +65,8 @@ class WrapperScreen extends StatelessWidget {
                 'assets/imgs/icn_user.png',
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
+                  currentIndex.value = 3;
+                  pageController.jumpToPage(3);
                 },
               ),
               _buildItemMenu('Statistics', 'assets/imgs/icn_chart.png'),
@@ -74,7 +75,8 @@ class WrapperScreen extends StatelessWidget {
                 'assets/imgs/icn_transfer.png',
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TransferScreen()));
+                  currentIndex.value = 2;
+                  pageController.jumpToPage(2);
                 },
               ),
               _buildItemMenu('Setings', 'assets/imgs/icn_settings.png'),
