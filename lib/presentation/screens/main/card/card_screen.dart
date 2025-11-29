@@ -34,7 +34,7 @@ class _CardScreenState extends State<CardScreen> {
 
         if (walletProvider.primaryWallet != null) {
           // Load combined histories (incoming + outgoing)
-          historyProvider.loadTransferHistories(userId, walletProvider.primaryWallet!.walletNummer);
+          historyProvider.loadTransferHistories(userId, walletProvider.primaryWallet!.walletNumber);
         }
       }
     });
@@ -248,7 +248,7 @@ class _CardScreenState extends State<CardScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: walletProvider.wallets.map((wallet) {
-                          return _buildCardWidget('VISA', wallet.walletNummer, wallet.balance.toStringAsFixed(2));
+                          return _buildCardWidget('VISA', wallet.walletNumber, wallet.balance.toStringAsFixed(2));
                         }).toList(),
                       ),
                     ),
@@ -338,7 +338,7 @@ class _CardScreenState extends State<CardScreen> {
                                     if (appProvider.loginStatus != null && walletProvider.primaryWallet != null) {
                                       historyProvider.refreshTransferHistories(
                                         appProvider.loginStatus!,
-                                        walletProvider.primaryWallet!.walletNummer,
+                                        walletProvider.primaryWallet!.walletNumber,
                                       );
                                     }
                                   },

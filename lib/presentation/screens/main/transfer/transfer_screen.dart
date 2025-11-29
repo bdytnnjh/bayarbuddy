@@ -37,10 +37,7 @@ class _TransferScreen1State extends State<TransferScreen> {
                   _buildTabButton('ASNB'),
                   const SizedBox(width: 12),
                   _buildTabButton('TABUNG HA'),
-                  if (selectedTab == 'OTHERS') ...[
-                    const SizedBox(width: 12),
-                    _buildTabButton('OVERSEAS'),
-                  ],
+                  if (selectedTab == 'OTHERS') ...[const SizedBox(width: 12), _buildTabButton('OVERSEAS')],
                 ],
               ),
             ),
@@ -53,20 +50,15 @@ class _TransferScreen1State extends State<TransferScreen> {
                 builder: (context, walletProvider, child) {
                   return _buildAccountCard(
                     title: 'Wallet',
-                    accountNumber: walletProvider.wallets.first.walletNummer,
-                    balance: walletProvider.wallets.first.balance
-                        .toStringAsFixed(2),
+                    accountNumber: walletProvider.wallets.first.walletNumber,
+                    balance: walletProvider.wallets.first.balance.toStringAsFixed(2),
                   );
                 },
               ),
               const SizedBox(height: 24),
 
               // Saving Account Section
-              _buildAccountCard(
-                title: 'Saving Account',
-                accountNumber: '1511 1356 2213',
-                balance: 'RM 44,123.22',
-              ),
+              _buildAccountCard(title: 'Saving Account', accountNumber: '1511 1356 2213', balance: 'RM 44,123.22'),
             ] else if (selectedTab == 'OTHERS') ...[
               // New Transfer Section
               Text(
@@ -132,11 +124,7 @@ class _TransferScreen1State extends State<TransferScreen> {
               Center(
                 child: Text(
                   'Content for $selectedTab',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontFamily: 'Poppins', fontSize: 16, color: Colors.grey[600]),
                 ),
               ),
             ],
@@ -157,12 +145,7 @@ class _TransferScreen1State extends State<TransferScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: isSelected ? Color(0xFFFF1F70) : Colors.transparent,
-              width: 3,
-            ),
-          ),
+          border: Border(bottom: BorderSide(color: isSelected ? Color(0xFFFF1F70) : Colors.transparent, width: 3)),
         ),
         child: Text(
           label,
@@ -177,41 +160,23 @@ class _TransferScreen1State extends State<TransferScreen> {
     );
   }
 
-  Widget _buildAccountCard({
-    required String title,
-    required String accountNumber,
-    required String balance,
-  }) {
+  Widget _buildAccountCard({required String title, required String accountNumber, required String balance}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFFF1F70),
-          ),
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
         ),
         const SizedBox(height: 8),
         Text(
           accountNumber,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            color: Colors.grey[700],
-          ),
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[700]),
         ),
         const SizedBox(height: 4),
         Text(
           balance,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         const SizedBox(height: 12),
         Container(height: 1, color: Color(0xFFFF1F70)),
@@ -227,10 +192,7 @@ class _TransferScreen1State extends State<TransferScreen> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) =>
-                SelectReceiverScreen(transferType: label.toLowerCase()),
-          ),
+          MaterialPageRoute(builder: (context) => SelectReceiverScreen(transferType: label.toLowerCase())),
         );
       },
     );
@@ -242,20 +204,14 @@ class _TransferScreen1State extends State<TransferScreen> {
       return Container(
         width: 60,
         height: 60,
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: Colors.grey[100], shape: BoxShape.circle),
         child: Icon(Icons.add, color: Color(0xFFFF1F70), size: 28),
       );
     } else {
       // Favourite contact - make it clickable
       return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => EnterAmountScreen()),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => EnterAmountScreen()));
         },
         child: Container(
           width: 60,

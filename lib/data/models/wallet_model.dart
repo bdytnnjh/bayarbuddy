@@ -4,7 +4,7 @@ class WalletModel {
   final String id;
   final bool isPrimary;
   final String userId;
-  final String walletNummer;
+  final String walletNumber;
   final double balance;
   final String currency;
   final DateTime lastUpdated;
@@ -13,7 +13,7 @@ class WalletModel {
     required this.id,
     required this.isPrimary,
     required this.userId,
-    required this.walletNummer,
+    required this.walletNumber,
     required this.balance,
     required this.currency,
     required this.lastUpdated,
@@ -24,7 +24,7 @@ class WalletModel {
     return {
       'isPrimary': isPrimary,
       'userId': userId,
-      'walletNummer': walletNummer,
+      'walletNumber': walletNumber,
       'balance': balance,
       'currency': currency,
       'lastUpdated': Timestamp.fromDate(lastUpdated),
@@ -37,11 +37,10 @@ class WalletModel {
       id: id,
       isPrimary: map['isPrimary'] ?? false,
       userId: map['userId'] ?? '',
-      walletNummer: map['walletNummer'] ?? '',
+      walletNumber: map['walletNumber'] ?? '',
       balance: (map['balance'] ?? 0.0).toDouble(),
       currency: map['currency'] ?? 'MYR',
-      lastUpdated:
-          (map['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      lastUpdated: (map['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
@@ -55,11 +54,10 @@ class WalletModel {
       id: doc.id,
       isPrimary: data['isPrimary'] ?? false,
       userId: data['userId'] ?? '',
-      walletNummer: data['walletNummer'] ?? '',
+      walletNumber: data['walletNumber'] ?? '',
       balance: (data['balance'] ?? 0.0).toDouble(),
       currency: data['currency'] ?? 'MYR',
-      lastUpdated:
-          (data['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      lastUpdated: (data['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
@@ -68,7 +66,7 @@ class WalletModel {
     String? id,
     bool? isPrimary,
     String? userId,
-    String? walletNummer,
+    String? walletNumber,
     double? balance,
     String? currency,
     DateTime? lastUpdated,
@@ -77,7 +75,7 @@ class WalletModel {
       id: id ?? this.id,
       isPrimary: isPrimary ?? this.isPrimary,
       userId: userId ?? this.userId,
-      walletNummer: walletNummer ?? this.walletNummer,
+      walletNumber: walletNumber ?? this.walletNumber,
       balance: balance ?? this.balance,
       currency: currency ?? this.currency,
       lastUpdated: lastUpdated ?? this.lastUpdated,
@@ -86,6 +84,6 @@ class WalletModel {
 
   @override
   String toString() {
-    return 'WalletModel(isPrimary: $isPrimary, userId: $userId, walletNummer: $walletNummer, balance: $balance, currency: $currency)';
+    return 'WalletModel(isPrimary: $isPrimary, userId: $userId, walletNumber: $walletNumber, balance: $balance, currency: $currency)';
   }
 }

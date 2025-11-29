@@ -42,6 +42,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
   }
 
   Future<void> _searchWalletNumber(String walletNumber) async {
+    print('Searching wallet number: $walletNumber');
     if (walletNumber.isEmpty) {
       setState(() {
         _foundReceiver = null;

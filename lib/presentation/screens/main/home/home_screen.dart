@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Wait for wallets to load, then load incoming transfers
         await walletProvider.loadWallets();
         if (walletProvider.primaryWallet != null) {
-          historyProvider.loadIncomingTransfers(walletProvider.primaryWallet!.walletNummer);
+          historyProvider.loadIncomingTransfers(walletProvider.primaryWallet!.walletNumber);
         }
       }
     });
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: walletProvider.wallets.map((wallet) {
-                          return _buildCardWidget('VISA', wallet.walletNummer, wallet.balance.toStringAsFixed(2));
+                          return _buildCardWidget('VISA', wallet.walletNumber, wallet.balance.toStringAsFixed(2));
                         }).toList(),
                       ),
                     ),

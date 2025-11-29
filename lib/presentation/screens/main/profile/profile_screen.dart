@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           if (walletProvider.wallets.isEmpty) {
                             return _buildInfoRow('Account Number', 'Loading...');
                           }
-                          return _buildInfoRow('Account Number', walletProvider.primaryWallet?.walletNummer ?? 'N/A');
+                          return _buildInfoRow('Account Number', walletProvider.primaryWallet?.walletNumber ?? 'N/A');
                         },
                       ),
                       _buildInfoRow('Username', user.username),
