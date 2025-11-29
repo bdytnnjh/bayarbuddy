@@ -95,6 +95,7 @@ class TransferProvider with ChangeNotifier {
   // Execute transfer (create pending transfer)
   Future<Map<String, dynamic>> executeTransfer({
     required String senderUid,
+    required String senderName,
     required String senderWalletId,
     bool isDistressSignal = false,
   }) async {
@@ -112,6 +113,7 @@ class TransferProvider with ChangeNotifier {
 
       final result = await _transferRepository.executeTransfer(
         senderUid: senderUid,
+        senderName: senderName,
         senderWalletId: senderWalletId,
         recipientWalletNumber: _receiver!.walletNumber,
         recipientName: _receiver!.name,
@@ -138,12 +140,8 @@ class TransferProvider with ChangeNotifier {
   }
 
   // Approve transfer (update balances)
-  Future<Map<String, dynamic>> approveTransfer({
-    required String senderWalletId,
-  }) async {
-    if (_currentTransferHistoryId == null ||
-        _receiver == null ||
-        _amount.isEmpty) {
+  Future<Map<String, dynamic>> approveTransfer({required String senderWalletId}) async {
+    if (_currentTransferHistoryId == null || _receiver == null || _amount.isEmpty) {
       return {'success': false, 'message': 'Invalid transfer data'};
     }
 
@@ -200,10 +198,7 @@ class TransferProvider with ChangeNotifier {
       if (wallets.isEmpty) return null;
 
       // Return primary wallet or first wallet
-      final primaryWallet = wallets.firstWhere(
-        (w) => w.isPrimary,
-        orElse: () => wallets.first,
-      );
+      final primaryWallet = wallets.firstWhere((w) => w.isPrimary, orElse: () => wallets.first);
 
       return primaryWallet.id;
     } catch (e) {

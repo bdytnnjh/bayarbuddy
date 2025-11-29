@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: _buildTransactionCard(
                                 '+RM ${history.amount.toStringAsFixed(2)}',
                                 'From',
-                                history.recipientName,
+                                history.senderName,
                                 _formatDate(history.createdAt),
                                 'assets/imgs/user_avatar.png',
                                 isIncoming: true,

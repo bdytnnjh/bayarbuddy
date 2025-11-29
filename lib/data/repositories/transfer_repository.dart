@@ -11,6 +11,7 @@ class TransferRepository {
   /// Execute transfer - Update sender and receiver balance, create history
   Future<Map<String, dynamic>> executeTransfer({
     required String senderUid,
+    required String senderName,
     required String senderWalletId,
     required String recipientWalletNumber,
     required String recipientName,
@@ -31,9 +32,7 @@ class TransferRepository {
       }
 
       // 3. Get recipient wallet
-      final recipientWallet = await _walletRepository.searchWalletByNumber(
-        recipientWalletNumber,
-      );
+      final recipientWallet = await _walletRepository.searchWalletByNumber(recipientWalletNumber);
       if (recipientWallet == null) {
         return {'success': false, 'message': 'Recipient wallet not found'};
       }
@@ -43,6 +42,7 @@ class TransferRepository {
         collection: _collection,
         data: {
           'senderUid': senderUid,
+          'senderName': senderName,
           'recipientAcc': recipientWalletNumber,
           'recipientName': recipientName,
           'amount': amount,
@@ -89,9 +89,7 @@ class TransferRepository {
       }
 
       // 3. Get recipient wallet
-      final recipientWallet = await _walletRepository.searchWalletByNumber(
-        recipientWalletNumber,
-      );
+      final recipientWallet = await _walletRepository.searchWalletByNumber(recipientWalletNumber);
       if (recipientWallet == null) {
         // Update history to FAILED
         await updateTransferStatus(historyId, TransferStatus.failed);
@@ -102,34 +100,23 @@ class TransferRepository {
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         // Deduct from sender
         final newSenderBalance = senderWallet.balance - amount;
-        transaction.update(
-          FirebaseFirestore.instance.collection('wallets').doc(senderWallet.id),
-          {
-            'balance': newSenderBalance,
-            'lastUpdated': FieldValue.serverTimestamp(),
-          },
-        );
+        transaction.update(FirebaseFirestore.instance.collection('wallets').doc(senderWallet.id), {
+          'balance': newSenderBalance,
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
 
         // Add to recipient
         final newRecipientBalance = recipientWallet.balance + amount;
-        transaction.update(
-          FirebaseFirestore.instance
-              .collection('wallets')
-              .doc(recipientWallet.id),
-          {
-            'balance': newRecipientBalance,
-            'lastUpdated': FieldValue.serverTimestamp(),
-          },
-        );
+        transaction.update(FirebaseFirestore.instance.collection('wallets').doc(recipientWallet.id), {
+          'balance': newRecipientBalance,
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
 
         // Update transfer history to SUCCESS
-        transaction.update(
-          FirebaseFirestore.instance.collection(_collection).doc(historyId),
-          {
-            'status': TransferStatus.success,
-            'completedAt': FieldValue.serverTimestamp(),
-          },
-        );
+        transaction.update(FirebaseFirestore.instance.collection(_collection).doc(historyId), {
+          'status': TransferStatus.success,
+          'completedAt': FieldValue.serverTimestamp(),
+        });
       });
 
       return {
@@ -162,10 +149,7 @@ class TransferRepository {
 
   /// Get transfer history by ID
   Future<TransferHistoryModel?> getTransferHistory(String historyId) async {
-    final doc = await FirebaseQuery.getDocument(
-      collection: _collection,
-      docId: historyId,
-    );
+    final doc = await FirebaseQuery.getDocument(collection: _collection, docId: historyId);
 
     if (!doc.exists || doc.data() == null) {
       return null;
@@ -175,19 +159,14 @@ class TransferRepository {
   }
 
   /// Get all transfer histories for a user (as sender)
-  Future<List<TransferHistoryModel>> getUserTransferHistories(
-    String userId,
-  ) async {
+  Future<List<TransferHistoryModel>> getUserTransferHistories(String userId) async {
     final snapshot = await FirebaseQuery.getDocuments(
       collection: _collection,
-      queryBuilder: (collection) => collection
-          .where('senderUid', isEqualTo: userId)
-          .orderBy('createdAt', descending: true),
+      queryBuilder: (collection) =>
+          collection.where('senderUid', isEqualTo: userId).orderBy('createdAt', descending: true),
     );
 
-    return snapshot.docs
-        .map((doc) => TransferHistoryModel.fromSnapshot(doc))
-        .toList();
+    return snapshot.docs.map((doc) => TransferHistoryModel.fromSnapshot(doc)).toList();
   }
 
   /// Get pending transfers for a user
@@ -200,31 +179,21 @@ class TransferRepository {
           .orderBy('createdAt', descending: true),
     );
 
-    return snapshot.docs
-        .map((doc) => TransferHistoryModel.fromSnapshot(doc))
-        .toList();
+    return snapshot.docs.map((doc) => TransferHistoryModel.fromSnapshot(doc)).toList();
   }
 
   /// Stream transfer histories for real-time updates
-  Stream<List<TransferHistoryModel>> streamUserTransferHistories(
-    String userId,
-  ) {
+  Stream<List<TransferHistoryModel>> streamUserTransferHistories(String userId) {
     return FirebaseFirestore.instance
         .collection(_collection)
         .where('senderUid', isEqualTo: userId)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => TransferHistoryModel.fromMap(doc.data(), doc.id))
-              .toList(),
-        );
+        .map((snapshot) => snapshot.docs.map((doc) => TransferHistoryModel.fromMap(doc.data(), doc.id)).toList());
   }
 
   /// Get incoming transfers (where user is the recipient)
-  Future<List<TransferHistoryModel>> getIncomingTransfers(
-    String walletNumber,
-  ) async {
+  Future<List<TransferHistoryModel>> getIncomingTransfers(String walletNumber) async {
     final snapshot = await FirebaseQuery.getDocuments(
       collection: _collection,
       queryBuilder: (collection) => collection
@@ -234,9 +203,7 @@ class TransferRepository {
           .limit(10),
     );
 
-    return snapshot.docs
-        .map((doc) => TransferHistoryModel.fromSnapshot(doc))
-        .toList();
+    return snapshot.docs.map((doc) => TransferHistoryModel.fromSnapshot(doc)).toList();
   }
 
   /// Get outgoing transfers (where user is the sender)
@@ -250,8 +217,6 @@ class TransferRepository {
           .limit(10),
     );
 
-    return snapshot.docs
-        .map((doc) => TransferHistoryModel.fromSnapshot(doc))
-        .toList();
+    return snapshot.docs.map((doc) => TransferHistoryModel.fromSnapshot(doc)).toList();
   }
 }

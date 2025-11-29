@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TransferHistoryModel {
   final String id;
   final String senderUid;
+  final String senderName;
   final String recipientAcc;
   final String recipientName;
   final double amount;
@@ -15,6 +16,7 @@ class TransferHistoryModel {
   TransferHistoryModel({
     required this.id,
     required this.senderUid,
+    required this.senderName,
     required this.recipientAcc,
     required this.recipientName,
     required this.amount,
@@ -29,6 +31,7 @@ class TransferHistoryModel {
   Map<String, dynamic> toMap() {
     return {
       'senderUid': senderUid,
+      'senderName': senderName,
       'recipientAcc': recipientAcc,
       'recipientName': recipientName,
       'amount': amount,
@@ -36,20 +39,17 @@ class TransferHistoryModel {
       'status': status,
       'isDistressSignal': isDistressSignal,
       'createdAt': Timestamp.fromDate(createdAt),
-      'completedAt': completedAt != null
-          ? Timestamp.fromDate(completedAt!)
-          : null,
+      'completedAt': completedAt != null ? Timestamp.fromDate(completedAt!) : null,
     };
   }
 
   // Create from Firestore snapshot
-  factory TransferHistoryModel.fromSnapshot(
-    DocumentSnapshot<Map<String, dynamic>> doc,
-  ) {
+  factory TransferHistoryModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
     return TransferHistoryModel(
       id: doc.id,
       senderUid: data['senderUid'] ?? '',
+      senderName: data['senderName'] ?? '',
       recipientAcc: data['recipientAcc'] ?? '',
       recipientName: data['recipientName'] ?? '',
       amount: (data['amount'] ?? 0).toDouble(),
@@ -66,6 +66,7 @@ class TransferHistoryModel {
     return TransferHistoryModel(
       id: id,
       senderUid: data['senderUid'] ?? '',
+      senderName: data['senderName'] ?? '',
       recipientAcc: data['recipientAcc'] ?? '',
       recipientName: data['recipientName'] ?? '',
       amount: (data['amount'] ?? 0).toDouble(),
@@ -81,6 +82,7 @@ class TransferHistoryModel {
   TransferHistoryModel copyWith({
     String? id,
     String? senderUid,
+    String? senderName,
     String? recipientAcc,
     String? recipientName,
     double? amount,
@@ -93,6 +95,7 @@ class TransferHistoryModel {
     return TransferHistoryModel(
       id: id ?? this.id,
       senderUid: senderUid ?? this.senderUid,
+      senderName: senderName ?? this.senderName,
       recipientAcc: recipientAcc ?? this.recipientAcc,
       recipientName: recipientName ?? this.recipientName,
       amount: amount ?? this.amount,

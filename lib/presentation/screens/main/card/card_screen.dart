@@ -369,7 +369,7 @@ class _CardScreenState extends State<CardScreen> {
                       }
 
                       // Show only the latest 3 transactions
-                      final latestHistories = historyProvider.histories.take(3).toList();
+                      final latestHistories = historyProvider.histories.toList();
 
                       return Column(
                         children: latestHistories.map((history) {

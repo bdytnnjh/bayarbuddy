@@ -1,5 +1,6 @@
 import 'package:app/core/widgets/customs/app_bar_global.dart';
 import 'package:app/data/models/receiver_model.dart';
+import 'package:app/data/repositories/user_repository.dart';
 import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +50,15 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
         throw Exception('Wallet not found');
       }
 
+      // Get sender name from UserRepository
+      final userRepo = UserRepository();
+      final userData = await userRepo.getUserByUid(uid: userUid);
+      final senderName = userData?['fullName'] ?? 'Unknown';
+
       // Execute transfer first (creates pending history)
       final executeResult = await transferProvider.executeTransfer(
         senderUid: userUid,
+        senderName: senderName,
         senderWalletId: walletId,
         isDistressSignal: false,
       );
