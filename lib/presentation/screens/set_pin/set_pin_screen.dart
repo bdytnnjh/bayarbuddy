@@ -16,8 +16,7 @@ class SetPinScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     return ChangeNotifierProvider(
-      create: (_) =>
-          SetPinProvider()..setVerifyMode(isVerifyMode, hashedPin: hashedPin),
+      create: (_) => SetPinProvider()..setVerifyMode(isVerifyMode, hashedPin: hashedPin),
       child: _SetPinContent(uid: user?.uid ?? ''),
     );
   }
@@ -46,19 +45,13 @@ class _SetPinContent extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(8)),
                   child: Row(
                     children: [
                       Icon(Icons.error_outline, color: Colors.red.shade700),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
-                          pinProvider.errorMessage!,
-                          style: TextStyle(color: Colors.red.shade700),
-                        ),
+                        child: Text(pinProvider.errorMessage!, style: TextStyle(color: Colors.red.shade700)),
                       ),
                       IconButton(
                         icon: const Icon(Icons.close, size: 20),
@@ -85,10 +78,7 @@ class _SetPinContent extends StatelessWidget {
               if (pinProvider.isVerifyMode && pinProvider.failedAttempts > 0)
                 Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 16,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.orange.shade50,
                     borderRadius: BorderRadius.circular(8),
@@ -97,19 +87,11 @@ class _SetPinContent extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        Icons.warning_amber_rounded,
-                        color: Colors.orange.shade700,
-                        size: 20,
-                      ),
+                      Icon(Icons.warning_amber_rounded, color: Colors.orange.shade700, size: 20),
                       const SizedBox(width: 8),
                       Text(
                         'Failed attempts: ${pinProvider.failedAttempts}/${pinProvider.maxFailedAttempts}',
-                        style: TextStyle(
-                          color: Colors.orange.shade700,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: Colors.orange.shade700, fontWeight: FontWeight.w600, fontSize: 13),
                       ),
                     ],
                   ),
@@ -117,33 +99,19 @@ class _SetPinContent extends StatelessWidget {
 
               // Subtitle
               Text(
-                pinProvider.isVerifyMode
-                    ? 'Please enter your'
-                    : 'Please set your own',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  color: Colors.grey[400],
-                ),
+                pinProvider.isVerifyMode ? 'Please enter your' : 'Please set your own',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 16, color: Colors.grey[400]),
               ),
               Text(
                 'Pin Code',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  color: Colors.grey[400],
-                ),
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 16, color: Colors.grey[400]),
               ),
               const SizedBox(height: 32),
 
               // PIN length indicator
               Text(
                 'Set Pin Code (5-digit)',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
               ),
               const SizedBox(height: 16),
 
@@ -158,9 +126,7 @@ class _SetPinContent extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: index < pinProvider.pin.length
-                          ? Color(0xFFFF1F70)
-                          : Colors.grey[300],
+                      color: index < pinProvider.pin.length ? Color(0xFFFF1F70) : Colors.grey[300],
                     ),
                   ),
                 ),
@@ -219,9 +185,7 @@ class _SetPinContent extends StatelessWidget {
                 type: ButtonType.primary,
                 onPressed:
                     pinProvider.isLoading ||
-                        (pinProvider.isVerifyMode &&
-                            pinProvider.failedAttempts >=
-                                pinProvider.maxFailedAttempts)
+                        (pinProvider.isVerifyMode && pinProvider.failedAttempts >= pinProvider.maxFailedAttempts)
                     ? null
                     : () async {
                         if (pinProvider.isVerifyMode) {
@@ -231,30 +195,25 @@ class _SetPinContent extends StatelessWidget {
                             Navigator.pushReplacementNamed(context, '/home');
                           } else if (!success && context.mounted) {
                             // Check if account is blocked
-                            if (pinProvider.failedAttempts >=
-                                pinProvider.maxFailedAttempts) {
+                            if (pinProvider.failedAttempts >= pinProvider.maxFailedAttempts) {
                               // Logout user if blocked
-                              await SessionUtil().deleteSession(
-                                SessionUtil().userKey,
-                              );
-                              Navigator.pushReplacementNamed(context, '/login');
+                              await SessionUtil().deleteSession(SessionUtil().userKey);
+                              if (context.mounted) {
+                                Navigator.pushReplacementNamed(context, '/login');
+                              }
                             }
+
+                            if (!context.mounted) return;
 
                             // Show error snackbar when PIN is incorrect
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Row(
                                   children: [
-                                    const Icon(
-                                      Icons.error_outline,
-                                      color: Colors.white,
-                                    ),
+                                    const Icon(Icons.error_outline, color: Colors.white),
                                     const SizedBox(width: 8),
                                     Expanded(
-                                      child: Text(
-                                        pinProvider.errorMessage ??
-                                            'Incorrect PIN. Please try again.',
-                                      ),
+                                      child: Text(pinProvider.errorMessage ?? 'Incorrect PIN. Please try again.'),
                                     ),
                                   ],
                                 ),
@@ -275,10 +234,9 @@ class _SetPinContent extends StatelessWidget {
                               ),
                             );
                             // Save session and navigate to home
-                            await SessionUtil().writeSession(
-                              SessionUtil().userKey,
-                              uid,
-                            );
+                            await SessionUtil().writeSession(SessionUtil().userKey, uid);
+
+                            if (!context.mounted) return;
                             Navigator.pushReplacementNamed(context, '/home');
                           }
                         }
@@ -301,11 +259,7 @@ class _SetPinContent extends StatelessWidget {
       type: ButtonType.secondary,
       child: Text(
         digit,
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
       ),
     );
   }
@@ -330,20 +284,15 @@ class _SetPinContent extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Fingerprint action
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Fingerprint not implemented'),
-            backgroundColor: Color(0xFFFF1F70),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Fingerprint not implemented'), backgroundColor: Color(0xFFFF1F70)));
       },
       child: Container(
         width: 60,
         height: 60,
         decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
-        child: Center(
-          child: Icon(Icons.fingerprint, color: Colors.white, size: 28),
-        ),
+        child: Center(child: Icon(Icons.fingerprint, color: Colors.white, size: 28)),
       ),
     );
   }

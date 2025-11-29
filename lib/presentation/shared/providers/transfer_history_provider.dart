@@ -17,14 +17,23 @@ class TransferHistoryProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  /// Load transfer histories for a user
-  Future<void> loadTransferHistories(String userId) async {
+  /// Load transfer histories for a user (combine incoming and outgoing)
+  Future<void> loadTransferHistories(String userId, String walletNumber) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      _histories = await _transferRepository.getUserTransferHistories(userId);
+      // Load both incoming and outgoing transfers
+      final outgoing = await _transferRepository.getOutgoingTransfers(userId);
+      final incoming = await _transferRepository.getIncomingTransfers(walletNumber);
+
+      // Combine both lists
+      _histories = [...outgoing, ...incoming];
+
+      // Sort by date (newest first)
+      _histories.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -36,30 +45,49 @@ class TransferHistoryProvider with ChangeNotifier {
   }
 
   /// Refresh transfer histories
-  Future<void> refreshTransferHistories(String userId) async {
-    await loadTransferHistories(userId);
+  Future<void> refreshTransferHistories(String userId, String walletNumber) async {
+    await loadTransferHistories(userId, walletNumber);
   }
 
-  /// Stream transfer histories (real-time updates)
-  void streamTransferHistories(String userId) {
+  /// Stream transfer histories (real-time updates) - combines incoming and outgoing
+  void streamTransferHistories(String userId, String walletNumber) async {
     _isLoading = true;
     notifyListeners();
 
-    _transferRepository
-        .streamUserTransferHistories(userId)
-        .listen(
-          (histories) {
-            _histories = histories;
+    try {
+      // Get both streams
+      final outgoingStream = _transferRepository.streamUserTransferHistories(userId);
+
+      outgoingStream.listen(
+        (outgoing) async {
+          try {
+            // Get incoming transfers
+            final incoming = await _transferRepository.getIncomingTransfers(walletNumber);
+
+            // Combine and sort
+            _histories = [...outgoing, ...incoming];
+            _histories.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
             _isLoading = false;
             _error = null;
             notifyListeners();
-          },
-          onError: (error) {
-            _error = error.toString();
+          } catch (e) {
+            _error = e.toString();
             _isLoading = false;
             notifyListeners();
-          },
-        );
+          }
+        },
+        onError: (error) {
+          _error = error.toString();
+          _isLoading = false;
+          notifyListeners();
+        },
+      );
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   /// Get histories by status
@@ -89,9 +117,7 @@ class TransferHistoryProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _incomingHistories = await _transferRepository.getIncomingTransfers(
-        walletNumber,
-      );
+      _incomingHistories = await _transferRepository.getIncomingTransfers(walletNumber);
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -109,9 +135,7 @@ class TransferHistoryProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _outgoingHistories = await _transferRepository.getOutgoingTransfers(
-        userId,
-      );
+      _outgoingHistories = await _transferRepository.getOutgoingTransfers(userId);
       _error = null;
     } catch (e) {
       _error = e.toString();

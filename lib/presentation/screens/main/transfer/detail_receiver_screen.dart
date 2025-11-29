@@ -31,12 +31,7 @@ class DetailReceiverScreen extends StatelessWidget {
             // You're Sending Label
             Text(
               "YOU'RE SENDING",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: Colors.grey[600],
-                letterSpacing: 1.5,
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600], letterSpacing: 1.5),
             ),
             const SizedBox(height: 8),
 
@@ -55,15 +50,11 @@ class DetailReceiverScreen extends StatelessWidget {
             // Recipient Avatar
             CircleAvatar(
               radius: 48,
-              backgroundColor: const Color(0xFFFF1F70).withOpacity(0.1),
-              backgroundImage: receiver.photoUrl != null
-                  ? NetworkImage(receiver.photoUrl!)
-                  : null,
+              backgroundColor: const Color(0xFFFF1F70).withValues(alpha: 0.1),
+              backgroundImage: receiver.photoUrl != null ? NetworkImage(receiver.photoUrl!) : null,
               child: receiver.photoUrl == null
                   ? Text(
-                      receiver.name.isNotEmpty
-                          ? receiver.name[0].toUpperCase()
-                          : 'U',
+                      receiver.name.isNotEmpty ? receiver.name[0].toUpperCase() : 'U',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 32,
@@ -78,12 +69,7 @@ class DetailReceiverScreen extends StatelessWidget {
             // TO Label
             Text(
               'TO',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: Colors.grey[600],
-                letterSpacing: 1.5,
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600], letterSpacing: 1.5),
             ),
             const SizedBox(height: 8),
 
@@ -124,11 +110,7 @@ class DetailReceiverScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Date',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                     ),
                     const Text(
                       'Today',
@@ -149,11 +131,7 @@ class DetailReceiverScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Recipient reference',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                     ),
                     Text(
                       reference.isNotEmpty ? reference : 'No reference',
@@ -174,11 +152,7 @@ class DetailReceiverScreen extends StatelessWidget {
                   children: [
                     Text(
                       'Wallet Number',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                     ),
                     Text(
                       receiver.walletNumber,
@@ -200,11 +174,7 @@ class DetailReceiverScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Phone Number',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                       ),
                       Text(
                         receiver.phoneNumber!,
@@ -227,11 +197,7 @@ class DetailReceiverScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Email',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                       ),
                       Flexible(
                         child: Text(
@@ -257,11 +223,7 @@ class DetailReceiverScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Payment Details',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                       ),
                       Flexible(
                         child: Text(
@@ -305,9 +267,7 @@ class DetailReceiverScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF1F70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 child: const Text(
                   'Transfer Now',

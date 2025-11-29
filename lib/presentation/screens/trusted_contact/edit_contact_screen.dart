@@ -29,9 +29,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
     _nameController = TextEditingController(text: widget.contact.name);
     _emailController = TextEditingController(text: widget.contact.email);
     _phoneController = TextEditingController(text: widget.contact.phoneNumber);
-    _relationshipController = TextEditingController(
-      text: widget.contact.relationship,
-    );
+    _relationshipController = TextEditingController(text: widget.contact.relationship);
   }
 
   @override
@@ -47,10 +45,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      final provider = Provider.of<TrustedContactProvider>(
-        context,
-        listen: false,
-      );
+      final provider = Provider.of<TrustedContactProvider>(context, listen: false);
 
       final success = await provider.updateContact(
         contactId: widget.contact.contactId,
@@ -66,29 +61,24 @@ class _EditContactScreenState extends State<EditContactScreen> {
         if (success) {
           Navigator.pop(context, true); // Return true to indicate success
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Error: ${provider.error ?? "Failed to update contact"}',
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: ${provider.error ?? "Failed to update contact"}')));
         }
       }
     }
   }
 
   void _handleDelete() async {
+    final provider = Provider.of<TrustedContactProvider>(context, listen: false);
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Contact'),
         content: const Text('Are you sure you want to delete this contact?'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: AppTheme.colors.red),
@@ -101,10 +91,6 @@ class _EditContactScreenState extends State<EditContactScreen> {
     if (confirmed == true) {
       setState(() => _isLoading = true);
 
-      final provider = Provider.of<TrustedContactProvider>(
-        context,
-        listen: false,
-      );
       final success = await provider.deleteContact(widget.contact.contactId);
 
       if (mounted) {
@@ -113,13 +99,9 @@ class _EditContactScreenState extends State<EditContactScreen> {
         if (success) {
           Navigator.pop(context, true); // Return true to indicate success
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Error: ${provider.error ?? "Failed to delete contact"}',
-              ),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Error: ${provider.error ?? "Failed to delete contact"}')));
         }
       }
     }
@@ -174,9 +156,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
                   if (value == null || value.isEmpty) {
                     return 'Please enter an email';
                   }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                     return 'Please enter a valid email';
                   }
                   return null;
@@ -218,9 +198,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: AppTheme.colors.primary, width: 2),
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                 ),
                 child: Text(
                   'Cancel',
@@ -240,18 +218,13 @@ class _EditContactScreenState extends State<EditContactScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.colors.primary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                 ),
                 child: _isLoading
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                       )
                     : Text(
                         'Update',
@@ -284,23 +257,12 @@ class _EditContactScreenState extends State<EditContactScreen> {
         validator: validator,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(
-            color: AppTheme.colors.primary,
-            fontWeight: FontWeight.w500,
-          ),
+          labelStyle: TextStyle(color: AppTheme.colors.primary, fontWeight: FontWeight.w500),
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[300]!),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey[300]!),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.colors.primary),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: AppTheme.colors.red),
-          ),
+          border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[300]!)),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[300]!)),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppTheme.colors.primary)),
+          errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppTheme.colors.red)),
         ),
       ),
     );

@@ -10,15 +10,11 @@ class LoginRepository {
   final JwTUtil _jwtUtil = JwTUtil();
   final SessionUtil _sessionUtil = SessionUtil();
 
-  Future<bool> loginWithEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> loginWithEmailPassword({required String email, required String password}) async {
     try {
       final usersSnapshot = await FirebaseQuery.getDocuments(
         collection: _usersCollection,
-        queryBuilder: (collection) =>
-            collection.where('email', isEqualTo: email).limit(1),
+        queryBuilder: (collection) => collection.where('email', isEqualTo: email).limit(1),
       );
 
       if (usersSnapshot.docs.isEmpty) {
@@ -36,16 +32,11 @@ class LoginRepository {
 
       // Check if user account is inactive
       if (user.status == 'inactive') {
-        throw Exception(
-          'Your account is inactive. Please contact admin support.',
-        );
+        throw Exception('Your account is inactive. Please contact admin support.');
       }
 
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       } catch (e) {
         throw Exception('Invalid password. Please try again.');
       }
@@ -107,6 +98,7 @@ class LoginRepository {
     try {
       await _sessionUtil.deleteSession(_sessionUtil.authKey);
       await _sessionUtil.deleteSession(_sessionUtil.userKey);
+      await FirebaseAuth.instance.signOut();
       debugPrint('User logged out successfully.');
     } catch (e) {
       debugPrint('Logout Error: $e');

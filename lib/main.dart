@@ -11,6 +11,7 @@ import 'package:app/presentation/screens/set_pin/verify_pin_screen.dart';
 import 'package:app/presentation/screens/splash/splash_screen.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
 import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
+import 'package:app/presentation/shared/providers/user_profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => TransferProvider()),
         ChangeNotifierProvider(create: (_) => TransferHistoryProvider()),
+        ChangeNotifierProvider(create: (_) => UserProfileProvider()),
       ],
       child: MaterialApp(
         title: 'Bayar Buddy',

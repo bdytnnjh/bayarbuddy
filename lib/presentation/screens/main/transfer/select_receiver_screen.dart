@@ -90,10 +90,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
       }
 
       // Create receiver model
-      final receiver = ReceiverModel.fromUserAndWallet(
-        userData: userData,
-        walletNumber: walletNumber,
-      );
+      final receiver = ReceiverModel.fromUserAndWallet(userData: userData, walletNumber: walletNumber);
 
       setState(() {
         _foundReceiver = receiver;
@@ -120,11 +117,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
             // Instruction Text
             Text(
               'Enter 12-digit wallet number',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.grey[700],
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[700]),
             ),
             const SizedBox(height: 12),
 
@@ -136,11 +129,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
               maxLength: 12,
               decoration: InputDecoration(
                 hintText: 'Enter wallet number (12 digits)',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.grey[400],
-                ),
+                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
                 prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
@@ -157,14 +146,8 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
                     : null,
                 filled: true,
                 fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 counterText: '',
               ),
             ),
@@ -179,11 +162,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
                     SizedBox(height: 12),
                     Text(
                       'Searching wallet...',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -204,11 +183,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
                     Expanded(
                       child: Text(
                         _searchError!,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: Colors.red[700],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.red[700]),
                       ),
                     ),
                   ],
@@ -247,7 +222,7 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
         border: Border.all(color: const Color(0xFFFF1F70), width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -261,15 +236,11 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
               // Avatar
               CircleAvatar(
                 radius: 30,
-                backgroundColor: const Color(0xFFFF1F70).withOpacity(0.1),
-                backgroundImage: receiver.photoUrl != null
-                    ? NetworkImage(receiver.photoUrl!)
-                    : null,
+                backgroundColor: const Color(0xFFFF1F70).withValues(alpha: 0.1),
+                backgroundImage: receiver.photoUrl != null ? NetworkImage(receiver.photoUrl!) : null,
                 child: receiver.photoUrl == null
                     ? Text(
-                        receiver.name.isNotEmpty
-                            ? receiver.name[0].toUpperCase()
-                            : 'U',
+                        receiver.name.isNotEmpty ? receiver.name[0].toUpperCase() : 'U',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24,
@@ -298,21 +269,13 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
                     const SizedBox(height: 4),
                     Text(
                       receiver.walletNumber,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                     ),
                     if (receiver.phoneNumber != null) ...[
                       const SizedBox(height: 2),
                       Text(
                         receiver.phoneNumber!,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: Colors.grey[500],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[500]),
                       ),
                     ],
                   ],
@@ -328,35 +291,20 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
             child: ElevatedButton(
               onPressed: () {
                 // Save receiver to provider
-                final transferProvider = Provider.of<TransferProvider>(
-                  context,
-                  listen: false,
-                );
+                final transferProvider = Provider.of<TransferProvider>(context, listen: false);
                 transferProvider.setReceiver(receiver);
 
                 // Navigate to enter amount screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EnterAmountScreen(),
-                  ),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const EnterAmountScreen()));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF1F70),
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               child: const Text(
                 'Continue',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
           ),

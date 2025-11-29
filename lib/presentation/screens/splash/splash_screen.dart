@@ -32,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
     // Dapatkan rute awal berdasarkan status
     if (mounted) {
       final route = await appProvider.getInitialRoute();
-      print(route);
       if (mounted) {
         Navigator.pushReplacementNamed(context, route);
       }

@@ -34,10 +34,7 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      final transferProvider = Provider.of<TransferProvider>(
-        context,
-        listen: false,
-      );
+      final transferProvider = Provider.of<TransferProvider>(context, listen: false);
       final appProvider = Provider.of<AppProvider>(context, listen: false);
 
       // Get current user UID
@@ -64,13 +61,11 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
       }
 
       // Approve transfer (updates balances)
-      final approveResult = await transferProvider.approveTransfer(
-        senderWalletId: walletId,
-      );
+      final approveResult = await transferProvider.approveTransfer(senderWalletId: walletId);
 
       setState(() => _isProcessing = false);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       // Navigate to status screen
       Navigator.pushReplacement(
@@ -79,8 +74,7 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           builder: (context) => StatusTransferScreen(
             amount: widget.amount,
             recipientName: widget.receiver.name,
-            recipientPhone:
-                widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+            recipientPhone: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
             senderName: 'You',
             isSuccessful: approveResult['success'],
           ),
@@ -89,14 +83,11 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     } catch (e) {
       setState(() => _isProcessing = false);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Transfer failed: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Transfer failed: ${e.toString()}'), backgroundColor: Colors.red));
 
       // Navigate to failed status
       Navigator.pushReplacement(
@@ -105,8 +96,7 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           builder: (context) => StatusTransferScreen(
             amount: widget.amount,
             recipientName: widget.receiver.name,
-            recipientPhone:
-                widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+            recipientPhone: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
             senderName: 'You',
             isSuccessful: false,
           ),
@@ -121,17 +111,14 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      final transferProvider = Provider.of<TransferProvider>(
-        context,
-        listen: false,
-      );
+      final transferProvider = Provider.of<TransferProvider>(context, listen: false);
 
       // Reject transfer
       await transferProvider.rejectTransfer();
 
       setState(() => _isProcessing = false);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
       // Navigate to rejected status
       Navigator.pushReplacement(
@@ -140,8 +127,7 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           builder: (context) => StatusTransferScreen(
             amount: widget.amount,
             recipientName: widget.receiver.name,
-            recipientPhone:
-                widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+            recipientPhone: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
             senderName: 'You',
             isSuccessful: false,
           ),
@@ -150,14 +136,11 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     } catch (e) {
       setState(() => _isProcessing = false);
 
-      if (!mounted) return;
+      if (!context.mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: Colors.red));
     }
   }
 
@@ -170,22 +153,14 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 24.0,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Secure authorisation label
                   Text(
                     'Secure authorisation',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: Color(0xFFB8697E),
-                      letterSpacing: 0.5,
-                    ),
+                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFB8697E), letterSpacing: 0.5),
                   ),
                   const SizedBox(height: 8),
 
@@ -202,11 +177,7 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                   const SizedBox(height: 32),
 
                   // To Section
-                  _buildDetailRow(
-                    label: 'To',
-                    value1: widget.receiver.name,
-                    value2: widget.receiver.walletNumber,
-                  ),
+                  _buildDetailRow(label: 'To', value1: widget.receiver.name, value2: widget.receiver.walletNumber),
                   const SizedBox(height: 24),
 
                   // From Section
@@ -214,27 +185,18 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                   const SizedBox(height: 24),
 
                   // Transaction type Section
-                  _buildDetailRow(
-                    label: 'Transaction type',
-                    value1: 'Transfer',
-                  ),
+                  _buildDetailRow(label: 'Transaction type', value1: 'Transfer'),
                   const SizedBox(height: 24),
 
                   // Date & time Section
-                  _buildDetailRow(
-                    label: 'Date & time',
-                    value1: '23 May 2025, 12:03AM',
-                  ),
+                  _buildDetailRow(label: 'Date & time', value1: '23 May 2025, 12:03AM'),
                 ],
               ),
             ),
           ),
           // Buttons at the bottom
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 24.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
             child: Column(
               children: [
                 // Reject and Approve buttons
@@ -242,25 +204,15 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: _isProcessing
-                            ? null
-                            : () => _handleReject(context),
+                        onPressed: _isProcessing ? null : () => _handleReject(context),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           elevation: 0,
                         ),
                         child: _isProcessing
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
+                            ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                             : const Text(
                                 'Reject',
                                 style: TextStyle(
@@ -275,25 +227,18 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: _isProcessing
-                            ? null
-                            : () => _handleApprove(context),
+                        onPressed: _isProcessing ? null : () => _handleApprove(context),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFF1F70),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                           elevation: 0,
                         ),
                         child: _isProcessing
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
+                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                               )
                             : const Text(
                                 'Approve',
@@ -315,19 +260,12 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FamilyMemberHelpScreen(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const FamilyMemberHelpScreen()));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFFF1F70),
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       elevation: 0,
                     ),
                     child: Text(
@@ -349,22 +287,14 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     );
   }
 
-  Widget _buildDetailRow({
-    required String label,
-    required String value1,
-    String? value2,
-  }) {
+  Widget _buildDetailRow({required String label, required String value1, String? value2}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 14,
-            color: Color(0xFFB8697E),
-          ),
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Color(0xFFB8697E)),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,

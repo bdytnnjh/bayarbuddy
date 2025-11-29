@@ -29,13 +29,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
             amount = '0.${amountWithoutDecimal.padLeft(2, '0')}';
           } else {
             // 3+ digits: remove all leading zeros, then format
-            String beforeDecimal = amountWithoutDecimal.substring(
-              0,
-              amountWithoutDecimal.length - 2,
-            );
-            String afterDecimal = amountWithoutDecimal.substring(
-              amountWithoutDecimal.length - 2,
-            );
+            String beforeDecimal = amountWithoutDecimal.substring(0, amountWithoutDecimal.length - 2);
+            String afterDecimal = amountWithoutDecimal.substring(amountWithoutDecimal.length - 2);
             // Remove leading zeros from beforeDecimal
             beforeDecimal = beforeDecimal.replaceAll(RegExp(r'^0+'), '');
             if (beforeDecimal.isEmpty) beforeDecimal = '0';
@@ -50,22 +45,14 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     setState(() {
       String amountWithoutDecimal = amount.replaceAll('.', '');
       if (amountWithoutDecimal.length > 1) {
-        amountWithoutDecimal = amountWithoutDecimal.substring(
-          0,
-          amountWithoutDecimal.length - 1,
-        );
+        amountWithoutDecimal = amountWithoutDecimal.substring(0, amountWithoutDecimal.length - 1);
         if (amountWithoutDecimal.length <= 2) {
           // 1-2 digits: pad with leading zeros
           amount = '0.${amountWithoutDecimal.padLeft(2, '0')}';
         } else {
           // 3+ digits: remove leading zeros
-          String beforeDecimal = amountWithoutDecimal.substring(
-            0,
-            amountWithoutDecimal.length - 2,
-          );
-          String afterDecimal = amountWithoutDecimal.substring(
-            amountWithoutDecimal.length - 2,
-          );
+          String beforeDecimal = amountWithoutDecimal.substring(0, amountWithoutDecimal.length - 2);
+          String afterDecimal = amountWithoutDecimal.substring(amountWithoutDecimal.length - 2);
           beforeDecimal = beforeDecimal.replaceAll(RegExp(r'^0+'), '');
           if (beforeDecimal.isEmpty) beforeDecimal = '0';
           amount = '$beforeDecimal.$afterDecimal';
@@ -99,17 +86,11 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                         children: [
                           CircleAvatar(
                             radius: 32,
-                            backgroundColor: const Color(
-                              0xFFFF1F70,
-                            ).withOpacity(0.1),
-                            backgroundImage: receiver.photoUrl != null
-                                ? NetworkImage(receiver.photoUrl!)
-                                : null,
+                            backgroundColor: const Color(0xFFFF1F70).withValues(alpha: 0.1),
+                            backgroundImage: receiver.photoUrl != null ? NetworkImage(receiver.photoUrl!) : null,
                             child: receiver.photoUrl == null
                                 ? Text(
-                                    receiver.name.isNotEmpty
-                                        ? receiver.name[0].toUpperCase()
-                                        : 'U',
+                                    receiver.name.isNotEmpty ? receiver.name[0].toUpperCase() : 'U',
                                     style: const TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 24,
@@ -136,11 +117,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                                 const SizedBox(height: 4),
                                 Text(
                                   receiver.walletNumber,
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    color: Colors.grey[600],
-                                  ),
+                                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
                                 ),
                               ],
                             ),
@@ -164,14 +141,8 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                   const SizedBox(height: 16),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    decoration: BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
                     child: Text(
                       'RM $amount',
                       style: const TextStyle(
@@ -196,40 +167,24 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
                 // Row 1-3
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildKeypadButton('1'),
-                    _buildKeypadButton('2'),
-                    _buildKeypadButton('3'),
-                  ],
+                  children: [_buildKeypadButton('1'), _buildKeypadButton('2'), _buildKeypadButton('3')],
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildKeypadButton('4'),
-                    _buildKeypadButton('5'),
-                    _buildKeypadButton('6'),
-                  ],
+                  children: [_buildKeypadButton('4'), _buildKeypadButton('5'), _buildKeypadButton('6')],
                 ),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildKeypadButton('7'),
-                    _buildKeypadButton('8'),
-                    _buildKeypadButton('9'),
-                  ],
+                  children: [_buildKeypadButton('7'), _buildKeypadButton('8'), _buildKeypadButton('9')],
                 ),
                 const SizedBox(height: 16),
 
                 // Bottom row: Delete, 0, Check
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildDeleteButton(),
-                    _buildKeypadButton('0'),
-                    _buildCheckButton(),
-                  ],
+                  children: [_buildDeleteButton(), _buildKeypadButton('0'), _buildCheckButton()],
                 ),
               ],
             ),
@@ -245,10 +200,7 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
       child: Container(
         width: 60,
         height: 60,
-        decoration: const BoxDecoration(
-          color: Colors.transparent,
-          shape: BoxShape.circle,
-        ),
+        decoration: const BoxDecoration(color: Colors.transparent, shape: BoxShape.circle),
         child: Center(
           child: Text(
             digit,
@@ -270,19 +222,11 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
       child: Container(
         width: 60,
         height: 60,
-        decoration: const BoxDecoration(
-          color: Colors.black,
-          shape: BoxShape.circle,
-        ),
+        decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
         child: const Center(
           child: Text(
             'X',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: TextStyle(fontFamily: 'Poppins', fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
       ),
@@ -293,19 +237,13 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
     return GestureDetector(
       onTap: () {
         // Validate amount
-        final transferProvider = Provider.of<TransferProvider>(
-          context,
-          listen: false,
-        );
+        final transferProvider = Provider.of<TransferProvider>(context, listen: false);
         final error = transferProvider.validateAmount(amount);
 
         if (error != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(error),
-              backgroundColor: const Color(0xFFFF1F70),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(error), backgroundColor: const Color(0xFFFF1F70)));
           return;
         }
 
@@ -313,21 +251,13 @@ class _EnterAmountScreenState extends State<EnterAmountScreen> {
         transferProvider.setAmount(amount);
 
         // Navigate to reference screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const EnterReferenceScreen()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const EnterReferenceScreen()));
       },
       child: Container(
         width: 60,
         height: 60,
-        decoration: const BoxDecoration(
-          color: Colors.black,
-          shape: BoxShape.circle,
-        ),
-        child: const Center(
-          child: Icon(Icons.check, color: Colors.white, size: 28),
-        ),
+        decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
+        child: const Center(child: Icon(Icons.check, color: Colors.white, size: 28)),
       ),
     );
   }
