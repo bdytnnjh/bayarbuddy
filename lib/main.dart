@@ -1,4 +1,5 @@
 import 'package:app/core/configs/firebase_options.dart';
+import 'package:app/core/services/notification_service.dart';
 import 'package:app/core/themes/base_theme.dart';
 import 'package:app/presentation/screens/boarding/boarding_screen.dart';
 import 'package:app/presentation/screens/login/login_screen.dart';
@@ -13,12 +14,22 @@ import 'package:app/presentation/shared/providers/app_provider.dart';
 import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
 import 'package:app/presentation/shared/providers/user_profile_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  await NotificationService.instance.initialize(
+    onNotificationTap: (data) =>
+        debugPrint('Notification tapped with payload: $data'),
+  );
+
+  print('TOKEN DEVICE: ${await FirebaseMessaging.instance.getToken()}');
 
   runApp(const MyApp());
 }

@@ -1,3 +1,4 @@
+import 'package:app/core/services/notification_service.dart';
 import 'package:app/core/utils/app_util.dart';
 import 'package:app/data/models/transfer_history_model.dart';
 import 'package:app/presentation/shared/providers/app_provider.dart';
@@ -20,8 +21,14 @@ class _CardScreenState extends State<CardScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
-      final historyProvider = Provider.of<TransferHistoryProvider>(context, listen: false);
+      final walletProvider = Provider.of<WalletProvider>(
+        context,
+        listen: false,
+      );
+      final historyProvider = Provider.of<TransferHistoryProvider>(
+        context,
+        listen: false,
+      );
 
       final userId = await AppUtil.getCurrentUserId();
       setState(() {
@@ -34,7 +41,10 @@ class _CardScreenState extends State<CardScreen> {
 
         if (walletProvider.primaryWallet != null) {
           // Load combined histories (incoming + outgoing)
-          historyProvider.loadTransferHistories(userId, walletProvider.primaryWallet!.walletNumber);
+          historyProvider.loadTransferHistories(
+            userId,
+            walletProvider.primaryWallet!.walletNumber,
+          );
         }
       }
     });
@@ -60,7 +70,13 @@ class _CardScreenState extends State<CardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(cardType, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(
+                      cardType,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
                       cardInfo,
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -72,7 +88,11 @@ class _CardScreenState extends State<CardScreen> {
               const SizedBox(width: 8),
               Text(
                 'RM $balance',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFF1F70),
+                ),
               ),
             ],
           ),
@@ -81,7 +101,11 @@ class _CardScreenState extends State<CardScreen> {
     );
   }
 
-  Widget _buildCurrencyCard(String currency, String amount, {required bool isActive}) {
+  Widget _buildCurrencyCard(
+    String currency,
+    String amount, {
+    required bool isActive,
+  }) {
     return Container(
       width: 100,
       padding: const EdgeInsets.all(12),
@@ -104,7 +128,11 @@ class _CardScreenState extends State<CardScreen> {
                   color: isActive ? Colors.white : Colors.black,
                 ),
               ),
-              Icon(Icons.arrow_outward, size: 16, color: isActive ? Colors.white : Colors.black),
+              Icon(
+                Icons.arrow_outward,
+                size: 16,
+                color: isActive ? Colors.white : Colors.black,
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -147,7 +175,8 @@ class _CardScreenState extends State<CardScreen> {
         statusIcon = Icons.arrow_upward;
         amountPrefix = '-';
       }
-    } else if (history.status == TransferStatus.failed || history.status == TransferStatus.rejected) {
+    } else if (history.status == TransferStatus.failed ||
+        history.status == TransferStatus.rejected) {
       statusColor = Colors.red;
       statusIcon = Icons.error_outline;
       amountPrefix = isIncoming ? '+' : '-';
@@ -160,7 +189,10 @@ class _CardScreenState extends State<CardScreen> {
 
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         children: [
           Container(
@@ -179,21 +211,35 @@ class _CardScreenState extends State<CardScreen> {
               children: [
                 Text(
                   isIncoming ? history.senderName : history.recipientName,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   formattedTime,
-                  style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ],
             ),
           ),
-          if (history.isDistressSignal) Icon(Icons.warning_amber_rounded, size: 20, color: Colors.red),
+          if (history.isDistressSignal)
+            Icon(Icons.warning_amber_rounded, size: 20, color: Colors.red),
           if (history.isDistressSignal) const SizedBox(width: 8),
           const SizedBox(width: 12),
           Text(
             '$amountPrefix RM ${history.amount.toStringAsFixed(2)}',
-            style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold, color: statusColor),
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: statusColor,
+            ),
           ),
         ],
       ),
@@ -208,9 +254,13 @@ class _CardScreenState extends State<CardScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               String? userId = await AppUtil.getCurrentUserId();
-              if (userId == null || walletProvider.primaryWallet == null) return;
+              if (userId == null || walletProvider.primaryWallet == null)
+                return;
 
-              historyProvider.refreshTransferHistories(userId, walletProvider.primaryWallet!.walletNumber);
+              historyProvider.refreshTransferHistories(
+                userId,
+                walletProvider.primaryWallet!.walletNumber,
+              );
               walletProvider.refreshWallets();
             },
             color: Color(0xFFFF1F70),
@@ -226,7 +276,9 @@ class _CardScreenState extends State<CardScreen> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFFF1F70),
+                        ),
                       ),
                     )
                   else if (walletProvider.error != null)
@@ -235,9 +287,15 @@ class _CardScreenState extends State<CardScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            Text('Error loading wallets', style: TextStyle(color: Colors.red)),
+                            Text(
+                              'Error loading wallets',
+                              style: TextStyle(color: Colors.red),
+                            ),
                             SizedBox(height: 8),
-                            ElevatedButton(onPressed: () => walletProvider.refreshWallets(), child: Text('Retry')),
+                            ElevatedButton(
+                              onPressed: () => walletProvider.refreshWallets(),
+                              child: Text('Retry'),
+                            ),
                           ],
                         ),
                       ),
@@ -246,7 +304,10 @@ class _CardScreenState extends State<CardScreen> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: Text('No wallets found', style: TextStyle(color: Colors.grey[600])),
+                        child: Text(
+                          'No wallets found',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ),
                     )
                   else
@@ -254,7 +315,11 @@ class _CardScreenState extends State<CardScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: walletProvider.wallets.map((wallet) {
-                          return _buildCardWidget('VISA', wallet.walletNumber, wallet.balance.toStringAsFixed(2));
+                          return _buildCardWidget(
+                            'VISA',
+                            wallet.walletNumber,
+                            wallet.balance.toStringAsFixed(2),
+                          );
                         }).toList(),
                       ),
                     ),
@@ -274,11 +339,24 @@ class _CardScreenState extends State<CardScreen> {
                   // Add Card Button
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await NotificationService.instance.sendNotificationByToken(
+                          token:
+                              "eiOwK6rESgSuNTvdMMxAlK:APA91bH3IqLZwd3f8egZafPEaVF2XrohRKQkOUk1wpPsImCrU-wGu2PfaDPZdTeRMaQd41x2ztxPE5MViLdZThnAU4pQAFZpu04-GWiRNzPsQPm8GWeTRPQ",
+                          title: 'TEST NOTIFICATION',
+                          body:
+                              'This is a test notification sent from Card Screen',
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFFF1F70),
-                        padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 14),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 48,
+                          vertical: 14,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                       ),
                       child: Text(
                         'Add Card',
@@ -310,7 +388,11 @@ class _CardScreenState extends State<CardScreen> {
                         onTap: () {},
                         child: Text(
                           'See All',
-                          style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Color(0xFFFF1F70)),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            color: Color(0xFFFF1F70),
+                          ),
                         ),
                       ),
                     ],
@@ -324,7 +406,9 @@ class _CardScreenState extends State<CardScreen> {
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(32.0),
-                            child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
+                            child: CircularProgressIndicator(
+                              color: Color(0xFFFF1F70),
+                            ),
                           ),
                         );
                       }
@@ -335,16 +419,30 @@ class _CardScreenState extends State<CardScreen> {
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
                               children: [
-                                Text('Error loading history', style: TextStyle(color: Colors.red)),
+                                Text(
+                                  'Error loading history',
+                                  style: TextStyle(color: Colors.red),
+                                ),
                                 SizedBox(height: 8),
                                 ElevatedButton(
                                   onPressed: () {
-                                    final appProvider = Provider.of<AppProvider>(context, listen: false);
-                                    final walletProvider = Provider.of<WalletProvider>(context, listen: false);
-                                    if (appProvider.loginStatus != null && walletProvider.primaryWallet != null) {
+                                    final appProvider =
+                                        Provider.of<AppProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    final walletProvider =
+                                        Provider.of<WalletProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    if (appProvider.loginStatus != null &&
+                                        walletProvider.primaryWallet != null) {
                                       historyProvider.refreshTransferHistories(
                                         appProvider.loginStatus!,
-                                        walletProvider.primaryWallet!.walletNumber,
+                                        walletProvider
+                                            .primaryWallet!
+                                            .walletNumber,
                                       );
                                     }
                                   },
@@ -362,11 +460,19 @@ class _CardScreenState extends State<CardScreen> {
                             padding: const EdgeInsets.all(32.0),
                             child: Column(
                               children: [
-                                Icon(Icons.receipt_long_outlined, size: 64, color: Colors.grey[400]),
+                                Icon(
+                                  Icons.receipt_long_outlined,
+                                  size: 64,
+                                  color: Colors.grey[400],
+                                ),
                                 SizedBox(height: 16),
                                 Text(
                                   'No transactions yet',
-                                  style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ],
                             ),
@@ -375,7 +481,8 @@ class _CardScreenState extends State<CardScreen> {
                       }
 
                       // Show only the latest 3 transactions
-                      final latestHistories = historyProvider.histories.toList();
+                      final latestHistories = historyProvider.histories
+                          .toList();
 
                       return Column(
                         children: latestHistories.map((history) {
