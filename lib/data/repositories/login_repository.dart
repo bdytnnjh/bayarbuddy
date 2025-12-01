@@ -3,6 +3,7 @@ import 'package:app/core/utils/jwt_utils.dart';
 import 'package:app/core/utils/session_util.dart';
 import 'package:app/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 class LoginRepository {
@@ -10,15 +11,11 @@ class LoginRepository {
   final JwTUtil _jwtUtil = JwTUtil();
   final SessionUtil _sessionUtil = SessionUtil();
 
-  Future<bool> loginWithEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> loginWithEmailPassword({required String email, required String password}) async {
     try {
       final usersSnapshot = await FirebaseQuery.getDocuments(
         collection: _usersCollection,
-        queryBuilder: (collection) =>
-            collection.where('email', isEqualTo: email).limit(1),
+        queryBuilder: (collection) => collection.where('email', isEqualTo: email).limit(1),
       );
 
       if (usersSnapshot.docs.isEmpty) {
@@ -36,16 +33,17 @@ class LoginRepository {
 
       // Check if user account is inactive
       if (user.status == 'inactive') {
-        throw Exception(
-          'Your account is inactive. Please contact admin support.',
-        );
+        throw Exception('Your account is inactive. Please contact admin support.');
       }
 
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: password,
+        final deviceToken = await FirebaseMessaging.instance.getToken();
+        await FirebaseQuery.updateDocument(
+          collection: _usersCollection,
+          docId: user.uid,
+          data: {'deviceToken': deviceToken},
         );
+        await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       } catch (e) {
         throw Exception('Invalid password. Please try again.');
       }

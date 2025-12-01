@@ -25,11 +25,8 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   await NotificationService.instance.initialize(
-    onNotificationTap: (data) =>
-        debugPrint('Notification tapped with payload: $data'),
+    onNotificationTap: (data) => debugPrint('Notification tapped with payload: $data'),
   );
-
-  print('TOKEN DEVICE: ${await FirebaseMessaging.instance.getToken()}');
 
   runApp(const MyApp());
 }
