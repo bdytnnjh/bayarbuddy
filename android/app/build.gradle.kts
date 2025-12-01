@@ -9,7 +9,6 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-    
 }
 
 // Membaca file dev.properties
@@ -30,6 +29,7 @@ android {
     ndkVersion = ndkVersionValue // Menggunakan nilai dari dev.properties   
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -61,7 +61,10 @@ flutter {
 }
 
 dependencies {
+  coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
   implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
   implementation("androidx.multidex:multidex:2.0.1")
   implementation("com.google.firebase:firebase-analytics")
+  implementation("androidx.window:window:1.0.0")
+  implementation("androidx.window:window-java:1.0.0")
 }
