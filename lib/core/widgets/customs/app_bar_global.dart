@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class AppBarGlobal extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
+  final VoidCallback? onBackPressed;
 
-  const AppBarGlobal({super.key, required this.title, this.actions});
+  const AppBarGlobal({super.key, required this.title, this.actions, this.onBackPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class AppBarGlobal extends StatelessWidget implements PreferredSizeWidget {
           decoration: BoxDecoration(color: AppTheme.colors.primary, borderRadius: BorderRadius.circular(50)),
           child: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
           ),
         ),
       ),

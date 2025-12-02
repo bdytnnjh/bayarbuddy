@@ -37,12 +37,8 @@ class LoginRepository {
       }
 
       try {
-        final deviceToken = await FirebaseMessaging.instance.getToken();
-        await FirebaseQuery.updateDocument(
-          collection: _usersCollection,
-          docId: user.uid,
-          data: {'deviceToken': deviceToken},
-        );
+        final fcmToken = await FirebaseMessaging.instance.getToken();
+        await FirebaseQuery.updateDocument(collection: _usersCollection, docId: user.uid, data: {'fcmToken': fcmToken});
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
       } catch (e) {
         throw Exception('Invalid password. Please try again.');

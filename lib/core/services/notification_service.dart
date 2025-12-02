@@ -9,16 +9,25 @@ import '../configs/firebase_options.dart';
 
 typedef NotificationTapCallback = void Function(Map<String, dynamic> data);
 
-const AndroidNotificationChannel _defaultAndroidChannel =
-    AndroidNotificationChannel(
-      'sidhiq_default_channel',
-      'SIDHIQ Notifications',
-      description: 'General SIDHIQ notifications',
-      importance: Importance.high,
-    );
+const AndroidNotificationChannel _defaultAndroidChannel = AndroidNotificationChannel(
+  'sidhiq_default_channel',
+  'SIDHIQ Notifications',
+  description: 'General SIDHIQ notifications',
+  importance: Importance.high,
+);
 
-final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+const AndroidNotificationChannel _helpRequestChannel = AndroidNotificationChannel(
+  'bayarbuddy_help_request',
+  'Emergency Help Requests',
+  description: 'Urgent help request notifications from trusted contacts',
+  importance: Importance.max,
+  playSound: true,
+  enableVibration: true,
+  enableLights: true,
+  showBadge: true,
+);
+
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class NotificationService {
   NotificationService._internal();
@@ -115,26 +124,39 @@ class NotificationService {
 
     final payload = message.data.isNotEmpty ? jsonEncode(message.data) : null;
 
+    // Check if this is a help_request for full-screen intent
+    final isHelpRequest = message.data['type'] == 'help_request' || message.data['type'] == 'scam_detection';
+
+    // Use appropriate channel based on notification type
+    final channel = isHelpRequest ? _helpRequestChannel : _defaultAndroidChannel;
+
     // ✅ Download image jika ada imageUrl
     BigPictureStyleInformation? bigPictureStyle;
     ByteArrayAndroidBitmap? largeIcon;
 
     final androidDetails = AndroidNotificationDetails(
-      _defaultAndroidChannel.id,
-      _defaultAndroidChannel.name,
-      channelDescription: _defaultAndroidChannel.description,
-      importance: Importance.high,
-      priority: Priority.high,
+      channel.id,
+      channel.name,
+      channelDescription: channel.description,
+      importance: Importance.max,
+      priority: Priority.max,
       icon: notification?.android?.smallIcon ?? '@mipmap/launcher_icon',
-      largeIcon: largeIcon, // ✅ Set large icon
-      styleInformation: bigPictureStyle, // ✅ Set big picture style
+      largeIcon: largeIcon,
+      styleInformation: bigPictureStyle,
       channelShowBadge: true,
+      // ✅ Full-screen intent untuk help request
+      fullScreenIntent: isHelpRequest,
+      category: isHelpRequest ? AndroidNotificationCategory.call : null,
+      visibility: isHelpRequest ? NotificationVisibility.public : null,
+      ongoing: isHelpRequest,
+      autoCancel: !isHelpRequest,
     );
 
     const darwinDetails = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
       presentSound: true,
+      interruptionLevel: InterruptionLevel.critical,
     );
 
     await _flutterLocalNotificationsPlugin.show(
@@ -146,65 +168,12 @@ class NotificationService {
     );
   }
 
-  /// Send notification to a specific device using FCM token
-  /// Note: This requires a server-side implementation or Cloud Functions
-  /// This method prepares the notification data structure
-  Future<Map<String, dynamic>> sendNotificationByToken({
-    required String token,
-    required String title,
-    required String body,
-    Map<String, dynamic>? data,
-    String? imageUrl,
-  }) async {
-    try {
-      // Prepare notification payload
-      final payload = {
-        'to': token,
-        'notification': {
-          'title': title,
-          'body': body,
-          if (imageUrl != null) 'image': imageUrl,
-        },
-        'data': data ?? {},
-        'priority': 'high',
-        'android': {
-          'priority': 'high',
-          'notification': {
-            'channel_id': _defaultAndroidChannel.id,
-            'sound': 'default',
-          },
-        },
-        'apns': {
-          'payload': {
-            'aps': {'sound': 'default', 'badge': 1},
-          },
-        },
-      };
-
-      debugPrint('Notification payload prepared for token: $token');
-      debugPrint('Payload: $payload');
-
-      // Return the payload - actual sending should be done via server/Cloud Functions
-      return {
-        'success': true,
-        'payload': payload,
-        'message':
-            'Notification payload prepared. Send this via your backend server.',
-      };
-    } catch (error, stackTrace) {
-      debugPrint('Failed to prepare notification: $error');
-      debugPrint('$stackTrace');
-      return {'success': false, 'message': error.toString()};
-    }
-  }
-
   Future<void> _configureForegroundPresentation() async {
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
 
   Future<void> _requestPermissions() async {
@@ -218,14 +187,10 @@ class NotificationService {
       sound: true,
     );
 
-    debugPrint(
-      'Notification permission status: ${settings.authorizationStatus}',
-    );
+    debugPrint('Notification permission status: ${settings.authorizationStatus}');
 
     await _flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin
-        >()
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
@@ -234,19 +199,14 @@ class NotificationService {
       return;
     }
 
-    const androidInitialization = AndroidInitializationSettings(
-      '@mipmap/launcher_icon',
-    );
+    const androidInitialization = AndroidInitializationSettings('@mipmap/launcher_icon');
     final darwinInitialization = const DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
     );
 
-    final initializationSettings = InitializationSettings(
-      android: androidInitialization,
-      iOS: darwinInitialization,
-    );
+    final initializationSettings = InitializationSettings(android: androidInitialization, iOS: darwinInitialization);
 
     await _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
@@ -255,10 +215,9 @@ class NotificationService {
     );
 
     final androidPlugin = _flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >();
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
     await androidPlugin?.createNotificationChannel(_defaultAndroidChannel);
+    await androidPlugin?.createNotificationChannel(_helpRequestChannel); // ✅ Create help request channel
 
     _localPluginInitialized = true;
   }
@@ -267,14 +226,21 @@ class NotificationService {
     if (kDebugMode) {
       debugPrint('Foreground message received: ${message.messageId}');
     }
+
+    // Check if this is a help_request or scam_detection
+    final isHelpRequest = message.data['type'] == 'help_request' || message.data['type'] == 'scam_detection';
+
+    if (isHelpRequest) {
+      // For help request, immediately trigger the full screen intent
+      debugPrint('Emergency notification received - showing full screen notification');
+    }
+
     showNotificationFromMessage(message);
   }
 
   void _onMessageOpenedApp(RemoteMessage message) {
     if (kDebugMode) {
-      debugPrint(
-        'Notification opened from background/terminated: ${message.messageId}',
-      );
+      debugPrint('Notification opened from background/terminated: ${message.messageId}');
     }
     _handleMessageTapPayload(message.data);
   }
@@ -312,6 +278,13 @@ class NotificationService {
     }
   }
 
+  /// Handle help request notification when app is in foreground
+  /// This will be called automatically for full-screen intent notifications
+  void handleHelpRequestInForeground(Map<String, dynamic> data) {
+    debugPrint('Handling help request in foreground: $data');
+    _dispatchNotificationTap(data);
+  }
+
   Map<String, dynamic>? _decodePayload(String payload) {
     try {
       final decoded = jsonDecode(payload);
@@ -330,11 +303,65 @@ class NotificationService {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  debugPrint('Background message received: ${message.messageId}');
+  debugPrint('Message data: ${message.data}');
+
+  // Check if this is an emergency notification (help_request or scam_detection)
+  final notificationType = message.data['type'];
+  final isEmergency = notificationType == 'help_request' || notificationType == 'scam_detection';
+
+  if (isEmergency) {
+    debugPrint('Emergency notification in background - type: $notificationType');
+
+    // Show full-screen intent notification even in background
+    final notification = message.notification;
+    final title = notification?.title ?? message.data['title'] as String?;
+    final body = notification?.body ?? message.data['body'] as String?;
+
+    if (title != null || body != null) {
+      final payload = message.data.isNotEmpty ? jsonEncode(message.data) : null;
+
+      // Create full-screen intent notification for emergency
+      final androidDetails = AndroidNotificationDetails(
+        _helpRequestChannel.id,
+        _helpRequestChannel.name,
+        channelDescription: _helpRequestChannel.description,
+        importance: Importance.max,
+        priority: Priority.max,
+        icon: '@mipmap/launcher_icon',
+        channelShowBadge: true,
+        fullScreenIntent: true, // Full-screen intent for emergency
+        category: AndroidNotificationCategory.call,
+        visibility: NotificationVisibility.public,
+        ongoing: true,
+        autoCancel: false,
+        enableLights: true,
+        enableVibration: true,
+        playSound: true,
+      );
+
+      const darwinDetails = DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+        interruptionLevel: InterruptionLevel.critical,
+      );
+
+      await _flutterLocalNotificationsPlugin.show(
+        message.hashCode,
+        title,
+        body,
+        NotificationDetails(android: androidDetails, iOS: darwinDetails),
+        payload: payload,
+      );
+
+      debugPrint('Emergency notification shown in background');
+    }
+  }
 }
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse response) {
-  NotificationService.instance.handleNotificationResponsePayload(
-    response.payload,
-  );
+  NotificationService.instance.handleNotificationResponsePayload(response.payload);
 }

@@ -1,6 +1,6 @@
 import 'package:app/core/widgets/customs/app_bar_global.dart';
 import 'package:app/presentation/screens/main/transfer/enter_reference_screen.dart';
-import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
+import 'package:app/presentation/screens/main/transfer/providers/transfer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

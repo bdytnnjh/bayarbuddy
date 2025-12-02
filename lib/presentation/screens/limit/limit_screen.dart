@@ -16,10 +16,7 @@ class LimitTransactionScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 20.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
             child: Consumer<LimitProvider>(
               builder: (context, limitProvider, child) {
                 if (limitProvider.isLoading) {
@@ -38,22 +35,13 @@ class LimitTransactionScreen extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.red.shade50,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(8)),
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.error_outline,
-                              color: Colors.red.shade700,
-                            ),
+                            Icon(Icons.error_outline, color: Colors.red.shade700),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: Text(
-                                limitProvider.errorMessage!,
-                                style: TextStyle(color: Colors.red.shade700),
-                              ),
+                              child: Text(limitProvider.errorMessage!, style: TextStyle(color: Colors.red.shade700)),
                             ),
                             IconButton(
                               icon: const Icon(Icons.close, size: 20),
@@ -65,38 +53,22 @@ class LimitTransactionScreen extends StatelessWidget {
                       ),
                     // Title and Description
                     Text(
-                      limitProvider.isEditing
-                          ? 'Transfer Limit Successfully Updated'
-                          : 'Limit Transaction',
-                      style: TextStyle(
-                        color: AppTheme.colors.primary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      limitProvider.isEditing ? 'Transfer Limit Successfully Updated' : 'Limit Transaction',
+                      style: TextStyle(color: AppTheme.colors.primary, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       limitProvider.isEditing
                           ? 'Your custom limit and emergency trigger settings have been saved.'
                           : 'Drag the slider to set the minimum transaction amount that will trigger the Help button or require third-party verification',
-                      style: TextStyle(
-                        color: AppTheme.colors.grey,
-                        fontSize: 14,
-                        height: 1.5,
-                      ),
+                      style: TextStyle(color: AppTheme.colors.grey, fontSize: 14, height: 1.5),
                     ),
                     const SizedBox(height: 30),
                     // Limit Amount Display
                     Center(
                       child: Column(
                         children: [
-                          Text(
-                            'Limit Transactions:',
-                            style: TextStyle(
-                              color: AppTheme.colors.grey,
-                              fontSize: 14,
-                            ),
-                          ),
+                          Text('Limit Transactions:', style: TextStyle(color: AppTheme.colors.grey, fontSize: 14)),
                           const SizedBox(height: 8),
                           Text(
                             'RM ${limitProvider.transactionLimit.toStringAsFixed(0)}',
@@ -120,17 +92,14 @@ class LimitTransactionScreen extends StatelessWidget {
                               activeTrackColor: AppTheme.colors.primary,
                               inactiveTrackColor: Colors.grey[300],
                               thumbColor: AppTheme.colors.primary,
-                              thumbShape: const RoundSliderThumbShape(
-                                enabledThumbRadius: 12,
-                              ),
-                              overlayShape: const RoundSliderOverlayShape(
-                                overlayRadius: 18,
-                              ),
+                              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12),
+                              overlayShape: const RoundSliderOverlayShape(overlayRadius: 18),
                             ),
                             child: Slider(
                               value: limitProvider.transactionLimit,
                               min: limitProvider.minLimit,
                               max: limitProvider.maxLimit,
+                              divisions: ((limitProvider.maxLimit - limitProvider.minLimit) / 50).round(),
                               onChanged: (value) {
                                 limitProvider.setTransactionLimit(value);
                               },
@@ -142,17 +111,11 @@ class LimitTransactionScreen extends StatelessWidget {
                             children: [
                               Text(
                                 'RM ${limitProvider.minLimit.toStringAsFixed(0)}',
-                                style: TextStyle(
-                                  color: AppTheme.colors.grey,
-                                  fontSize: 12,
-                                ),
+                                style: TextStyle(color: AppTheme.colors.grey, fontSize: 12),
                               ),
                               Text(
                                 'RM ${limitProvider.maxLimit.toStringAsFixed(0)}',
-                                style: TextStyle(
-                                  color: AppTheme.colors.grey,
-                                  fontSize: 12,
-                                ),
+                                style: TextStyle(color: AppTheme.colors.grey, fontSize: 12),
                               ),
                             ],
                           ),
@@ -168,11 +131,7 @@ class LimitTransactionScreen extends StatelessWidget {
                       ),
                       child: Text(
                         'If a transaction exceeds your emergency threshold, your trusted contact will be alerted for verification.',
-                        style: TextStyle(
-                          color: AppTheme.colors.grey,
-                          fontSize: 13,
-                          height: 1.5,
-                        ),
+                        style: TextStyle(color: AppTheme.colors.grey, fontSize: 13, height: 1.5),
                       ),
                     ),
                     const SizedBox(height: 60),
@@ -189,9 +148,7 @@ class LimitTransactionScreen extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.colors.primary,
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                           ),
                           child: limitProvider.isLoading
                               ? const SizedBox(
@@ -199,18 +156,12 @@ class LimitTransactionScreen extends StatelessWidget {
                                   width: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                   ),
                                 )
                               : Text(
                                   'Update',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                         ),
                       )
@@ -224,15 +175,9 @@ class LimitTransactionScreen extends StatelessWidget {
                                 limitProvider.setIsEditing(false);
                               },
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: AppTheme.colors.primary,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
+                                side: BorderSide(color: AppTheme.colors.primary),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                               ),
                               child: Text(
                                 'Edit',
@@ -252,20 +197,12 @@ class LimitTransactionScreen extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppTheme.colors.primary,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 14,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                               ),
                               child: Text(
                                 'Done',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),

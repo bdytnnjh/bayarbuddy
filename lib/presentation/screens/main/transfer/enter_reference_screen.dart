@@ -1,6 +1,6 @@
 import 'package:app/core/widgets/customs/app_bar_global.dart';
 import 'package:app/presentation/screens/main/transfer/detail_receiver_screen.dart';
-import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
+import 'package:app/presentation/screens/main/transfer/providers/transfer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +13,7 @@ class EnterReferenceScreen extends StatefulWidget {
 
 class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
   final TextEditingController _referenceController = TextEditingController();
-  final TextEditingController _paymentDetailsController =
-      TextEditingController();
+  final TextEditingController _paymentDetailsController = TextEditingController();
 
   @override
   void dispose() {
@@ -35,10 +34,7 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
             // Recipient Info
             Row(
               children: [
-                CircleAvatar(
-                  radius: 32,
-                  backgroundImage: AssetImage('assets/imgs/user_avatar.png'),
-                ),
+                CircleAvatar(radius: 32, backgroundImage: AssetImage('assets/imgs/user_avatar.png')),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -46,28 +42,16 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                     children: [
                       Text(
                         '1233 3566 2352',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'TOM HAALAND',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'MAYBANK',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -91,24 +75,12 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
               controller: _referenceController,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
                 hintText: 'Enter reference',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.grey[400],
-                ),
+                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
               ),
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.black),
             ),
             const SizedBox(height: 32),
 
@@ -128,24 +100,12 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
               maxLines: 3,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
-                ),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
                 hintText: 'Enter payment details',
-                hintStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                  color: Colors.grey[400],
-                ),
+                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
               ),
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.black),
             ),
             const SizedBox(height: 48),
 
@@ -163,14 +123,9 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                     );
                   } else {
                     // Save reference and payment details to provider
-                    final transferProvider = Provider.of<TransferProvider>(
-                      context,
-                      listen: false,
-                    );
+                    final transferProvider = Provider.of<TransferProvider>(context, listen: false);
                     transferProvider.setReference(_referenceController.text);
-                    transferProvider.setPaymentDetails(
-                      _paymentDetailsController.text,
-                    );
+                    transferProvider.setPaymentDetails(_paymentDetailsController.text);
 
                     // Navigate to Detail Receiver Screen
                     Navigator.push(
@@ -189,9 +144,7 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 child: Text(
                   'Continue',

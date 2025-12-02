@@ -1,5 +1,6 @@
 import 'package:app/core/utils/app_util.dart';
 import 'package:app/data/models/trusted_contact_model.dart';
+import 'package:app/data/models/user_model.dart';
 import 'package:app/data/repositories/trusted_contact_repository.dart';
 import 'package:app/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,6 @@ class TrustedContactProvider with ChangeNotifier {
     required String phoneNumber,
     required String email,
     required String relationship,
-    String? linkedUserId,
   }) async {
     try {
       final userId = await AppUtil.getCurrentUserId();
@@ -50,25 +50,19 @@ class TrustedContactProvider with ChangeNotifier {
         throw Exception('User not found');
       }
 
-      bool isUserApp = await _userRepository.checkUserExistsByEmail(email);
+      UserModel? isUserApp = await _userRepository.checkUserExistsByEmail(email);
 
-      if (isUserApp) {
-        await _repository.createTrustedContact(
-          userId: userId,
-          name: name,
-          phoneNumber: phoneNumber,
-          email: email,
-          relationship: relationship,
-          linkedUserId: linkedUserId,
-        );
+      await _repository.createTrustedContact(
+        userId: userId,
+        name: name,
+        phoneNumber: phoneNumber,
+        email: email,
+        relationship: relationship,
+        linkedUserId: isUserApp.uid,
+      );
 
-        await loadContacts();
-        return true;
-      } else {
-        _error = 'The email provided does not belong to a registered user.';
-        notifyListeners();
-        return false;
-      }
+      await loadContacts();
+      return true;
     } catch (e) {
       _error = e.toString();
       debugPrint('Error adding contact: $e');

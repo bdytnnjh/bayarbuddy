@@ -1,18 +1,18 @@
 import 'package:app/core/configs/firebase_query.dart';
+import 'package:app/data/models/user_model.dart';
 import 'package:flutter/foundation.dart';
 
 class UserRepository {
   static const String _usersCollection = 'users';
 
-  Future<bool> checkUserExistsByEmail(String email) async {
+  Future<UserModel> checkUserExistsByEmail(String email) async {
     try {
       final usersSnapshot = await FirebaseQuery.getDocuments(
         collection: _usersCollection,
-        queryBuilder: (collection) =>
-            collection.where('email', isEqualTo: email).limit(1),
+        queryBuilder: (collection) => collection.where('email', isEqualTo: email).limit(1),
       );
 
-      return usersSnapshot.docs.isNotEmpty;
+      return UserModel.fromMap(usersSnapshot.docs.isNotEmpty ? usersSnapshot.docs.first.data() : {});
     } catch (e) {
       debugPrint('Check User Exists Error: $e');
       rethrow;
@@ -21,10 +21,7 @@ class UserRepository {
 
   Future<double> getUserLimitTransaction({required String uid}) async {
     try {
-      final userDoc = await FirebaseQuery.getDocument(
-        collection: _usersCollection,
-        docId: uid,
-      );
+      final userDoc = await FirebaseQuery.getDocument(collection: _usersCollection, docId: uid);
 
       if (userDoc.exists) {
         final data = userDoc.data();
@@ -39,10 +36,7 @@ class UserRepository {
     }
   }
 
-  Future<bool> updateUserLimitTransaction({
-    required String uid,
-    required double newLimit,
-  }) async {
+  Future<bool> updateUserLimitTransaction({required String uid, required double newLimit}) async {
     try {
       await FirebaseQuery.updateDocument(
         collection: _usersCollection,
@@ -58,10 +52,7 @@ class UserRepository {
 
   Future<String?> getHashedPin({required String uid}) async {
     try {
-      final userDoc = await FirebaseQuery.getDocument(
-        collection: _usersCollection,
-        docId: uid,
-      );
+      final userDoc = await FirebaseQuery.getDocument(collection: _usersCollection, docId: uid);
 
       if (userDoc.exists) {
         final data = userDoc.data();
@@ -76,16 +67,9 @@ class UserRepository {
     }
   }
 
-  Future<bool> createOrUpdateHasedPin({
-    required String uid,
-    required String hashedPin,
-  }) async {
+  Future<bool> createOrUpdateHasedPin({required String uid, required String hashedPin}) async {
     try {
-      await FirebaseQuery.updateDocument(
-        collection: _usersCollection,
-        docId: uid,
-        data: {'hashedPin': hashedPin},
-      );
+      await FirebaseQuery.updateDocument(collection: _usersCollection, docId: uid, data: {'hashedPin': hashedPin});
       return true;
     } catch (e) {
       debugPrint('Create or Update Hashed Pin Error: $e');
@@ -93,10 +77,7 @@ class UserRepository {
     }
   }
 
-  Future<bool> updateUserStatus({
-    required String uid,
-    required String status,
-  }) async {
+  Future<bool> updateUserStatus({required String uid, required String status}) async {
     try {
       await FirebaseQuery.updateDocument(
         collection: _usersCollection,
@@ -112,10 +93,7 @@ class UserRepository {
 
   Future<String?> getUserStatus({required String uid}) async {
     try {
-      final userDoc = await FirebaseQuery.getDocument(
-        collection: _usersCollection,
-        docId: uid,
-      );
+      final userDoc = await FirebaseQuery.getDocument(collection: _usersCollection, docId: uid);
 
       if (userDoc.exists) {
         final data = userDoc.data();
@@ -132,10 +110,7 @@ class UserRepository {
 
   Future<Map<String, dynamic>?> getUserByUid({required String uid}) async {
     try {
-      final userDoc = await FirebaseQuery.getDocument(
-        collection: _usersCollection,
-        docId: uid,
-      );
+      final userDoc = await FirebaseQuery.getDocument(collection: _usersCollection, docId: uid);
 
       if (userDoc.exists) {
         return userDoc.data();

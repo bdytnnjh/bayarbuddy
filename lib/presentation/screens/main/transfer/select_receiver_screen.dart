@@ -4,7 +4,7 @@ import 'package:app/data/models/receiver_model.dart';
 import 'package:app/data/repositories/user_repository.dart';
 import 'package:app/data/repositories/wallet_repository.dart';
 import 'package:app/presentation/screens/main/transfer/enter_amount_screen.dart';
-import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
+import 'package:app/presentation/screens/main/transfer/providers/transfer_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +42,6 @@ class _SelectReceiverScreenState extends State<SelectReceiverScreen> {
   }
 
   Future<void> _searchWalletNumber(String walletNumber) async {
-    print('Searching wallet number: $walletNumber');
     if (walletNumber.isEmpty) {
       setState(() {
         _foundReceiver = null;

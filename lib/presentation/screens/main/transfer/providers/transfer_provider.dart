@@ -176,6 +176,8 @@ class TransferProvider with ChangeNotifier {
 
   // Reject transfer
   Future<void> rejectTransfer() async {
+    print('Rejecting transfer...');
+    print(_currentTransferHistoryId);
     if (_currentTransferHistoryId == null) return;
 
     _isProcessing = true;

@@ -47,7 +47,7 @@ class RegisterRepository {
     String? photoUrl,
   }) async {
     try {
-      final deviceToken = await FirebaseMessaging.instance.getToken();
+      final fcmToken = await FirebaseMessaging.instance.getToken();
 
       final userModel = UserModel(
         uid: uid,
@@ -58,7 +58,7 @@ class RegisterRepository {
         phoneNumber: phoneNumber,
         photoUrl: photoUrl,
         status: 'active',
-        tokenDevice: deviceToken,
+        fcmToken: fcmToken,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

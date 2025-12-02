@@ -33,10 +33,9 @@ class AppProvider with ChangeNotifier {
     try {
       debugPrint('Initializing AppProvider...');
 
-      _boardingStatus = await _sessionUtil.readSession(
-        _sessionUtil.boardingKey,
-      );
+      _boardingStatus = await _sessionUtil.readSession(_sessionUtil.boardingKey);
       _loginStatus = await _sessionUtil.readSession(_sessionUtil.userKey);
+
       _isInitialized = true;
 
       debugPrint('Boarding Status: $_boardingStatus');

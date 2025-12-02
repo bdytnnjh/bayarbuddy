@@ -4,7 +4,7 @@ import 'package:app/data/repositories/login_repository.dart';
 import 'package:app/presentation/screens/main/card/card_screen.dart';
 import 'package:app/presentation/screens/main/home/home_screen.dart';
 import 'package:app/presentation/screens/main/profile/profile_screen.dart';
-import 'package:app/presentation/screens/main/transfer/providers/tranfer_provider.dart';
+import 'package:app/presentation/screens/main/transfer/providers/transfer_provider.dart';
 import 'package:app/presentation/screens/main/transfer/transfer_screen.dart';
 import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
 import 'package:app/presentation/shared/providers/wallet_provider.dart';

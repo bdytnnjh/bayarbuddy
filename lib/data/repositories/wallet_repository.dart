@@ -55,7 +55,6 @@ class WalletRepository {
       queryBuilder: (collection) => collection.where('walletNumber', isEqualTo: walletNumber).limit(1),
     );
 
-    print('Wallet search snapshot docs: ${snapshot.docs.length}');
     if (snapshot.docs.isEmpty) {
       return null;
     }

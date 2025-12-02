@@ -1,4 +1,5 @@
 import 'dart:developer' as dev;
+import 'package:app/data/repositories/notification_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/configs/firebase_query.dart';
 import '../models/transfer_history_model.dart';
@@ -7,6 +8,7 @@ import 'wallet_repository.dart';
 class TransferRepository {
   final String _collection = 'transfer_histories';
   final WalletRepository _walletRepository = WalletRepository();
+  final NotificationRepository _notificationRepository = NotificationRepository();
 
   /// Execute transfer - Update sender and receiver balance, create history
   Future<Map<String, dynamic>> executeTransfer({
@@ -118,6 +120,13 @@ class TransferRepository {
           'completedAt': FieldValue.serverTimestamp(),
         });
       });
+
+      // 5. Send notification to recipient
+      await _notificationRepository.sendNotificationToUser(
+        userId: recipientWallet.userId,
+        title: 'Transfer Received',
+        body: 'You have received a transfer of RM ${amount.toStringAsFixed(2)}',
+      );
 
       return {
         'success': true,
