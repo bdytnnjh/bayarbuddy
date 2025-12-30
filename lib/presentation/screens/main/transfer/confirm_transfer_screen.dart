@@ -34,9 +34,11 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
   bool _isSendingHelp = false;
 
   final NotificationRepository _notificationRepo = NotificationRepository();
-  final TrustedContactRepository _trustedContactRepo = TrustedContactRepository();
+  final TrustedContactRepository _trustedContactRepo =
+      TrustedContactRepository();
   final UserRepository _userRepo = UserRepository();
-  final ScamTriggerHistoriesRepository _scamRepo = ScamTriggerHistoriesRepository();
+  final ScamTriggerHistoriesRepository _scamRepo =
+      ScamTriggerHistoriesRepository();
 
   /// Handle "Help Me!" button - Send distress notification to all trusted contacts
   Future<void> _handleHelpMe() async {
@@ -55,11 +57,30 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           style: TextStyle(fontFamily: 'Poppins'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFF1F70)),
-            child: const Text('Send Help Request'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF1F70),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20), // Oval shape
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ), // Smaller size
+            ),
+            child: const Text(
+              'Send Help Request',
+              style: TextStyle(
+                color: Colors.white, // White text color
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -81,7 +102,8 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
         userId: userUid,
         transferId: 'transfer_${DateTime.now().millisecondsSinceEpoch}',
         recipientName: widget.receiver.name,
-        recipientWalletNumber: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+        recipientWalletNumber:
+            widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
         amount: double.tryParse(widget.amount) ?? 0.0,
         triggerType: 'help_me',
         approveAttempts: 0, // Manual help, no approve attempts
@@ -91,17 +113,21 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
 
       // Get current user data
       final userData = await _userRepo.getUserByUid(uid: userUid);
-      final userName = userData?['fullName'] ?? userData?['username'] ?? 'Someone';
+      final userName =
+          userData?['fullName'] ?? userData?['username'] ?? 'Someone';
 
       // Get all trusted contacts for this user
-      final trustedContacts = await _trustedContactRepo.getTrustedContactsByUserId(userUid);
+      final trustedContacts = await _trustedContactRepo
+          .getTrustedContactsByUserId(userUid);
 
       if (trustedContacts.isEmpty) {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('No trusted contacts found. Please add trusted contacts first.'),
+            content: Text(
+              'No trusted contacts found. Please add trusted contacts first.',
+            ),
             backgroundColor: Colors.orange,
           ),
         );
@@ -119,7 +145,8 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
         'type': 'help_request',
         'amount': widget.amount,
         'recipientName': widget.receiver.name,
-        'recipientPhone': widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+        'recipientPhone':
+            widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
         'senderName': userName,
         'senderUid': userUid,
         'scamTriggerId': scamTriggerId,
@@ -132,7 +159,8 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
             await _notificationRepo.sendNotificationWithData(
               userId: contact.linkedUserId!,
               title: '🚨 URGENT: ${userName.toUpperCase()} NEEDS HELP!',
-              body: 'Help request for transfer of RM ${widget.amount} to ${widget.receiver.name}. Tap to view details.',
+              body:
+                  'Help request for transfer of RM ${widget.amount} to ${widget.receiver.name}. Tap to view details.',
               data: notificationData,
             );
             successCount++;
@@ -154,14 +182,18 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
       if (successCount > 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Help request sent to $successCount trusted contact(s)!'),
+            content: Text(
+              'Help request sent to $successCount trusted contact(s)!',
+            ),
             backgroundColor: Colors.green,
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send help requests. Please ensure your trusted contacts are linked.'),
+            content: Text(
+              'Failed to send help requests. Please ensure your trusted contacts are linked.',
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -174,7 +206,12 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString().replaceFirst('Exception: ', '')}'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(
+            'Error: ${e.toString().replaceFirst('Exception: ', '')}',
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -182,13 +219,17 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
   Future<void> _handleApprove(BuildContext context) async {
     if (_isProcessing) return;
 
-    final provider = Provider.of<ConfirmTransferProvider>(context, listen: false);
+    final provider = Provider.of<ConfirmTransferProvider>(
+      context,
+      listen: false,
+    );
 
     // If still in waiting period, count as suspicious attempt
     if (provider.isWaitingPeriod) {
       await provider.handleApproveAttempt(
         recipientName: widget.receiver.name,
-        recipientWalletNumber: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+        recipientWalletNumber:
+            widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
         amount: double.tryParse(widget.amount) ?? 0.0,
       );
 
@@ -196,7 +237,9 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please wait ${provider.remainingSeconds} seconds before approving'),
+          content: Text(
+            'Please wait ${provider.remainingSeconds} seconds before approving',
+          ),
           backgroundColor: Colors.orange,
         ),
       );
@@ -207,7 +250,9 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     if (provider.isScamDetected) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Transaction locked. Waiting for trusted contact verification.'),
+          content: Text(
+            'Transaction locked. Waiting for trusted contact verification.',
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -217,7 +262,10 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      final transferProvider = Provider.of<TransferProvider>(context, listen: false);
+      final transferProvider = Provider.of<TransferProvider>(
+        context,
+        listen: false,
+      );
 
       // Get current user UID
       final userUid = await AppUtil.getCurrentUserId();
@@ -232,7 +280,9 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
       }
 
       // Approve transfer (updates balances)
-      final approveResult = await transferProvider.approveTransfer(senderWalletId: walletId);
+      final approveResult = await transferProvider.approveTransfer(
+        senderWalletId: walletId,
+      );
 
       setState(() => _isProcessing = false);
 
@@ -245,7 +295,8 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           builder: (context) => StatusTransferScreen(
             amount: widget.amount,
             recipientName: widget.receiver.name,
-            recipientPhone: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+            recipientPhone:
+                widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
             senderName: 'You',
             isSuccessful: approveResult['success'],
           ),
@@ -256,9 +307,12 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
 
       if (!context.mounted) return;
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Transfer failed: ${e.toString()}'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Transfer failed: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
 
       // Navigate to failed status
       Navigator.pushReplacement(
@@ -267,7 +321,8 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           builder: (context) => StatusTransferScreen(
             amount: widget.amount,
             recipientName: widget.receiver.name,
-            recipientPhone: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+            recipientPhone:
+                widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
             senderName: 'You',
             isSuccessful: false,
           ),
@@ -282,7 +337,10 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      final transferProvider = Provider.of<TransferProvider>(context, listen: false);
+      final transferProvider = Provider.of<TransferProvider>(
+        context,
+        listen: false,
+      );
 
       // Reject transfer
       await transferProvider.rejectTransfer();
@@ -298,7 +356,8 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
           builder: (context) => StatusTransferScreen(
             amount: widget.amount,
             recipientName: widget.receiver.name,
-            recipientPhone: widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
+            recipientPhone:
+                widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
             senderName: 'You',
             isSuccessful: false,
           ),
@@ -309,9 +368,12 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
 
       if (!context.mounted) return;
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -321,9 +383,14 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
       canPop: false, // Prevent default back behavior
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
-          final transferProvider = Provider.of<TransferProvider>(context, listen: false);
+          final transferProvider = Provider.of<TransferProvider>(
+            context,
+            listen: false,
+          );
           transferProvider.rejectTransfer();
-          Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+          Navigator.of(
+            context,
+          ).pushNamedAndRemoveUntil('/home', (route) => false);
           // Handle back manually
         }
       },
@@ -336,16 +403,24 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
               appBar: AppBarGlobal(
                 title: 'Confirm Transfer',
                 onBackPressed: () {
-                  final transferProvider = Provider.of<TransferProvider>(context, listen: false);
+                  final transferProvider = Provider.of<TransferProvider>(
+                    context,
+                    listen: false,
+                  );
                   transferProvider.rejectTransfer();
-                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                  Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil('/home', (route) => false);
                 },
               ),
               body: Column(
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 24.0,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -357,11 +432,18 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.orange.shade100,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.orange, width: 2),
+                                border: Border.all(
+                                  color: Colors.orange,
+                                  width: 2,
+                                ),
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.timer, color: Colors.orange, size: 24),
+                                  const Icon(
+                                    Icons.timer,
+                                    color: Colors.orange,
+                                    size: 24,
+                                  ),
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
@@ -391,7 +473,11 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      const Icon(Icons.warning, color: Colors.red, size: 24),
+                                      const Icon(
+                                        Icons.warning,
+                                        color: Colors.red,
+                                        size: 24,
+                                      ),
                                       const SizedBox(width: 12),
                                       const Expanded(
                                         child: Text(
@@ -409,7 +495,11 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                                   const SizedBox(height: 8),
                                   Text(
                                     'Suspicious activity detected! Help request sent to your trusted contacts.',
-                                    style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.red.shade900),
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 12,
+                                      color: Colors.red.shade900,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -451,18 +541,27 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                           const SizedBox(height: 24),
 
                           // Transaction type Section
-                          _buildDetailRow(label: 'Transaction type', value1: 'Transfer'),
+                          _buildDetailRow(
+                            label: 'Transaction type',
+                            value1: 'Transfer',
+                          ),
                           const SizedBox(height: 24),
 
                           // Date & time Section
-                          _buildDetailRow(label: 'Date & time', value1: '23 May 2025, 12:03AM'),
+                          _buildDetailRow(
+                            label: 'Date & time',
+                            value1: '23 May 2025, 12:03AM',
+                          ),
                         ],
                       ),
                     ),
                   ),
                   // Buttons at the bottom
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 24.0,
+                    ),
                     child: Column(
                       children: [
                         // Reject and Approve buttons
@@ -470,20 +569,28 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                           children: [
                             Expanded(
                               child: ElevatedButton(
-                                onPressed: (_isProcessing || !confirmProvider.canReject)
+                                onPressed:
+                                    (_isProcessing ||
+                                        !confirmProvider.canReject)
                                     ? null
                                     : () => _handleReject(context),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                   elevation: 0,
                                 ),
                                 child: _isProcessing
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,
-                                        child: CircularProgressIndicator(strokeWidth: 2),
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
                                       )
                                     : const Text(
                                         'Reject',
@@ -503,19 +610,31 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                                     ? null
                                     : !confirmProvider.canApprove
                                     ? () async {
-                                        await confirmProvider.handleApproveAttempt(
-                                          recipientName: widget.receiver.name,
-                                          recipientWalletNumber:
-                                              widget.receiver.phoneNumber ?? widget.receiver.walletNumber,
-                                          amount: double.tryParse(widget.amount) ?? 0.0,
-                                        );
+                                        await confirmProvider
+                                            .handleApproveAttempt(
+                                              recipientName:
+                                                  widget.receiver.name,
+                                              recipientWalletNumber:
+                                                  widget.receiver.phoneNumber ??
+                                                  widget.receiver.walletNumber,
+                                              amount:
+                                                  double.tryParse(
+                                                    widget.amount,
+                                                  ) ??
+                                                  0.0,
+                                            );
 
                                         // Show UI feedback when scam detected
                                         // Provider already handles notification & history in _triggerScamDetection()
-                                        if (confirmProvider.isScamDetected && context.mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                        if (confirmProvider.isScamDetected &&
+                                            context.mounted) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
                                             const SnackBar(
-                                              content: Text('Emergency alert sent to your trusted contacts'),
+                                              content: Text(
+                                                'Emergency alert sent to your trusted contacts',
+                                              ),
                                               backgroundColor: Colors.red,
                                               duration: Duration(seconds: 2),
                                             ),
@@ -525,15 +644,22 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                                     : () => _handleApprove(context),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF1F70),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                   elevation: 0,
                                 ),
                                 child: _isProcessing
                                     ? const SizedBox(
                                         height: 20,
                                         width: 20,
-                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
                                       )
                                     : Text(
                                         confirmProvider.isWaitingPeriod
@@ -558,13 +684,18 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: (_isProcessing || _isSendingHelp || confirmProvider.isScamDetected)
+                            onPressed:
+                                (_isProcessing ||
+                                    _isSendingHelp ||
+                                    confirmProvider.isScamDetected)
                                 ? null
                                 : _handleHelpMe,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFFF1F70),
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                               elevation: 0,
                             ),
                             child: _isSendingHelp
@@ -573,7 +704,9 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
                                     ),
                                   )
                                 : const Text(
@@ -599,14 +732,22 @@ class _ConfirmTransferScreenState extends State<ConfirmTransferScreen> {
     );
   }
 
-  Widget _buildDetailRow({required String label, required String value1, String? value2}) {
+  Widget _buildDetailRow({
+    required String label,
+    required String value1,
+    String? value2,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Color(0xFFB8697E)),
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 14,
+            color: Color(0xFFB8697E),
+          ),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
