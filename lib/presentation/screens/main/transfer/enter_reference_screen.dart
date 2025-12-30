@@ -13,7 +13,8 @@ class EnterReferenceScreen extends StatefulWidget {
 
 class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
   final TextEditingController _referenceController = TextEditingController();
-  final TextEditingController _paymentDetailsController = TextEditingController();
+  final TextEditingController _paymentDetailsController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -24,6 +25,9 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final transferProvider = Provider.of<TransferProvider>(context);
+    final receiver = transferProvider.receiver;
+
     return Scaffold(
       appBar: AppBarGlobal(title: 'Enter Reference'),
       body: SingleChildScrollView(
@@ -32,33 +36,53 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Recipient Info
-            Row(
-              children: [
-                CircleAvatar(radius: 32, backgroundImage: AssetImage('assets/imgs/user_avatar.png')),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '1233 3566 2352',
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'TOM HAALAND',
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'MAYBANK',
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 12, color: Colors.grey[600]),
-                      ),
-                    ],
+            if (receiver != null) ...[
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundImage: receiver.photoUrl != null
+                        ? NetworkImage(receiver.photoUrl!)
+                        : AssetImage('assets/imgs/user_avatar.png')
+                              as ImageProvider,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          receiver.walletNumber,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          receiver.name.toUpperCase(),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'MAYBANK', // Keeping the bank name as a static value
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+            ],
 
             // Recipient Reference
             Text(
@@ -75,12 +99,24 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
               controller: _referenceController,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
+                ),
                 hintText: 'Enter reference',
-                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
+                hintStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: Colors.grey[400],
+                ),
               ),
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.black),
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -100,12 +136,24 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
               maxLines: 3,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2)),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFFF1F70), width: 2),
+                ),
                 hintText: 'Enter payment details',
-                hintStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[400]),
+                hintStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: Colors.grey[400],
+                ),
               ),
-              style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.black),
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 14,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(height: 48),
 
@@ -123,9 +171,10 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                     );
                   } else {
                     // Save reference and payment details to provider
-                    final transferProvider = Provider.of<TransferProvider>(context, listen: false);
                     transferProvider.setReference(_referenceController.text);
-                    transferProvider.setPaymentDetails(_paymentDetailsController.text);
+                    transferProvider.setPaymentDetails(
+                      _paymentDetailsController.text,
+                    );
 
                     // Navigate to Detail Receiver Screen
                     Navigator.push(
@@ -144,7 +193,9 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF1F70),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
                 child: Text(
                   'Continue',
