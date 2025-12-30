@@ -16,8 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
-      final historyProvider = Provider.of<TransferHistoryProvider>(context, listen: false);
+      final walletProvider = Provider.of<WalletProvider>(
+        context,
+        listen: false,
+      );
+      final historyProvider = Provider.of<TransferHistoryProvider>(
+        context,
+        listen: false,
+      );
 
       final userId = await AppUtil.getCurrentUserId();
 
@@ -28,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
         // Wait for wallets to load, then load incoming transfers
         await walletProvider.loadWallets();
         if (walletProvider.primaryWallet != null) {
-          historyProvider.loadIncomingTransfers(walletProvider.primaryWallet!.walletNumber);
+          historyProvider.loadIncomingTransfers(
+            walletProvider.primaryWallet!.walletNumber,
+          );
         }
       }
     });
@@ -42,9 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
           return RefreshIndicator(
             onRefresh: () async {
               String? userId = await AppUtil.getCurrentUserId();
-              if (userId == null || walletProvider.primaryWallet == null) return;
+              if (userId == null || walletProvider.primaryWallet == null)
+                return;
 
-              historyProvider.refreshTransferHistories(userId, walletProvider.primaryWallet!.walletNumber);
+              historyProvider.refreshTransferHistories(
+                userId,
+                walletProvider.primaryWallet!.walletNumber,
+              );
               walletProvider.refreshWallets();
             },
             color: Color(0xFFFF1F70),
@@ -58,7 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Current Balance', style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                      Text(
+                        'Current Balance',
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         walletProvider.calculateCurrentBalance(),
@@ -78,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: CircularProgressIndicator(color: Color(0xFFFF1F70)),
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFFF1F70),
+                        ),
                       ),
                     )
                   else if (walletProvider.error != null)
@@ -87,9 +104,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            Text('Error loading wallets', style: TextStyle(color: Colors.red)),
+                            Text(
+                              'Error loading wallets',
+                              style: TextStyle(color: Colors.red),
+                            ),
                             SizedBox(height: 8),
-                            ElevatedButton(onPressed: () => walletProvider.refreshWallets(), child: Text('Retry')),
+                            ElevatedButton(
+                              onPressed: () => walletProvider.refreshWallets(),
+                              child: Text('Retry'),
+                            ),
                           ],
                         ),
                       ),
@@ -98,7 +121,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: Text('No wallets found', style: TextStyle(color: Colors.grey[600])),
+                        child: Text(
+                          'No wallets found',
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ),
                     )
                   else
@@ -106,7 +132,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: walletProvider.wallets.map((wallet) {
-                          return _buildCardWidget('VISA', wallet.walletNumber, wallet.balance.toStringAsFixed(2));
+                          return _buildCardWidget(
+                            'VISA',
+                            wallet.walletNumber,
+                            wallet.balance.toStringAsFixed(2),
+                          );
                         }).toList(),
                       ),
                     ),
@@ -118,11 +148,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         'Incoming Transactions',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[700],
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
+                        child: Text(
+                          'See All',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFFFF1F70),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -135,7 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.all(32.0),
                             child: Text(
                               'No incoming transactions',
-                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         );
@@ -144,19 +187,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: historyProvider.incomingHistories.take(5).map((history) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: _buildTransactionCard(
-                                '+RM ${history.amount.toStringAsFixed(2)}',
-                                'From',
-                                history.senderName,
-                                _formatDate(history.createdAt),
-                                'assets/imgs/user_avatar.png',
-                                isIncoming: true,
-                              ),
-                            );
-                          }).toList(),
+                          children: historyProvider.incomingHistories
+                              .take(5)
+                              .map((history) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _buildTransactionCard(
+                                    '+RM ${history.amount.toStringAsFixed(2)}',
+                                    'From',
+                                    history.senderName,
+                                    _formatDate(history.createdAt),
+                                    'assets/imgs/user_avatar.png',
+                                    isIncoming: true,
+                                  ),
+                                );
+                              })
+                              .toList(),
                         ),
                       );
                     },
@@ -169,11 +215,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         'Outgoing Transactions',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[700],
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {},
-                        child: Text('See All', style: TextStyle(fontSize: 12, color: Color(0xFFFF1F70))),
+                        child: Text(
+                          'See All',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFFFF1F70),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -186,7 +242,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.all(32.0),
                             child: Text(
                               'No outgoing transactions',
-                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
                             ),
                           ),
                         );
@@ -195,19 +254,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: historyProvider.outgoingHistories.take(5).map((history) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: _buildTransactionCard(
-                                '-RM ${history.amount.toStringAsFixed(2)}',
-                                'To',
-                                history.recipientName,
-                                _formatDate(history.createdAt),
-                                'assets/imgs/user_avatar.png',
-                                isIncoming: false,
-                              ),
-                            );
-                          }).toList(),
+                          children: historyProvider.outgoingHistories
+                              .take(5)
+                              .map((history) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _buildTransactionCard(
+                                    '-RM ${history.amount.toStringAsFixed(2)}',
+                                    'To',
+                                    history.recipientName,
+                                    _formatDate(history.createdAt),
+                                    'assets/imgs/user_avatar.png',
+                                    isIncoming: false,
+                                  ),
+                                );
+                              })
+                              .toList(),
                         ),
                       );
                     },
@@ -259,7 +321,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(cardType, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    Text(
+                      cardType,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text(
                       cardInfo,
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
@@ -271,7 +339,11 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(width: 8),
               Text(
                 'RM $balance',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFFFF1F70)),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFF1F70),
+                ),
               ),
             ],
           ),
@@ -291,7 +363,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       width: 160,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.grey[50], borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -315,19 +390,6 @@ class _HomeScreenState extends State<HomeScreen> {
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: isIncoming ? [Color(0xFFB3E5FC), Color(0xFF80DEEA)] : [Color(0xFFE8EAFD), Color(0xFFD1D5FF)],
-              ),
-              borderRadius: BorderRadius.circular(4),
             ),
           ),
           const SizedBox(height: 8),
