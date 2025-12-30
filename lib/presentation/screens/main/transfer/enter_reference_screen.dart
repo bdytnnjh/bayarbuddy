@@ -13,7 +13,8 @@ class EnterReferenceScreen extends StatefulWidget {
 
 class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
   final TextEditingController _referenceController = TextEditingController();
-  final TextEditingController _paymentDetailsController = TextEditingController();
+  final TextEditingController _paymentDetailsController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -42,7 +43,8 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                     radius: 32,
                     backgroundImage: receiver.photoUrl != null
                         ? NetworkImage(receiver.photoUrl!)
-                        : AssetImage('assets/imgs/user_avatar.png') as ImageProvider,
+                        : AssetImage('assets/imgs/user_avatar.png')
+                              as ImageProvider,
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -170,7 +172,9 @@ class _EnterReferenceScreenState extends State<EnterReferenceScreen> {
                   } else {
                     // Save reference and payment details to provider
                     transferProvider.setReference(_referenceController.text);
-                    transferProvider.setPaymentDetails(_paymentDetailsController.text);
+                    transferProvider.setPaymentDetails(
+                      _paymentDetailsController.text,
+                    );
 
                     // Navigate to Detail Receiver Screen
                     Navigator.push(
