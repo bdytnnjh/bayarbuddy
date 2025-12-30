@@ -7,6 +7,7 @@ import 'package:app/presentation/screens/main/profile/profile_screen.dart';
 import 'package:app/presentation/screens/main/transfer/providers/transfer_provider.dart';
 import 'package:app/presentation/screens/main/transfer/transfer_screen.dart';
 import 'package:app/presentation/shared/providers/transfer_history_provider.dart';
+import 'package:app/presentation/shared/providers/user_profile_provider.dart';
 import 'package:app/presentation/shared/providers/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,11 @@ class WrapperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProfileProvider = Provider.of<UserProfileProvider>(context);
+    final user = userProfileProvider.userProfile;
+    final userName = user?.fullName ?? 'Unknown User';
+    final userEmail = user?.email ?? 'unknown@example.com';
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => WalletProvider()),
@@ -39,14 +45,27 @@ class WrapperScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(radius: 35, backgroundImage: AssetImage('assets/imgs/user_avatar.png')),
-                      Text(
-                        'John Doe',
-                        style: TextStyle(fontFamily: 'Amaranth', fontSize: 20, fontWeight: FontWeight.bold),
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundImage: AssetImage(
+                          'assets/imgs/user_avatar.png',
+                        ),
                       ),
                       Text(
-                        "john.appleseed@apple.com",
-                        style: TextStyle(fontFamily: 'Poppins', fontSize: 14, color: Colors.grey[600]),
+                        userName,
+                        style: TextStyle(
+                          fontFamily: 'Amaranth',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        userEmail,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ],
                   ),
@@ -55,6 +74,7 @@ class WrapperScreen extends StatelessWidget {
               _buildItemMenu(
                 'My Wallet',
                 'assets/imgs/icn_wallet.png',
+                iconColor: Colors.grey,
                 // onTap: () {
                 //  Navigator.pop(context);
                 //  Navigator.push(context, MaterialPageRoute(builder: (context) => MyWaller()));
@@ -63,23 +83,33 @@ class WrapperScreen extends StatelessWidget {
               _buildItemMenu(
                 'Profile',
                 'assets/imgs/icn_user.png',
+                iconColor: Colors.grey,
                 onTap: () {
                   Navigator.pop(context);
                   currentIndex.value = 3;
                   pageController.jumpToPage(3);
                 },
               ),
-              _buildItemMenu('Statistics', 'assets/imgs/icn_chart.png'),
+              _buildItemMenu(
+                'Statistics',
+                'assets/imgs/icn_chart.png',
+                iconColor: Colors.grey,
+              ),
               _buildItemMenu(
                 'Transfer',
                 'assets/imgs/icn_transfer.png',
+                iconColor: Colors.grey,
                 onTap: () {
                   Navigator.pop(context);
                   currentIndex.value = 2;
                   pageController.jumpToPage(2);
                 },
               ),
-              _buildItemMenu('Setings', 'assets/imgs/icn_settings.png'),
+              _buildItemMenu(
+                'Settings',
+                'assets/imgs/icn_settings.png',
+                iconColor: Colors.grey,
+              ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(16.0),
@@ -88,18 +118,32 @@ class WrapperScreen extends StatelessWidget {
                   onPressed: () {
                     LoginRepository loginRepository = LoginRepository();
                     loginRepository.logout();
-                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/login',
+                      (route) => false,
+                    );
                   },
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12.0,
+                      horizontal: 24.0,
+                    ),
                     backgroundColor: Color(0xFFFF1F70),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
                   ),
                   child: Row(
                     spacing: 8.0,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset('assets/imgs/icn_logout.png', height: 20, width: 20, color: Colors.white),
+                      Image.asset(
+                        'assets/imgs/icn_logout.png',
+                        height: 20,
+                        width: 20,
+                        color: Colors.white,
+                      ),
                       Text('Logout', style: TextStyle(color: Colors.white)),
                     ],
                   ),
@@ -109,24 +153,46 @@ class WrapperScreen extends StatelessWidget {
           ),
         ),
         appBar: AppBar(
-          actions: [IconButton(icon: Icon(Icons.notifications_none_outlined), onPressed: () {})],
+          actions: [
+            IconButton(
+              icon: Icon(Icons.notifications_none_outlined),
+              onPressed: () {},
+            ),
+          ],
         ),
         body: PageView(
           controller: pageController,
           onPageChanged: (index) {
             currentIndex.value = index;
           },
-          children: [HomeScreen(), CardScreen(), TransferScreen(), ProfileScreen()],
+          children: [
+            HomeScreen(),
+            CardScreen(),
+            TransferScreen(),
+            ProfileScreen(),
+          ],
         ),
         bottomNavigationBar: ValueListenableBuilder<int>(
           valueListenable: currentIndex,
           builder: (context, value, child) {
             return NavBottomBarCustomWidget(
               items: [
-                NavBottomBarCustomItem(imagePath: 'assets/imgs/icn_home.png', text: 'Home'),
-                NavBottomBarCustomItem(imagePath: 'assets/imgs/icn_wallet.png', text: 'Card'),
-                NavBottomBarCustomItem(imagePath: 'assets/imgs/icn_transfer.png', text: 'Transfer'),
-                NavBottomBarCustomItem(imagePath: 'assets/imgs/icn_user.png', text: 'Profile'),
+                NavBottomBarCustomItem(
+                  imagePath: 'assets/imgs/icn_home.png',
+                  text: 'Home',
+                ),
+                NavBottomBarCustomItem(
+                  imagePath: 'assets/imgs/icn_wallet.png',
+                  text: 'Card',
+                ),
+                NavBottomBarCustomItem(
+                  imagePath: 'assets/imgs/icn_transfer.png',
+                  text: 'Transfer',
+                ),
+                NavBottomBarCustomItem(
+                  imagePath: 'assets/imgs/icn_user.png',
+                  text: 'Profile',
+                ),
               ],
               backgroundColor: Colors.pink,
               unselectedColor: Colors.grey,
@@ -143,10 +209,15 @@ class WrapperScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildItemMenu(String title, String iconPath, {void Function()? onTap}) {
+  Widget _buildItemMenu(
+    String title,
+    String iconPath, {
+    Color iconColor = Colors.grey,
+    void Function()? onTap,
+  }) {
     return ListTile(
       onTap: onTap,
-      leading: Image.asset(iconPath, width: 24, height: 24),
+      leading: Image.asset(iconPath, width: 24, height: 24, color: iconColor),
       title: Text(title, style: TextStyle(fontFamily: 'Poppins', fontSize: 16)),
     );
   }
